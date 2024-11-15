@@ -23,7 +23,6 @@ def verify_jwt(allowed_roles="user"):
             user = User.find_one({"username": username})
             if not user:
                 raise HTTPException(status_code=401, detail="Unauthenticated")
-            
             # Verify user's role
             if allowed_roles:
                 if isinstance(allowed_roles, RoleEnum):
@@ -39,6 +38,8 @@ def verify_jwt(allowed_roles="user"):
             return user
         except JWTError:
             raise HTTPException(status_code=401, detail="Unauthenticated")
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(status_code=500, detail={"message": "Internal Server Error", "exception": str(e)})
     

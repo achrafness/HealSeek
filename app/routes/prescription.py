@@ -10,7 +10,7 @@ def get_prescription():
     return {"prescription": "prescriptions"}
 
 @router.get("/{prescription_id}")
-def get_user(prescription_id: int):
+def get_prescription(prescription_id: int):
     return {"prescription_id": prescription_id}
 
 @router.post("/")
@@ -22,5 +22,5 @@ def update_prescription(prescription_id: int):
     return {"message": "prescription updated"}
 
 @router.delete("/{prescription_id}")
-def delete_user(prescription_id: int):
+def delete_prescription(prescription_id: int):
     return {"message": "prescription deleted"}

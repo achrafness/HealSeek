@@ -13,6 +13,10 @@ def get_doctors():
 def get_user(doctor_id: int):
     return {"doctor_id": doctor_id}
 
+@router.get("/")
+def search_doctor(name: str=''):
+    return {"message": name}
+
 @router.post("/")
 def create_doctor():
     return {"message": "doctor created"}

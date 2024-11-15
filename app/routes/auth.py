@@ -28,4 +28,9 @@ def refresh(response:Response,request:Request):
 
 @router.get('/me')
 def get_my_user(response:Response,request:Request,user=Depends(verify_jwt())):
-    return auth_service.get_my_user(response,request,user)
+    user['_id'] = str(user['_id'])
+    return user
+
+@router.post('/forgetPassword')
+def forget_password(email:str):
+    return auth_service.forget_password(email)
