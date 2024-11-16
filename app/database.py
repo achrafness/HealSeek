@@ -7,8 +7,3 @@ print('Connected to MongoDB...')
 
 db = client[settings.MONGO_INITDB_DATABASE]
 User = db.users
-Quiz = db.quizzes
-Lesson = db.lessons
-Language = db.languages
-Badge = db.badges
-LeaderBoard = db.leaderboards
