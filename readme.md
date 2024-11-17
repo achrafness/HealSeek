@@ -3,24 +3,24 @@
 ## Requirements
 ### Functional Requirements
 
-1. **User Registration and Profile Management:**
-   - **Doctors,  users (normal  and admin)** can register and log in to the platform.
-   - Users can manage and update their profiles:
-     - Doctors can update their **specialties, experience,isTeleconsultations,  languages spoken, accepted insurance type and Appointment max number **.
-     - All users can update personal information and notification preferences.
-   - Display doctor office locations on an interactive map for easy access.
+1. **User Registration**  
+   - The platform enables registration and login for **Doctors**, **Regular Users**, and **Admins**.  
 
-2. **Doctor-Specific Profile and Appointment Management:**
-   - Doctors can manage **appointments** with the following functionalities:
-     - Add appointments for local users directly if needed.
-   - Doctors can view the **status** of each appointment:
-     - Options include **waiting, passed,** and **absent**.
+2. **Profile Management**  
+   - Users can update and manage their profiles:  
+     - **Doctors** can edit their specialties, years of experience, teleconsultation availability, languages spoken, accepted insurance types, and the maximum number of daily appointments.  
+     - **All users** can modify their personal information.  
+   - Doctor office locations are displayed on an interactive map for ease of access.  
 
-3. **Appointment Booking and Notification System for Users:**
-   - Users can book appointments through an **online booking system**.
-   - Users receive notifications for:
-     - A reminder notification **one hour before the appointment**.
-   - The system provides appointment options for **in-person consultations** or **teleconsultations** if available.
+3. **Appointments**  
+   - **For Users (Booking):**  
+     - Users can book appointments using an **online booking system**.  
+     - Notifications are sent to users, including a **reminder one hour before the appointment**.  
+     - Appointment options include **in-person consultations** or **teleconsultations**, if available.  
+   - **For Doctors (Management):**  
+     - Doctors can add appointments directly for local users when needed.  
+     - Doctors can view and manage the **status** of appointments, categorized as **waiting**, **completed**, or **no-show**.  
+     
 
 4. **Advanced Search Functionality:**
    - Users can search for doctors based on various filters:
@@ -40,6 +40,8 @@
 
 7. **Multilingual Support:**
    - The platform supports multiple languages, specifically **Arabic** and **French**, to enhance accessibility.
+
+
 ### Non-Functional Requirements
 
 1. **Performance and Reliability:**
@@ -74,30 +76,3 @@
 
 ## analyse and conception
  
-## use case
-1. Use Case Analysis
-
-We start by defining the main actors, their interactions with the system, and the primary use cases.
-Actors
-
-    Doctor: Registers, manages profile, and manages appointments.
-    User (Patient): Registers, books appointments, and rates/reviews doctors.
-    Admin: Manages users, views platform statistics, and blocks users.
-    System: Sends notifications for appointment reminders.
-
-Use Cases
-
-    Registration and Login (Doctors, Users, Admins)
-    Profile Management (Doctors, Users)
-        Doctor Profile: Add/update specialties, experience, teleconsultation option, languages spoken, insurance type, and maximum appointment slots.
-        User Profile: Update personal information, notification preferences.
-    Search for Doctors (Users)
-        Filter by specialty, location, availability, and insurance type.
-    Appointment Management (Doctors and Users)
-        Doctors: Add appointments for local users, view and update appointment status.
-        Users: Book appointments, receive reminders.
-    Rating and Reviews (Users)
-    Notifications (System)
-        Send a reminder one hour before the appointment.
-    Administrative Features (Admins)
-        View statistics, block/unblock users, manage inappropriate reviews.
