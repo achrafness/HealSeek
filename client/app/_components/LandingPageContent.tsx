@@ -3,6 +3,11 @@ import Image from 'next/image'
 import CustomButton from './CustomButton'
 import { FiMessageCircle } from 'react-icons/fi'
 import LandingCard from './LandingCard'
+import { FaRegClock } from "react-icons/fa";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import ReviewCard from './ReviewCard'
 export default function LandingPageContent() {
     return (
         <div className=' bg-[#F2F7FF]  '>
@@ -20,10 +25,44 @@ export default function LandingPageContent() {
                 </div>
                 <Image src='/Login.svg' alt='' width={517} height={679} />
             </div>
-            <div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <div className='w-1/3 mx-auto relative -bottom-16'>
+
+                <div className='flex h-fit justify-center items-center gap-4 flex-nowrap'>
+                    <div
+                        className='flex flex-row text-white text-sm justify-center items-center rounded-[12px] h-14 px-7 py-4 p-2 my-10 gap-2 w-full '
+                        style={{
+                            background: 'linear-gradient(0.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)',
+                            boxShadow: '0px 8px 23px 0px #4184F73D'
+                        }}
+                    >
+                        <FaRegClock />
+                        +15 years of experience
+
+                    </div>
+                    <div
+                        className='flex flex-row text-white text-sm justify-center items-center rounded-[12px] h-14 px-7 py-4 p-2 my-10 gap-2 w-full '
+                        style={{
+                            background: 'linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)',
+                            boxShadow: '0px 8px 23px 0px #4184F73D'
+                        }}
+                    >
+                        <IoMdCheckmarkCircleOutline />
+                        Urgent 24 hour service
+
+                    </div>
+
+                    <div
+                        className='flex flex-row text-white text-sm justify-center items-center rounded-[12px] h-14 px-7 py-4 p-2 my-10 gap-2 w-full '
+                        style={{
+                            background: 'linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)',
+                            boxShadow: '0px 8px 23px 0px #4184F73D'
+                        }}
+                    >
+                        <FiMessageCircle />
+                        high quality care
+
+                    </div>
+                </div>
             </div>
             <div className="bg-white">
 
@@ -95,6 +134,72 @@ export default function LandingPageContent() {
                     <div className='w-4/5 mx-auto'>
                         <Image src='/whyme.svg' alt='' width={517} height={679} className='w-full' />
                     </div>
+                    <div className='text-center w-4/5 mx-auto my-4'>
+                        <h1 className='text-[30px] font-semibold'>
+                            A dedicated doctor with the core mission to help
+                        </h1>
+                        <p className='text-base font-normal text-[#6C87AE] '>
+                            orem ipsum dolor sit amet, consectetur adipiscing elit. Quam proin nibh cursus at sed sagittis amet, sed. Tristique id nibh lobortis nunc elementum. Tellus quam mauris aenean turpis vulputate sodales nullam lobortis. Vulputate tortor tincidun.
+
+                        </p>
+                        <div className='flex justify-center items-center gap-4 flex-nowrap'>
+                            <div
+                                className='flex flex-row text-white text-xl justify-center items-center rounded-[12px] h-14 px-7 py-4 p-2 my-10 gap-2 w-full '
+                                style={{
+                                    background: 'linear-gradient(0.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)',
+                                    boxShadow: '0px 8px 23px 0px #4184F73D'
+                                }}
+                            >
+                                <FaRegClock />
+                                +15 years of experience
+
+                            </div>
+                            <div
+                                className='flex flex-row text-white text-xl justify-center items-center rounded-[12px] h-14 px-7 py-4 p-2 my-10 gap-2 w-full '
+                                style={{
+                                    background: 'linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)',
+                                    boxShadow: '0px 8px 23px 0px #4184F73D'
+                                }}
+                            >
+                                <IoMdCheckmarkCircleOutline />
+                                Urgent 24 hour service
+
+                            </div>
+
+                            <div
+                                className='flex flex-row text-white text-xl justify-center items-center rounded-[12px] h-14 px-7 py-4 p-2 my-10 gap-2 w-full '
+                                style={{
+                                    background: 'linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)',
+                                    boxShadow: '0px 8px 23px 0px #4184F73D'
+                                }}
+                            >
+                                <FiMessageCircle />
+                                high quality care
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div className='container mx-auto py-24  text-center'>
+
+                <h1 className='font-semibold text-[32px]'>
+                    What our great customers say about Dr. Matthew Anderson
+                </h1>
+                <p className='text-base font-normal text-[#6C87AE]'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                </p>
+                <div className='flex justify-center items-center gap-6'>
+                    <MdKeyboardArrowLeft className='text-7xl' />
+                    <div className='w-[95%] flex justify-center items-center gap-6 flex-wrap'>
+                        <ReviewCard />
+                        <ReviewCard />
+                        <ReviewCard />
+                        <ReviewCard />
+                    </div>
+                    <MdKeyboardArrowRight className='text-7xl' />
                 </div>
             </div>
         </div>
