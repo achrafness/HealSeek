@@ -8,6 +8,9 @@ import { IoMapOutline } from "react-icons/io5";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 
 import { LuMessageCircle } from "react-icons/lu";
+import Link from 'next/link';
+import { IoReturnUpBackOutline } from "react-icons/io5";
+
 type DoctorProfileContentProps = {
     doctor?: any
 }
@@ -84,18 +87,18 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
 
                 <div className='w-[45%]'>
                     <div className='mb-8'>
-                        <h1 className='font-semibold text-[30px]'>
+                        <h1 className='font-semibold text-[28px]'>
                             About doctor
                         </h1>
-                        <p className='text-[24px] text-[#A7A6A5]'>
+                        <p className='text-[20px] text-[#A7A6A5]'>
                             Mr. Issam is an orthopedic specialist with expertise in treating musculoskeletal issues, from joint pain to sports injuries. He provides both surgical and non-surgical solutions tailored to each patient’s needs. Whether it's managing arthritis, fractures, or mobility issues, Mr. Issam offers effective treatments to relieve pain and improve movement. He uses the latest diagnostic tools to ensure accurate assessments and recovery plans. His goal is to help patients regain mobility and quality of life, guiding them through rehabilitation and prevention strategies. Mr. Issam’s compassionate care and personalized approach make him a trusted choice for orthopedic health.
                         </p>
                     </div>
                     <div className='mb-8'>
-                        <h1 className='font-semibold text-[30px]'>
+                        <h1 className='font-semibold text-[28px]'>
                             Specializations
                         </h1>
-                        <ul className='text-[24px] text-[#A7A6A5]'>
+                        <ul className='text-[20px] text-[#A7A6A5]'>
                             <li>Joint Replacement Surgery</li>
                             <li>Sports injuries</li>
                             <li>
@@ -114,10 +117,10 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
                         </ul>
                     </div>
                     <div className='mb-8'>
-                        <h1 className='font-semibold text-[30px]'>
+                        <h1 className='font-semibold text-[28px]'>
                             Past jobs and Experiences
                         </h1>
-                        <ul className='text-[24px] text-[#A7A6A5]'>
+                        <ul className='text-[20px] text-[#A7A6A5]'>
                             <li>Consultant Orthopedic Surgeon at [Hospital Name] (2010 - 2016)Led the orthopedic department, specializing in joint replacement surgeries and spinal care. Developed a reputation for precise surgical techniques and innovative rehabilitation protocols.</li>
                             <li>Consultant Orthopedic Surgeon at [Hospital Name] (2010 - 2016)Led the orthopedic department, specializing in joint replacement surgeries and spinal care. Developed a reputation for precise surgical techniques and innovative rehabilitation protocols.</li>
                             <li>Consultant Orthopedic Surgeon at [Hospital Name] (2010 - 2016)Led the orthopedic department, specializing in joint replacement surgeries and spinal care. Developed a reputation for precise surgical techniques and innovative rehabilitation protocols.</li>
@@ -134,7 +137,7 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
                         </ul>
                     </div>
                 </div>
-                <div className='w-[45%] flex flex-col justify-around items-center'>
+                <div className='w-[45%] flex flex-col justify-around items-start min-h-screen'>
                     {
                         doctor?.reviews ? doctor?.reviews
                             .sort((a: any, b: any) => b.rating - a.rating)
@@ -148,7 +151,18 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
                                 <ProfileReview />
                             </>)
                     }
+
+                    <div className='flex  justify-between items-center w-full'>
+                        <Link href='/' className='bg-[#F2F6FF] border-4 border-white shadow-lg rounded-lg h-[70px] w-[70px] flex justify-center items-center '>
+                            <IoReturnUpBackOutline className='text-black text-4xl' />
+                        </Link>
+                        <button className='w-[80%]  h-[70px] bg-primary text-white rounded-lg mt-4 md:mt-0'>
+                            book an appointment
+                            <span>{'> >'} </span>
+                        </button>
+                    </div>
                 </div>
+
             </div>
         </div >
     )
