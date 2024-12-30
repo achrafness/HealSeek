@@ -21,8 +21,8 @@ export default function SearchForm() {
                         <CiLocationOn className='text-4xl' />
                     </div>
                     <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-500">Location</div>
-                        <input type='text' className="outline-none text-lg font-bold text-gray-900" placeholder='Algeria,Oran' />
+                        <div className="text-sm font-medium text-gray-500">Speciality</div>
+                        <input type='text' className="outline-none text-lg font-bold text-gray-900" placeholder='Cardiology' />
                     </div>
                 </div>
                 <div className="flex items-center p-4 max-md:p-1 bg-white shadow-md rounded-lg">
@@ -30,8 +30,8 @@ export default function SearchForm() {
                         <CiLocationOn className='text-4xl' />
                     </div>
                     <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-500">Location</div>
-                        <input type='text' className="outline-none text-lg font-bold text-gray-900" placeholder='Algeria,Oran' />
+                        <div className="text-sm font-medium text-gray-500">date</div>
+                        <input type='text' className="outline-none text-lg font-bold text-gray-900" placeholder='17 december 2030' />
                     </div>
                 </div>
 

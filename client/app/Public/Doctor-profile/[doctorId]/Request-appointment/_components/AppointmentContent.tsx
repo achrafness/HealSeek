@@ -202,7 +202,7 @@ export default function AppointmentContent({ doctor }: DoctorAppointmentContentP
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-fit font-semibold text-[34px] min-w-[340px] h-[111px] flex justify-between items-center my-10 ml-2 bg-primary text-white p-2 rounded-[19px] hover:bg-blue-600"
+                            className="w-fit font-semibold text-[34px] min-w-[340px] h-[111px] flex justify-around items-center my-10 ml-2 bg-primary text-white p-2 rounded-[19px] hover:bg-blue-600"
                         >
                             Submit
                             <span> {"> >"}</span>

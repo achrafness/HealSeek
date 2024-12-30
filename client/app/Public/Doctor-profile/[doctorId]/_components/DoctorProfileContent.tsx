@@ -156,7 +156,7 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
                         <Link href='/' className='bg-[#F2F6FF] border-4 border-white shadow-lg rounded-lg h-[70px] w-[70px] flex justify-center items-center '>
                             <IoReturnUpBackOutline className='text-black text-4xl' />
                         </Link>
-                        <button className='w-[80%]  h-[70px] bg-primary text-white rounded-lg mt-4 md:mt-0'>
+                        <button className='w-[80%]  h-[70px] bg-primary text-white rounded-[14.09px] mt-4 md:mt-0'>
                             book an appointment
                             <span>{'> >'} </span>
                         </button>
