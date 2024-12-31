@@ -1,16 +1,14 @@
 import React from 'react'
-import SettingsContent from './_components/SettingsContent';
 import DoctorNavbar from '@/app/Doctor/Settings/_components/DoctorNavbar';
-import Sidebar from './_components/AdminSidebar';
-
+import Sidebar from '../Settings/_components/AdminSidebar';
+import DashboardContent from './_components/DashboardContent';
 export default function page() {
     return (
         <div className='h-screen flex '>
             <Sidebar />
-            <div className='w-4/5  mx-auto'>
+            <div className='w-4/5  mx-auto h-screen'>
                 <DoctorNavbar />
-
-                <SettingsContent />
+                <DashboardContent />
             </div>
         </div>
     )

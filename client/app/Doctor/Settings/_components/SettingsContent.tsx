@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function SettingsContent() {
     return (
-        <div className='w-[75%] my-10 mx-auto flex-grow flex justify-center items-centerg gap-10'>
+        <div className='w-[75%] my-20 mx-auto max-md:w-full flex-grow flex max-md:flex-col justify-center items-centerg gap-10'>
             <div className='flex flex-col  gap-4'>
                 <div className='min-w-[320px] min-h-[325px] flex justify-center items-center flex-col rounded-[20px]' style={{ boxShadow: '0px 2px 4px 0px #00000030' }}>
                     <Image src='/user.svg' alt='' width={200} height={200} className='rounded-full' />
@@ -25,7 +25,7 @@ export default function SettingsContent() {
                     </ul>
                 </div>
             </div>
-            <div className=' flex-1 flex-grow w-full min-w-[320px] min-h-[325px] flex justify-center items-center flex-col rounded-[20px]' style={{ boxShadow: '0px 2px 4px 0px #00000030' }}>
+            <div className=' flex-1 flex-grow w-full  max-md:px-8 mb-9 min-w-[320px] min-h-[325px] h-[670px] flex justify-center items-center flex-col rounded-[20px]' style={{ boxShadow: '0px 2px 4px 0px #00000030' }}>
                 {/* <div className="flex justify-center items-center  bg-gray-100"> */}
                 <div className="w-full flex-1 h-full max-w-lg bg-white  py-12 rounded-[20px]">
                     <h2 className="text-xl font-semibold mb-4">User Settings</h2>

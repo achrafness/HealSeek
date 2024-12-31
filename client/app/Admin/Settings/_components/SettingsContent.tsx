@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function SettingsContent() {
     return (
-        <div className='w-[75%] my-10 mx-auto flex-grow flex justify-center items-centerg gap-10'>
+        <div className='w-[75%] my-20 mx-auto flex-grow flex justify-center items-centerg gap-10'>
             <div className='flex flex-col  gap-4'>
                 <div className='min-w-[320px] min-h-[325px] flex justify-center items-center flex-col rounded-[20px]' style={{ boxShadow: '0px 2px 4px 0px #00000030' }}>
                     <Image src='/user.svg' alt='' width={200} height={200} className='rounded-full' />
