@@ -3,6 +3,6 @@ from app.enums.status import status
 
 class Appointment(BaseModel):
     appointment_time: str
-    status: str
+    status: str = "scheduled"
     doctor_id: int
     patient_id: int

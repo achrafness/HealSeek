@@ -2,7 +2,6 @@ from email import message
 from fastapi import HTTPException, Request, Response , Form , Response ,Cookie
 from app.utils.auth import sign_access_token, verify_token
 from typing import Annotated
-from app.schemas.schemas import list_user_serial
 from app.enums.roles import Roles
 import bcrypt
 from app.database.database import User as us , db , Doctor , Patient , Admin

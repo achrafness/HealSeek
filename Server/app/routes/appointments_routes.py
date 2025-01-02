@@ -24,7 +24,7 @@ def get_apointment_by_id_route(request:Request,appointment_id: int):
     return get_apointment_by_id(request,appointment_id)
 
 
-@router.post("/add" , dependencies=[Depends(resolve_user(allowed_roles=["doctor"]))])
+@router.post("/add" , dependencies=[Depends(resolve_user(allowed_roles=["doctor" , "patient"]))])
 def add_appointment_route(appointment : Appointment):
     return add_appointment(appointment)
 
