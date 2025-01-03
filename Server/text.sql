@@ -89,3 +89,28 @@ CREATE TABLE IF NOT EXISTS doctor_languages (
     FOREIGN KEY (doctor_id) REFERENCES doctors(user_id) ON DELETE CASCADE,
     FOREIGN KEY (language_id) REFERENCES languages(language_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS prescriptions (
+    prescription_id SERIAL PRIMARY KEY,
+    appointment_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    patient_id INT NOT NULL,
+    diagnosis TEXT NOT NULL,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (patient_id) REFERENCES patients(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS prescription_medications (
+    medication_id SERIAL PRIMARY KEY,
+    prescription_id INT NOT NULL,
+    medication_name VARCHAR(255) NOT NULL,
+    dosage VARCHAR(100) NOT NULL,
+    frequency VARCHAR(100) NOT NULL,
+    duration VARCHAR(100) NOT NULL,
+    instructions TEXT,
+    FOREIGN KEY (prescription_id) REFERENCES prescriptions(prescription_id) ON DELETE CASCADE
+);
