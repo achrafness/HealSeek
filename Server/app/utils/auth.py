@@ -16,10 +16,7 @@ def sign_access_token(params,type:str):
 
 def verify_token(token :str):
     try:
-        print("eezezez")
-        payload = jwt.decode(token, settings.JWT_PRIVATE_KEY, algorithms=settings.JWT_ALGORITHM)
-        print("hhhhhhhh")
-        print(payload)
+        payload = jwt.decode(token,settings.JWT_PRIVATE_KEY, algorithms=settings.JWT_ALGORITHM)
         return payload
     except jwt.ExpiredSignatureError:
         return None

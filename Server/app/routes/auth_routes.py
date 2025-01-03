@@ -28,12 +28,12 @@ def login(user_credentials: Login_input, response: Response):
     return response
 
 @router.get("/logout", description="Log out a user by invalidating their refresh token.", response_description="Returns a message indicating logout status.")
-def logout(response: Response, request: Request):
+def logout(response: Response, request: Request,current_user: dict = Depends(get_current_user) ):
     response = auth_logout(response, request)
     return response
 
 @router.get("/refresh", description="Handle refresh token to generate new access token.", response_description="Returns a new access token.")
-def refresh_token(response: Response, request: Request):
+def refresh_token(response: Response, request: Request,current_user: dict = Depends(get_current_user)):
     response = handle_refresh_token(response, request)
     return response
 

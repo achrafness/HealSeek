@@ -5,6 +5,7 @@ import inflection
 from typing import Any, Dict, List, Optional, Tuple, Union
 from contextlib import contextmanager
 import logging
+from app.config import settings
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -367,4 +368,5 @@ class PrescriptionMedication(BaseModel):
     def find(cls, **kwargs):
         query = cls.select(**kwargs)
         return query
-db = Database('localhost', '5432' ,'Test-02', 'postgres', 'Achraf*2017')
+print(settings.DATABASE_PASSWORD)
+db = Database(settings.DATABASE_HOST, settings.DATABASE_PORT ,settings.DATABASE_NAME, settings.DATABASE_USER, settings.DATABASE_PASSWORD)

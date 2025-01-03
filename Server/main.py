@@ -8,8 +8,51 @@ from dotenv import load_dotenv
 from app.database.database import db
 from app.routes.main_route import router
 
+# Check if .env file exists
 env_path = Path(__file__).parent / '.env'
+if not env_path.exists():
+    raise FileNotFoundError(
+        "The .env file is missing. Please create a .env file in the root directory of the project. "
+        "You can use the .env.example file as a template."
+    )
+
+# Load environment variables from .env file
 load_dotenv(dotenv_path=env_path)
+
+# List of required environment variables
+REQUIRED_ENV_VARS = [
+    "jwt_public_key",
+    "jwt_private_key",
+    "jwt_algorithm",
+    "refresh_token_expires_in",
+    "access_token_expires_in",
+    "twofactor_secret",
+    "google_client_id",
+    "google_client_secret",
+    "my_mail",
+    "my_pass",
+    "cloud_name",
+    "api_key",
+    "api_secret",
+    "database_host",
+    "database_port",
+    "database_name",
+    "database_user",
+    "database_password",
+]
+
+# Check if all required environment variables are present and non-empty
+missing_or_empty_vars = []
+for var in REQUIRED_ENV_VARS:
+    value = os.getenv(var)
+    if not value:
+        missing_or_empty_vars.append(var)
+
+if missing_or_empty_vars:
+    raise ValueError(
+        f"The following required environment variables are missing or empty in the .env file: {', '.join(missing_or_empty_vars)}. "
+        "Please ensure all required variables are defined and have valid values."
+    )
 
 class Settings(BaseSettings):
     # Basic Settings
@@ -43,6 +86,13 @@ class Settings(BaseSettings):
     api_key: str
     api_secret: str
 
+    # Database Settings
+    database_host: str
+    database_port: int
+    database_name: str
+    database_user: str
+    database_password: str
+    
     class Config:
         env_file = ".env"
         env_file_encoding = 'utf-8'
