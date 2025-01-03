@@ -1,10 +1,20 @@
 import psycopg2
-from psycopg2 import sql
+from psycopg2 import sql, errors
 from datetime import datetime
 import inflection
-import os
+from typing import Any, Dict, List, Optional, Tuple, Union
+from contextlib import contextmanager
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class DatabaseError(Exception):
+    """Custom exception for database-related errors"""
+    pass
 class Database:
-    def __init__(self, host, port, dbname, user, password):
+    def __init__(self, host: str, port: str, dbname: str, user: str, password: str):
         self.host = host
         self.dbname = dbname
         self.port = port
@@ -12,40 +22,78 @@ class Database:
         self.password = password
         self.conn = None
         self.cursor = None
+        self._connection_params = {
+            'host': host,
+            'port': port,
+            'dbname': dbname,
+            'user': user,
+            'password': password
+        }
 
-    def connect(self):
-        print("Connecting to the DataBase.......")
-        self.conn = psycopg2.connect(
-            host=self.host,
-            port=self.port,
-            dbname=self.dbname,
-            user=self.user,
-            password=self.password
-        )
-        self.cursor = self.conn.cursor()
-        self.cursor.execute("SELECT version()")
-        db_version = self.fetch_one()
-        print(f"Connection to the DataBase is successful: {db_version}") 
+    def connect(self) -> None:
+        """Establish database connection with error handling"""
+        try:
+            logger.info("Connecting to the database...")
+            self.conn = psycopg2.connect(**self._connection_params)
+            self.cursor = self.conn.cursor()
+            self.cursor.execute("SELECT version()")
+            db_version = self.fetch_one()
+            logger.info(f"Successfully connected to database: {db_version}")
+        except psycopg2.Error as e:
+            logger.error(f"Failed to connect to database: {str(e)}")
+            raise DatabaseError(f"Database connection failed: {str(e)}")
 
-    def close(self):
-        if self.cursor:
-            self.cursor.close()
-        if self.conn:
-            self.conn.close()
+    def close(self) -> None:
+        """Safely close database connections"""
+        try:
+            if self.cursor:
+                self.cursor.close()
+            if self.conn:
+                self.conn.close()
+                logger.info("Database connection closed successfully")
+        except psycopg2.Error as e:
+            logger.error(f"Error closing database connection: {str(e)}")
+            raise DatabaseError(f"Failed to close database connection: {str(e)}")
 
-    def execute_query(self, query, params=None):
-        """ Execute a query with optional parameters """
-        if self.cursor:
+    @contextmanager
+    def transaction(self):
+        """Context manager for database transactions"""
+        try:
+            yield
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            logger.error(f"Transaction failed, rolling back: {str(e)}")
+            raise
+
+    def execute_query(self, query: Union[str, sql.Composed], params: Optional[tuple] = None) -> None:
+        """Execute a query with optional parameters and error handling"""
+        if not self.cursor:
+            raise DatabaseError("Database connection not established")
+        
+        try:
             self.cursor.execute(query, params)
             self.conn.commit()
-        else:
-            print("Error: Database connection or cursor is not available.")
+        except psycopg2.Error as e:
+            self.conn.rollback()
+            logger.error(f"Query execution failed: {str(e)}\nQuery: {query}")
+            raise DatabaseError(f"Query execution failed: {str(e)}")
 
-    def fetch_one(self):
-        return self.cursor.fetchone()
+    def fetch_one(self) -> Optional[tuple]:
+        """Fetch a single row with error handling"""
+        try:
+            return self.cursor.fetchone()
+        except psycopg2.Error as e:
+            logger.error(f"Error fetching row: {str(e)}")
+            raise DatabaseError(f"Failed to fetch row: {str(e)}")
 
-    def fetch_all(self):
-        return self.cursor.fetchall()
+    def fetch_all(self) -> List[tuple]:
+        """Fetch all rows with error handling"""
+        try:
+            return self.cursor.fetchall()
+        except psycopg2.Error as e:
+            logger.error(f"Error fetching all rows: {str(e)}")
+            raise DatabaseError(f"Failed to fetch all rows: {str(e)}")
 class BaseModel:
     table_name = None
 
@@ -273,22 +321,50 @@ class Language(BaseModel):
     def find(cls, **kwargs):
         query = cls.select(**kwargs)
         return query
+class Prescription(BaseModel):
+    table_name = "prescriptions"
+    prescription_id: int
+    appointment_id: int
+    doctor_id: int
+    patient_id: int
+    diagnosis: str
+    notes: str
+    created_at: datetime
+    updated_at: datetime
 
-db = Database('localhost', '5432' ,'Test2', 'postgres', 'majd2020')
+    @classmethod
+    def create(cls, **kwargs):
+        query = cls.insert(**kwargs)
+        return query
 
-""" file_path = os.path.join(os.path.dirname(__file__), "text.sql") """
-""" with open(file_path, "r") as file:
-    text = file.read()
-    db.execute_query(text)
-    # fetch names of all tables
-    # db.execute_query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
-    # tables = db.fetch_all()
-    # print(f"Tables in the database: {tables}")
-user = User.create(UserId=3, Name="John Doe", Email="asassd@gmail.com" , PhoneNumber="132367890", DateOfBirth="1990-01-01", Password="asasa",role='doctor')
-db.execute_query(user)
-# attrbute of object user 
-print(f"user in object form: {user}")
-db.execute_query("SELECT * FROM users;")
-user = db.fetch_all()
-print(f"Users in the database: {user}")
-db.close() """
+    @classmethod
+    def find(cls, **kwargs):
+        query = cls.select(**kwargs)
+        return query
+
+    @classmethod
+    def update(cls, **kwargs):
+        # Update the updated_at timestamp
+        kwargs['updated_at'] = datetime.now()
+        query = super().update(**kwargs)
+        return query
+class PrescriptionMedication(BaseModel):
+    table_name = "prescription_medications"
+    medication_id: int
+    prescription_id: int
+    medication_name: str
+    dosage: str
+    frequency: str
+    duration: str
+    instructions: str
+
+    @classmethod
+    def create(cls, **kwargs):
+        query = cls.insert(**kwargs)
+        return query
+
+    @classmethod
+    def find(cls, **kwargs):
+        query = cls.select(**kwargs)
+        return query
+db = Database('localhost', '5432' ,'Test-02', 'postgres', 'Achraf*2017')
