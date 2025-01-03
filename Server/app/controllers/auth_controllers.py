@@ -26,17 +26,21 @@ async def registeration(User : Registration_input):
     user_query = us.find(email=user["email"])
     db.execute_query(user_query, params=(user["email"],))
     user_found = db.fetch_one()
-    print(user_found)
     if user_found:
         raise HTTPException(400, detail='user already exists')
     #new_username = users_collection.find_one({"username" : username})
     #print(new_username)
     salt = bcrypt.gensalt(10)
-    print(user["password"])
     user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
     userId = ''.join(filter(str.isdigit, str(uuid4())))
     userId = int(userId[:6])
-    print(userId)
+    try:
+        if user["date_of_birth"]:
+            date_obj = datetime.strptime(user["date_of_birth"], '%Y-%m-%d')
+            # Format it to PostgreSQL date format
+            user["date_of_birth"] = date_obj.strftime('%Y-%m-%d')
+    except ValueError as e:
+        raise HTTPException(400, detail=f"Invalid date format for date_of_birth. Please use YYYY-MM-DD format: {str(e)}")
     try:
         usa = us.create(user_id = userId,Name=user['name'], Email=user["email"] , PhoneNumber=user["phone_number"]
                         , DateOfBirth=user["date_of_birth"], Password=user["password"],role=user["role"] , gender = user["gender"], profile_picture_url = user["pfpUrl"])
