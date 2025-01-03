@@ -6,6 +6,7 @@ from app.config import settings
 from datetime import datetime
 import cloudinary
 from cloudinary.uploader import upload
+import bcrypt
 
 cloudinary.config(
     cloud_name = settings.CLOUD_NAME,
