@@ -12,24 +12,39 @@ import jwt
 from fastapi.responses import JSONResponse , RedirectResponse
 from datetime import datetime
 from app.utils.twoFA import generate_2fa_code , verify_2fa_code
+from enum import Enum
 
+class UserRole(str, Enum):
+    DOCTOR = "doctor"
+    PATIENT = "patient"
+    ADMIN = "admin"
 
 
 async def registeration(User : Registration_input):
     user = dict(User)
-    if not user['password'] : 
-        HTTPException(400 , detail='a password is a must')
-    elif not user['email']:
-        HTTPException(400 , detail='an email is a must')
-    elif not user['name']:
-        HTTPException(400 , detail='a name is a must')
+    
+    required_fields = {
+        'password': 'Password is required',
+        'email': 'Email is required',
+        'name': 'Name is required',
+        'role': 'Role is required'
+    }
+    
+    for field, message in required_fields.items():
+        if not user.get(field):
+            raise HTTPException(400, detail=message)
+    
+    try:
+        role = UserRole(user["role"].lower())  
+        user["role"] = role.value  
+    except ValueError:
+        raise HTTPException(400, detail=f"Invalid role. Must be one of: {', '.join([r.value for r in UserRole])}")
+
     user_query = us.find(email=user["email"])
     db.execute_query(user_query, params=(user["email"],))
     user_found = db.fetch_one()
     if user_found:
         raise HTTPException(400, detail='user already exists')
-    #new_username = users_collection.find_one({"username" : username})
-    #print(new_username)
     salt = bcrypt.gensalt(10)
     user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
     userId = ''.join(filter(str.isdigit, str(uuid4())))

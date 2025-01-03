@@ -13,9 +13,9 @@ class User(BaseModel) :
     password : str
     phone_number : int
     date_of_birth: str = Field(default="2000-01-01")
-    role: str
+    role: str = Field(default="patient")
     pfpUrl : str
-    gender : str
+    gender : str 
     
     
 class Registration_input(User):
