@@ -1,9 +1,21 @@
 import React from 'react'
-
-export default function page() {
+import Sidebar from '../../Settings/_components/Sidebar'
+import DoctorNavbar from '../../Settings/_components/DoctorNavbar'
+import PatientDetail from '../_components/PatientDetail'
+type Params = {
+  params: {
+    PatientId: string
+  }
+}
+export default async function page({ params }: Params) {
+  const { PatientId } = await params
   return (
-    <div>
-      
+    <div className='h-screen flex '>
+      <Sidebar />
+      <div className='w-4/5  mx-auto h-screen'>
+        <DoctorNavbar />
+        <PatientDetail />
+      </div>
     </div>
   )
 }

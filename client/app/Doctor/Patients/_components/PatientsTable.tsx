@@ -183,9 +183,10 @@ export function PatientTable({ patients }: PatientTableProps) {
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className="hover:bg-gray-100 text-[#252C58] font-light text-[25px] h-28 "
+                                    className="hover:bg-gray-100 text-[#252C58] font-light text-[25px] h-28 cursor-pointer"
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
+                                    onClick={() => window.location.href = `./Patients/${row.original.id}`}
                                 >
                                     {row.getVisibleCells().map((cell) => {
                                         return (
