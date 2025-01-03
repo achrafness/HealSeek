@@ -12,7 +12,7 @@ class User(BaseModel) :
     email: Annotated[str, Field(pattern=mail_regex)] = 'exmp@mail.com'
     password : str
     phone_number : int
-    date_of_birth: str
+    date_of_birth: str = Field(default="2000-01-01")
     role: str
     pfpUrl : str
     gender : str
