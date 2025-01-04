@@ -16,8 +16,8 @@ security = HTTPBearer(auto_error=False)
 
 # Include routers with prefixes and tags
 router.include_router(auth_router, prefix='/auth', tags=['auth'])
-router.include_router(user_router, prefix='/user', tags=['user'])
-router.include_router(rating_router, prefix='/rating', tags=['rating'])
+router.include_router(user_router, prefix='/users', tags=['user'])
+router.include_router(rating_router, prefix='/ratings', tags=['rating'])
 router.include_router(insurance_router, prefix='/insurance', tags=['insurance'])
 router.include_router(language_router, prefix='/language', tags=['language'])
 router.include_router(websocket_router, prefix='/ws', tags=['ws'])

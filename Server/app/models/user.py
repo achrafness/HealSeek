@@ -27,7 +27,7 @@ class Registration_input(User):
     office_location_url: Optional[str] = None
 
 class Login_input(BaseModel):
-    email : str
+    email : str  = Field(default="exmp@mail.com")
     password : str
     
     

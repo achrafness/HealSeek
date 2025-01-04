@@ -7,6 +7,7 @@ from datetime import datetime
 import cloudinary
 from cloudinary.uploader import upload
 import bcrypt
+from typing import Optional
 
 cloudinary.config(
     cloud_name = settings.CLOUD_NAME,
@@ -25,14 +26,61 @@ def get_user_by_id(user_id:int):
         raise HTTPException(status_code=404, detail="User not found")
     return JSONResponse(content=user_data, status_code=200)
 
-def get_all_users():
-    db.execute_query("SELECT * FROM users;")
-    result = db.fetch_all()
-    users_data = [{"user_id": user[0] ,"name": user[1] ,"refresh_token" : user[2], "email": user[3], "phone_number" : user[4], "date_of_birth" : user[5].isoformat() if user[5] else None, "gender" : user[7] , "profile_picture_url" : user[8] ,"role": user[9]} for user in result]
-    print(users_data)
-    if not users_data:
-        raise HTTPException(status_code=404, detail="No users found")
-    return JSONResponse(content=users_data, status_code=200)
+def get_all_users(email: Optional[str] = None, name: Optional[str] = None):
+    try:
+        query = "SELECT * FROM users WHERE 1=1"
+        params = []
+        
+        if email:
+            query += " AND LOWER(email) LIKE LOWER(%s)"
+            params.append(f"%{email}%")
+            
+        if name:
+            query += " AND LOWER(name) LIKE LOWER(%s)"
+            params.append(f"%{name}%")
+            
+        query += ";"
+        
+        db.execute_query(query, params)
+        result = db.fetch_all()
+        
+        users_data = [
+            {
+                "user_id": user[0],
+                "name": user[1],
+                "refresh_token": user[2],
+                "email": user[3],
+                "phone_number": user[4],
+                "date_of_birth": user[5].isoformat() if user[5] else None,
+                "gender": user[7],
+                "profile_picture_url": user[8],
+                "role": user[9]
+            } 
+            for user in result
+        ]
+        
+        if not users_data:
+            raise HTTPException(
+                status_code=404, 
+                detail="No users found matching the search criteria"
+            )
+            
+        return JSONResponse(
+            content={
+                "total": len(users_data),
+                "users": users_data
+            }, 
+            status_code=200
+        )
+        
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Internal server error: {str(e)}"
+        )
+
 
 def get_user_by_email(request:Request):
     user_grabbed = request.headers.get("user")

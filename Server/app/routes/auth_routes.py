@@ -6,6 +6,7 @@ from app.utils.twoFA import generate_2fa_code, verify_2fa_code
 from app.utils.auth import verify_token
 from fastapi import Response, Request, status
 from fastapi.responses import JSONResponse
+from app.routes.user_routes import resolve_user_temp
 
 router = APIRouter()
 
@@ -41,6 +42,34 @@ def refresh_token(response: Response, request: Request,current_user: dict = Depe
 def verify_2fa_code(code: str, request: Request):
     return verify_2fa(code, request)
 
-@router.get("/protected", description="A protected route that requires a valid access token.", response_description="Returns a message indicating successful access.")
-async def protected_route(current_user: dict = Depends(get_current_user)):
-    return {"message": "You have accessed a protected route", "user": current_user}
+@router.get("/protected/user", description="Protected route for users only.", response_description="Returns user-specific data.")
+async def protected_user_route(current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin", "patient", "doctor"]))):
+    return {
+        "message": "You have accessed a user protected route",
+        "user": current_user,
+        "role": "user"
+    }
+
+@router.get("/protected/doctor", description="Protected route for doctors only.", response_description="Returns doctor-specific data.")
+async def protected_doctor_route(current_user: dict = Depends(resolve_user_temp(allowed_roles=["doctor"]))):
+    return {
+        "message": "You have accessed a doctor protected route",
+        "user": current_user,
+        "role": "doctor"
+    }
+
+@router.get("/protected/patient", description="Protected route for patients only.", response_description="Returns patient-specific data.")
+async def protected_patient_route(current_user: dict = Depends(resolve_user_temp(allowed_roles=["patient"]))):
+    return {
+        "message": "You have accessed a patient protected route",
+        "user": current_user,
+        "role": "patient"
+    }
+
+@router.get("/protected/admin", description="Protected route for administrators only.", response_description="Returns admin-specific data.")
+async def protected_admin_route(current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin"]))):
+    return {
+        "message": "You have accessed an admin protected route",
+        "user": current_user,
+        "role": "admin"
+    }

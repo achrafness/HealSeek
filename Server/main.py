@@ -181,9 +181,6 @@ def create_app() -> FastAPI:
         tags=["api"]
     )
 
-    app.include_router(api_router)
-    app.include_router(router)
-
     @app.get("/", tags=["root"])
     async def root():
         """Root endpoint."""
@@ -208,7 +205,8 @@ def create_app() -> FastAPI:
                 "database": "error",
                 "error": str(e)
             }
-
+    app.include_router(api_router)
+    app.include_router(router)
     return app
 
 # Create the application instance
