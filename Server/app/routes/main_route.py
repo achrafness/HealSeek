@@ -8,7 +8,7 @@ from app.routes.language_routes import router as language_router
 from app.routes.websocket_endpoint import router as websocket_router
 from app.routes.notifications_routes import router as notifications_router
 from app.routes.appointments_routes import router as appointments_router
-
+from app.routes.prescription_routes import router as prescription_router
 router = APIRouter()
 
 # Define the security scheme
@@ -20,6 +20,7 @@ router.include_router(user_router, prefix='/users', tags=['user'])
 router.include_router(rating_router, prefix='/ratings', tags=['rating'])
 router.include_router(insurance_router, prefix='/insurance', tags=['insurance'])
 router.include_router(language_router, prefix='/language', tags=['language'])
+router.include_router(prescription_router, prefix='/prescription', tags=['prescription'] )
 router.include_router(websocket_router, prefix='/ws', tags=['ws'])
 router.include_router(notifications_router, prefix='/notifications', tags=['notifications'])
 router.include_router(appointments_router, prefix='/appointments', tags=['appointments'])

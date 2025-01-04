@@ -368,5 +368,4 @@ class PrescriptionMedication(BaseModel):
     def find(cls, **kwargs):
         query = cls.select(**kwargs)
         return query
-print(settings.DATABASE_PASSWORD)
 db = Database(settings.DATABASE_HOST, settings.DATABASE_PORT ,settings.DATABASE_NAME, settings.DATABASE_USER, settings.DATABASE_PASSWORD)
