@@ -5,7 +5,7 @@ from app.routes.user_routes import resolve_user_temp
 
 router = APIRouter()
 
-@router.get("/all")
+@router.get("/" , dependencies=[Depends(resolve_user_temp(allowed_roles=["admin"]))])
 def get_all_appointments_route():
     return get_all_appointments()
 
@@ -24,7 +24,7 @@ def get_apointment_by_id_route(request:Request,appointment_id: int):
     return get_apointment_by_id(request,appointment_id)
 
 
-@router.post("/add" , dependencies=[Depends(resolve_user_temp(allowed_roles=["doctor" , "patient"]))])
+@router.post("/" , dependencies=[Depends(resolve_user_temp(allowed_roles=["doctor" , "patient"]))])
 def add_appointment_route(appointment : Appointment):
     return add_appointment(appointment)
 
