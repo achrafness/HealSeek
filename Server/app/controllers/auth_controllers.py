@@ -44,7 +44,7 @@ async def registeration(User: Registration_input) -> Response:
         
     Raises:
         HTTPException: 400 if validation fails or user exists
-                      500 if database operation fails
+                    500 if database operation fails
     """
     user = dict(User)
     
@@ -131,12 +131,7 @@ async def registeration(User: Registration_input) -> Response:
             patient = Patient.create(user_id=userId)
             db.execute_query(patient)
         elif user['role'] == "admin":
-            admin = Admin.create(
-                user_id=userId,
-                two_factor_auth_enabled=True,
-                last_login=datetime.now().isoformat()
-            )
-            db.execute_query(admin)
+            raise HTTPException(status_code=403 , detail="You can't assign admin as a role")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating {user['role']} profile: {str(e)}")
 
