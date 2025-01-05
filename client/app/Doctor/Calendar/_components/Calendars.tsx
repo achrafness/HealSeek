@@ -105,16 +105,16 @@ export default function Calendars() {
 
       {/* Double Calendar */}
       <div className="flex gap-4 w-full">
-        <div className="border p-4 rounded-md w-1/2">
+        <div className="border border-[#A2A2A1] p-4 rounded-[10px] w-1/2">
           <Calendar appointments={appointments} />
         </div>
-        <div className="border p-4 rounded-md w-1/2">
+        <div className="border border-[#A2A2A1] p-4 rounded-[10px] w-1/2">
           <Calendar appointments={appointments} />
         </div>
       </div>
 
       {/* Range Picker */}
-      <div className="border p-4 rounded-md w-full">
+      <div className="border border-[#A2A2A1] p-4 rounded-[10px] w-full">
         <div className="flex justify-start gap-4 items-center mb-4 w-full">
           <span>Start date</span>
           <FaArrowRight className="h-5 w-5" />
