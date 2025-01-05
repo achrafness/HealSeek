@@ -174,6 +174,7 @@ class Doctor(BaseModel):
     speciality: str
     experience: int
     max_appointments_in_day: int
+    appointment_duration_minutes: int 
     teleconsultation_available: bool
     office_location: str
     office_location_url: str

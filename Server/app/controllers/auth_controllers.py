@@ -6,7 +6,7 @@ from uuid import uuid4
 import json
 import jwt
 import bcrypt
-
+import asyncio
 from fastapi import HTTPException, Request, Response, Form, Cookie
 from fastapi.responses import JSONResponse, RedirectResponse
 
@@ -21,6 +21,16 @@ class UserRole(str, Enum):
     DOCTOR = "doctor"
     PATIENT = "patient"
     ADMIN = "admin"
+
+async def check_email(user, db):
+    user_query_email = us.find(email=user["email"])
+    db.execute_query(user_query_email, params=(user["email"],))
+    return db.fetch_one()
+
+async def check_phone_number(user, db):
+    user_query_phone_number = us.find(phone_number=user["phone_number"])
+    db.execute_query(user_query_phone_number, params=(user["phone_number"],))
+    return db.fetch_one()
 
 async def registeration(User: Registration_input) -> Response:
     """
@@ -56,21 +66,7 @@ async def registeration(User: Registration_input) -> Response:
         user["role"] = role.value  
     except ValueError:
         raise HTTPException(400, detail=f"Invalid role. Must be one of: {', '.join([r.value for r in UserRole])}")
-
-    # Check if user exists
-    user_query = us.find(email=user["email"])
-    db.execute_query(user_query, params=(user["email"],))
-    if db.fetch_one():
-        raise HTTPException(400, detail='user already exists')
-
-    # Hash password
-    salt = bcrypt.gensalt(10)
-    user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
     
-    # Generate user ID
-    userId = ''.join(filter(str.isdigit, str(uuid4())))
-    userId = int(userId[:6])
-
     # Process date of birth
     try:
         if user["date_of_birth"]:
@@ -78,6 +74,26 @@ async def registeration(User: Registration_input) -> Response:
             user["date_of_birth"] = date_obj.strftime('%Y-%m-%d')
     except ValueError as e:
         raise HTTPException(400, detail=f"Invalid date format for date_of_birth. Use YYYY-MM-DD: {str(e)}")
+
+
+    email_check, phone_check = await asyncio.gather(
+        check_email(user, db),
+        check_phone_number(user, db)
+    )
+
+    # Check if email or phone number already exists
+    if email_check:
+        raise HTTPException(400, detail='Email already exists')
+    if phone_check:
+        raise HTTPException(400, detail='Phone number already exists')
+    
+    # Hash password
+    salt = bcrypt.gensalt(10)
+    user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
+    
+    # Generate user ID
+    userId = ''.join(filter(str.isdigit, str(uuid4())))
+    userId = int(userId[:6])
 
     # Create user
     try:
@@ -104,10 +120,12 @@ async def registeration(User: Registration_input) -> Response:
                 speciality=user['speciality'],
                 experience=user['experience'],
                 max_appointments_in_day=user['max_appointments_in_day'],
+                appointment_duration_minutes=user['appointment_duration_minutes'],
                 teleconsultation_available=user['teleconsultation_available'],
                 office_location=user['office_location'],
                 office_location_url=user['office_location_url']
             )
+            print(doctor)
             db.execute_query(doctor)
         elif user['role'] == "patient":
             patient = Patient.create(user_id=userId)
@@ -122,7 +140,11 @@ async def registeration(User: Registration_input) -> Response:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating {user['role']} profile: {str(e)}")
 
-    return Response(content=json.dumps(user), media_type="application/json", status_code=201)
+    return Response(
+        content=json.dumps({"message": "register successful"}), 
+        media_type="application/json", 
+        status_code=201
+    )
 
 def login(userCredentials: Login_input, response: Response) -> JSONResponse:
     """

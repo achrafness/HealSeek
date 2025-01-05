@@ -58,7 +58,7 @@ def get_all_users(
 def get_user_by_id_route(user_id: int, current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin", "patient", "doctor"]))):
     return get_id(user_id)
 
-@router.put('/', description="Update user details the update is with token", response_description="Returns the updated user data.")
+@router.put('/{user_id}', description="Update user details the update is with token", response_description="Returns the updated user data.")
 def update_user_route(user_data: dict, current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin", "patient", "doctor"]))):
     user_id = current_user["user_id"]
     return update_user(user_id, user_data)

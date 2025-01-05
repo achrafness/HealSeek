@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS doctors (
     speciality VARCHAR(100),
     experience INT CHECK (experience >= 0),
     max_appointments_in_day INT CHECK (max_appointments_in_day > 0),
+    appointment_duration_minutes INT DEFAULT 30 CHECK (appointment_duration_minutes > 0), 
     teleconsultation_available BOOLEAN DEFAULT FALSE,
     office_location VARCHAR(255),
     office_location_url VARCHAR(255),
@@ -48,10 +49,32 @@ CREATE TABLE IF NOT EXISTS appointments (
     appointment_id SERIAL PRIMARY KEY,
     appointment_time TIMESTAMP NOT NULL,
     status VARCHAR(50) NOT NULL CHECK (status IN ('scheduled', 'completed', 'cancelled')),
+    type VARCHAR(50) NOT NULL CHECK (type IN ('in_person', 'teleconsultation')),
     doctor_id INT,
     patient_id INT,
     FOREIGN KEY (doctor_id) REFERENCES doctors(user_id) ON DELETE CASCADE,
     FOREIGN KEY (patient_id) REFERENCES patients(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS doctor_availability (
+    availability_id SERIAL PRIMARY KEY,
+    doctor_id INT NOT NULL,
+    day_of_week INT CHECK (day_of_week BETWEEN 0 AND 6),
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(user_id) ON DELETE CASCADE,
+    CONSTRAINT valid_time_range CHECK (start_time < end_time)
+);
+
+CREATE TABLE IF NOT EXISTS doctor_time_off (
+    time_off_id SERIAL PRIMARY KEY,
+    doctor_id INT NOT NULL,
+    start_datetime TIMESTAMP NOT NULL,
+    end_datetime TIMESTAMP NOT NULL,
+    reason VARCHAR(255),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(user_id) ON DELETE CASCADE,
+    CONSTRAINT valid_date_range CHECK (start_datetime < end_datetime)
 );
 
 CREATE TABLE IF NOT EXISTS ratings (

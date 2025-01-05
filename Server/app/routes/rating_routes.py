@@ -1,5 +1,5 @@
 from fastapi import APIRouter , HTTPException ,Depends , Request , Path, status
-from app.controllers.ratings_controller import get_all_ratings , add_rating , get_rating_by_id , update_rating , delete_rating
+from app.controllers.ratings_controller import get_all_ratings , add_rating , get_rating_by_id , update_rating , delete_rating , get_ratings_by_doctor , get_ratings_by_patient
 from app.models.rating import Rating
 from app.routes.user_routes import resolve_user_temp
 from typing import List, Optional
@@ -125,3 +125,47 @@ async def delete(
     )
 ):
     return delete_rating(rating_id)
+@router.get(
+    "/doctor/{doctor_id}",
+    response_model=List[RatingResponse],
+    description="Retrieve all ratings for a specific doctor.",
+    response_description="Returns a list of all ratings for the specified doctor.",
+    responses={
+        200: {"description": "Successfully retrieved doctor's ratings"},
+        404: {"description": "No ratings found for this doctor"},
+        500: {"description": "Internal server error"}
+    }
+)
+async def get_doctor_ratings(
+    doctor_id: int = Path(
+        ...,
+        description="The ID of the doctor whose ratings to retrieve",
+        gt=0,
+        example=1
+    )
+):
+    return get_ratings_by_doctor(doctor_id)
+
+@router.get(
+    "/patient/{patient_id}",
+    response_model=List[RatingResponse],
+    description="Retrieve all ratings made by a specific patient.",
+    response_description="Returns a list of all ratings made by the specified patient.",
+    responses={
+        200: {"description": "Successfully retrieved patient's ratings"},
+        403: {"description": "Not authorized to view these ratings"},
+        404: {"description": "No ratings found for this patient"},
+        500: {"description": "Internal server error"}
+    },
+    dependencies=[Depends(resolve_user_temp(allowed_roles=["patient", "admin"]))]
+)
+async def get_patient_ratings(
+    request: Request,
+    patient_id: int = Path(
+        ...,
+        description="The ID of the patient whose ratings to retrieve",
+        gt=0,
+        example=1
+    )
+):
+    return get_ratings_by_patient(request, patient_id)

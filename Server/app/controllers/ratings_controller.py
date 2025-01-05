@@ -106,3 +106,66 @@ def delete_rating(rating_id : int):
     except Exception as e:
         raise HTTPException(status_code=500, detail="internal error : "+ str(e))
     
+
+def get_ratings_by_doctor(doctor_id: int):
+    try:
+        query = rt.find(doctor_id=doctor_id)
+        db.execute_query(query, params=(doctor_id,))
+        result = db.fetch_all()
+        
+        if not result:
+            raise HTTPException(status_code=404, detail=f"No ratings found for doctor {doctor_id}")
+            
+        ratings_data = [
+            {
+                "rating_id": rating[0],
+                "rating_score": rating[1],
+                "review_text": rating[2],
+                "doctor_id": rating[3],
+                "patient_id": rating[4]
+            } for rating in result
+        ]
+        return JSONResponse(content=ratings_data, status_code=200)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error while fetching ratings for doctor: {str(e)}"
+        )
+
+def get_ratings_by_patient(request: Request, patient_id: int):
+    # Verify the requesting user matches the patient_id or is an admin
+    user_id = request.state.user
+    try:
+        # First check if the patient exists
+        existing_patient = us.find(user_id=patient_id)
+        db.execute_query(existing_patient, params=(patient_id,))
+        patient = db.fetch_one()
+        
+        if not patient:
+            raise HTTPException(status_code=404, detail="Patient not found")
+            
+        # Get the ratings
+        query = rt.find(patient_id=patient_id)
+        db.execute_query(query, params=(patient_id,))
+        result = db.fetch_all()
+        
+        if not result:
+            raise HTTPException(status_code=404, detail=f"No ratings found for patient {patient_id}")
+            
+        ratings_data = [
+            {
+                "rating_id": rating[0],
+                "rating_score": rating[1],
+                "review_text": rating[2],
+                "doctor_id": rating[3],
+                "patient_id": rating[4]
+            } for rating in result
+        ]
+        return JSONResponse(content=ratings_data, status_code=200)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error while fetching ratings for patient: {str(e)}"
+        )

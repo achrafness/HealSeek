@@ -11,7 +11,7 @@ class User(BaseModel) :
     name : str
     email: Annotated[str, Field(pattern=mail_regex)] = 'exmp@mail.com'
     password : str
-    phone_number : int
+    phone_number : str = Field(default='0666666666')
     date_of_birth: str = Field(default="2000-01-01")
     role: str = Field(default="patient")
     pfpUrl : str
@@ -22,6 +22,7 @@ class Registration_input(User):
     speciality: Optional[str] = None
     experience: Optional[int] = None
     max_appointments_in_day: Optional[int] = None
+    appointment_duration_minutes: Optional[int] = Field(default=30)
     teleconsultation_available: Optional[bool] = None
     office_location: Optional[str] = None
     office_location_url: Optional[str] = None
