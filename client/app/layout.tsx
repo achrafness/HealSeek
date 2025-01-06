@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from 'next/font/google'
 import "./globals.css";
-import RouteWrapper from "./_components/RouteWrapper";
+import RouteWrapper from "./components/RouteWrapper";
 
 const poppins = Poppins({
   variable: "--font-poppins",

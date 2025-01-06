@@ -1,8 +1,8 @@
-import React from 'react'
-import DoctorNavbar from '@/app/Doctor/Settings/_components/DoctorNavbar';
 
-import DashboardContent from '@/app/dashboard/admin/Dashboard/_components/DashboardContent';
-import Sidebar from '../Settings/_components/Sidebar';
+import React from 'react'
+import Sidebar from '../Settings/components/Sidebar'
+import DoctorNavbar from '../Settings/components/DoctorNavbar'
+import DashboardContent from '../../admin/Dashboard/_components/DashboardContent'
 export default function page() {
     return (
         <div className='h-screen flex '>
