@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function UserLogin() {
+    
     return (
         <div className='w-1/2 h-fit mx-auto'>
             <div className='w-full h-20 relative my-12'>
@@ -9,10 +10,6 @@ export default function UserLogin() {
                 <div className='absolute -bottom-12 left-0  w-0 h-0 border-t-[20px] border-t-transparent  border-l-[20px] border-l-primary border-b-transparent border-b-[20px] border-b-primary'></div>
             </div>
             <form method='Post' className='w-full'>
-                <div className='flex flex-col'>
-                    <label htmlFor="name" className=' font-medium text-xs text-[#333333] my-4'>Name</label>
-                    <input type="name" name="name" id="name" className='focus:outline-none flex flex-row justify-center items-center p-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0' />
-                </div>
                 <div className='flex flex-col'>
                     <label htmlFor="email" className=' font-medium text-xs text-[#333333] my-4'>Email</label>
                     <input type="email" name="email" id="email" className='focus:outline-none flex flex-row justify-center items-center p-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0' />
