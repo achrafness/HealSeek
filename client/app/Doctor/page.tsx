@@ -1,49 +1,86 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import { FiSearch, FiMessageCircle } from "react-icons/fi";
-import { IoFilterOutline } from "react-icons/io5";
+import { FaRegClock } from "react-icons/fa";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { MdLocationOn, MdOutlinePersonSearch } from "react-icons/md";
 
 const DoctorCard = ({ doctor }) => {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow">
-      <div className="flex gap-4">
+    <div className="bg-white rounded-[32px] p-8 shadow-md hover:shadow-xl transition-all">
+      <div className="flex gap-6">
         <img
           src={doctor.profile_picture_url || "/api/placeholder/150/150"}
           alt={doctor.name}
-          className="w-24 h-24 rounded-full object-cover"
+          className="w-28 h-28 rounded-2xl object-cover"
         />
         <div className="flex-1">
-          <h3 className="text-xl font-semibold text-gray-800">{doctor.name}</h3>
-          <p className="text-[#00BFA5]">{doctor.speciality}</p>
-          <div className="flex items-center gap-2 text-[#6C87AE] text-sm mt-1">
+          <p className="text-[#00BFA5] text-lg font-medium mb-1">
+            {doctor.speciality}
+          </p>
+          <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+            {doctor.name}
+          </h3>
+          <div className="flex items-center gap-2 text-[#6C87AE]">
+            <MdLocationOn className="text-lg" />
             <span>{doctor.office_location}</span>
-            <span>•</span>
-            <span>{doctor.experience} years experience</span>
-          </div>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {doctor.teleconsultation_available && (
-              <span className="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                Teleconsultation Available
-              </span>
-            )}
-            <span className="text-sm bg-gray-100 text-gray-600 px-2 py-1 rounded">
-              {doctor.appointment_duration_minutes} min consultation
-            </span>
           </div>
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-between">
+
+      <div className="grid grid-cols-3 gap-4 mt-6">
+        <div
+          className="flex flex-row text-white text-sm justify-center items-center rounded-xl h-12 px-4 gap-2"
+          style={{
+            background:
+              "linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)",
+            boxShadow: "0px 8px 23px 0px #4184F73D",
+          }}
+        >
+          <FaRegClock />
+          {doctor.experience}+ years
+        </div>
+
+        <div
+          className="flex flex-row text-white text-sm justify-center items-center rounded-xl h-12 px-4 gap-2"
+          style={{
+            background:
+              "linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)",
+            boxShadow: "0px 8px 23px 0px #4184F73D",
+          }}
+        >
+          <IoMdCheckmarkCircleOutline />
+          {doctor.appointment_duration_minutes} min
+        </div>
+
+        {doctor.teleconsultation_available && (
+          <div
+            className="flex flex-row text-white text-sm justify-center items-center rounded-xl h-12 px-4 gap-2"
+            style={{
+              background:
+                "linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)",
+              boxShadow: "0px 8px 23px 0px #4184F73D",
+            }}
+          >
+            <FiMessageCircle />
+            Teleconsult
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6 flex items-center justify-between">
         <div>
-          <span className="text-sm text-[#6C87AE]">Max appointments/day</span>
-          <p className="font-semibold text-lg">
+          <span className="text-[#6C87AE]">Available slots/day</span>
+          <p className="font-semibold text-xl">
             {doctor.max_appointments_per_day}
           </p>
         </div>
         <button
-          className="flex items-center gap-2 text-white rounded-full px-6 py-2"
+          className="flex items-center gap-2 text-white rounded-full px-8 py-4 text-lg"
           style={{
             background:
               "linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%)",
+            boxShadow: "0px 8px 23px 0px #4184F73D",
           }}
         >
           <FiMessageCircle />
@@ -59,39 +96,38 @@ const DoctorsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filter states
-  const [speciality, setSpeciality] = useState("");
-  const [location, setLocation] = useState("");
-  const [teleconsultation, setTeleconsultation] = useState(null);
-  const [maxDuration, setMaxDuration] = useState("");
+  const [filters, setFilters] = useState({
+    speciality: "",
+    location: "",
+    teleconsultation: null,
+    maxDuration: "",
+  });
 
   const fetchDoctors = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // Build query parameters
       const params = new URLSearchParams();
-      if (speciality) params.append("speciality", speciality);
-      if (location) params.append("location", location);
-      if (teleconsultation !== null)
-        params.append("teleconsultation", teleconsultation);
-      if (maxDuration) params.append("max_duration", maxDuration);
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          params.append(key, value);
+        }
+      });
 
       const response = await fetch(
         `http://localhost:8000/doctors/search?${params.toString()}`
       );
 
       if (!response.ok) {
-        if (response.status === 404) {
-          setDoctors([]);
-        } else {
-          throw new Error(`Error: ${response.status}`);
-        }
+        throw new Error(
+          response.status === 404
+            ? "No doctors found"
+            : "Failed to fetch doctors"
+        );
       }
 
       const data = await response.json();
-      
       setDoctors(data.doctors || []);
     } catch (err) {
       setError(err.message);
@@ -103,71 +139,90 @@ const DoctorsPage = () => {
 
   useEffect(() => {
     fetchDoctors();
-  }, [speciality, location, teleconsultation, maxDuration]);
+  }, [filters]);
 
   return (
-    <div className="bg-[#F2F7FF] min-h-screen py-8">
+    <div className="bg-[#F2F7FF] min-h-screen py-12">
       <div className="container mx-auto px-4">
-        {/* Search Section */}
-        <div className="bg-white rounded-2xl p-6 shadow-md mb-8">
-          <div className="flex flex-wrap gap-6">
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm text-gray-600 mb-2">
-                Speciality
-              </label>
-              <input
-                type="text"
-                placeholder="Enter speciality"
-                className="w-full p-3 rounded-lg border border-gray-200"
-                value={speciality}
-                onChange={(e) => setSpeciality(e.target.value)}
-              />
-            </div>
+        <div className="text-center mb-12">
+          <h1 className="font-bold text-[48px] mb-4">
+            Find Your Perfect Doctor
+          </h1>
+          <p className="text-[#6C87AE] text-xl font-normal max-w-2xl mx-auto">
+            Search through our network of qualified healthcare professionals to
+            find the right doctor for your needs
+          </p>
+        </div>
 
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm text-gray-600 mb-2">
-                Location
-              </label>
+        {/* Search Section */}
+        <div className="bg-white rounded-[32px] p-8 shadow-lg mb-12">
+          <div className="flex items-center gap-4 bg-[#F2F7FF] rounded-full p-4 mb-8">
+            <MdOutlinePersonSearch className="text-2xl text-[#3A8EF6]" />
+            <input
+              type="text"
+              placeholder="Search by doctor name or speciality..."
+              className="bg-transparent flex-1 outline-none text-lg"
+              value={filters.speciality}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, speciality: e.target.value }))
+              }
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-[#6C87AE] mb-2">Location</label>
               <input
                 type="text"
                 placeholder="Enter location"
-                className="w-full p-3 rounded-lg border border-gray-200"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                className="w-full p-4 rounded-xl border border-gray-200"
+                value={filters.location}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, location: e.target.value }))
+                }
               />
             </div>
 
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm text-gray-600 mb-2">
+            <div>
+              <label className="block text-[#6C87AE] mb-2">
                 Teleconsultation
               </label>
               <select
-                className="w-full p-3 rounded-lg border border-gray-200"
+                className="w-full p-4 rounded-xl border border-gray-200"
                 value={
-                  teleconsultation === null ? "" : teleconsultation.toString()
+                  filters.teleconsultation === null
+                    ? ""
+                    : filters.teleconsultation.toString()
                 }
                 onChange={(e) =>
-                  setTeleconsultation(
-                    e.target.value === "" ? null : e.target.value === "true"
-                  )
+                  setFilters((prev) => ({
+                    ...prev,
+                    teleconsultation:
+                      e.target.value === "" ? null : e.target.value === "true",
+                  }))
                 }
               >
-                <option value="">All</option>
+                <option value="">All Options</option>
                 <option value="true">Available</option>
                 <option value="false">Not Available</option>
               </select>
             </div>
 
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm text-gray-600 mb-2">
+            <div>
+              <label className="block text-[#6C87AE] mb-2">
                 Max Duration (minutes)
               </label>
               <input
                 type="number"
                 placeholder="Enter max duration"
-                className="w-full p-3 rounded-lg border border-gray-200"
-                value={maxDuration}
-                onChange={(e) => setMaxDuration(e.target.value)}
+                className="w-full p-4 rounded-xl border border-gray-200"
+                value={filters.maxDuration}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    maxDuration: e.target.value,
+                  }))
+                }
                 min="1"
               />
             </div>
@@ -177,7 +232,10 @@ const DoctorsPage = () => {
         {/* Loading State */}
         {loading && (
           <div className="text-center py-12">
-            <p className="text-xl text-gray-600">Loading doctors...</p>
+            <div className="w-16 h-16 border-4 border-[#3A8EF6] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-xl text-[#6C87AE]">
+              Finding the best doctors for you...
+            </p>
           </div>
         )}
 
@@ -189,20 +247,27 @@ const DoctorsPage = () => {
         )}
 
         {/* Results Section */}
-        {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {doctors.map((doctor) => (
-              <DoctorCard key={doctor.user_id} doctor={doctor} />
-            ))}
-          </div>
+        {!loading && !error && doctors.length > 0 && (
+          <>
+            <p className="text-[#00BFA5] text-xl font-medium mb-8">
+              Found {doctors.length} doctors
+            </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {doctors.map((doctor) => (
+                <DoctorCard key={doctor.user_id} doctor={doctor} />
+              ))}
+            </div>
+          </>
         )}
 
         {/* Empty State */}
         {!loading && !error && doctors.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-gray-600">
-              No doctors found matching your criteria
+            <MdOutlinePersonSearch className="text-6xl text-[#6C87AE] mx-auto mb-4" />
+            <p className="text-2xl text-gray-800 font-semibold mb-2">
+              No doctors found
             </p>
+            <p className="text-[#6C87AE]">Try adjusting your search criteria</p>
           </div>
         )}
       </div>
