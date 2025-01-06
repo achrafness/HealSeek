@@ -3,6 +3,7 @@ import React from 'react'
 import { useState } from 'react';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 export default function Register() {
@@ -83,7 +84,7 @@ export default function Register() {
                 router.push('/Auth/Login');
             }
             console.log(result);
-            
+
         } catch (error) {
             console.error(error);
             alert('Registration failed. Please try again.');
@@ -102,18 +103,16 @@ export default function Register() {
             <div className='flex flex-row gap-4 my-8'>
                 <div
                     onClick={() => setRole('patient')}
-                    className={`flex-1 p-6 rounded-lg cursor-pointer transition-all duration-300 ${
-                        role === 'patient' ? 'bg-primary text-white' : 'bg-[#FFF3F3] text-[#333333]'
-                    }`}
+                    className={`flex-1 p-6 rounded-lg cursor-pointer transition-all duration-300 ${role === 'patient' ? 'bg-primary text-white' : 'bg-[#FFF3F3] text-[#333333]'
+                        }`}
                 >
                     <h2 className='text-xl font-semibold'>Patient</h2>
                     <p className='text-sm'>Register as a patient</p>
                 </div>
                 <div
                     onClick={() => setRole('doctor')}
-                    className={`flex-1 p-6 rounded-lg cursor-pointer transition-all duration-300 ${
-                        role === 'doctor' ? 'bg-primary text-white' : 'bg-[#FFF3F3] text-[#333333]'
-                    }`}
+                    className={`flex-1 p-6 rounded-lg cursor-pointer transition-all duration-300 ${role === 'doctor' ? 'bg-primary text-white' : 'bg-[#FFF3F3] text-[#333333]'
+                        }`}
                 >
                     <h2 className='text-xl font-semibold'>Doctor</h2>
                     <p className='text-sm'>Register as a doctor</p>
@@ -211,7 +210,7 @@ export default function Register() {
                     <>
                         <div className='flex flex-col'>
                             <label htmlFor="speciality" className='font-medium text-xs text-[#333333] my-4'>Speciality</label>
-                            <div id="speciality" className='focus:outline-none flex flex-row justify-center items-center p-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'>
+                            <div id="speciality" className='focus:outline-none flex flex-row max-lg:grid max-lg:grid-rows-2 max-lg:grid-cols-2 max-lg:gap-6 max-lg:py-4 justify-center items-center p-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'>
                                 {specialities.map((speciality, index) => (
                                     <div
                                         key={index}
@@ -298,6 +297,12 @@ export default function Register() {
                 <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
                     Register
                 </button>
+                <div className="text-center text-sm text-[#333333] mt-4">
+                    Already have an account?{' '}
+                    <Link href="/Auth/Login" className="text-primary font-semibold hover:underline">
+                        Login instead
+                    </Link>
+                </div>
             </form>
         </div>
     );

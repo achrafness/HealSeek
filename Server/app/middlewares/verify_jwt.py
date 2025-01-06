@@ -20,6 +20,7 @@ def verify_jwt(request: Request,allowed_roles: list = None):
 
         # Verify the token using the utility function
         payload = verify_token(access_token)
+        print(payload)
         if not payload:
             raise HTTPException(status_code=401, detail="Invalid or expired token")
 

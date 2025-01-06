@@ -22,6 +22,8 @@ def resolve_user(allowed_roles: list = None):
 
 def resolve_user_temp(allowed_roles: list = None):
     async def dependency(credentials: HTTPAuthorizationCredentials = Depends(security)):
+        print("credentials")
+        print(credentials)
         try:
             access_token = credentials.credentials
             user = verify_jwt_temp(access_token, allowed_roles=allowed_roles)
@@ -54,6 +56,11 @@ def get_all_users(
 ):
     return get_users(email=email, name=name)
 
+@router.get('/profile', description="Fetch the profile of the current user.", response_description="Returns the user's profile data.")
+def get_profile(current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin", "patient", "doctor"]))):
+    user_id = current_user["user_id"]
+    return get_id(user_id)
+
 @router.get('/{user_id}', description="Fetch user details by user ID.", response_description="Returns the user data.")
 def get_user_by_id_route(user_id: int, current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin", "patient", "doctor"]))):
     return get_id(user_id)
@@ -67,10 +74,6 @@ def update_user_route(user_data: dict, current_user: dict = Depends(resolve_user
 def delete_user_route(user_id: int, current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin"]))):
     return delete(user_id)
 
-@router.get('/profile', description="Fetch the profile of the current user.", response_description="Returns the user's profile data.")
-def get_profile(current_user: dict = Depends(resolve_user_temp(allowed_roles=["admin", "patient", "doctor"]))):
-    user_id = current_user["user_id"]
-    return get_id(user_id)
 
 
 @router.put('/add-admin/{user_id}', description="Promote a user to admin.", response_description="Returns a message indicating the promotion status.")

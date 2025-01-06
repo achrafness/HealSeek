@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 // components/RequireAuth.tsx
 import { useRouter } from 'next/navigation';

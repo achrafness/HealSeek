@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime ,timedelta , timezone
 from email import message
 from enum import Enum
 from typing import Annotated
@@ -17,6 +17,7 @@ from app.utils.twoFA import generate_2fa_code, verify_2fa_code
 from app.database.database import User as us, db, Doctor, Patient, Admin
 from app.enums.roles import Roles
 from app.models.user import Registration_input, Login_input
+
 
 class UserRole(str, Enum):
     """Enum for user roles in the system."""
@@ -250,11 +251,24 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         Admin_query = Admin.update(last_login=datetime.now().isoformat(), user_id=user_found["user_id"])
         db.execute_query(Admin_query, params=(datetime.now().isoformat(), user_found["user_id"]))
 
-    return JSONResponse(
+    response =  JSONResponse(
         content={"accessToken": access_token},
         status_code=200,
-        headers={"Set-Cookie": f"jwt={refresh_token}; HttpOnly; Max-Age=1800; SameSite=Lax"}
     )
+
+    response.set_cookie(
+        key="jwt",
+        value=refresh_token,
+        max_age=7 * 24 * 60 * 60,
+        expires=(datetime.utcnow() + timedelta(days=7)).replace(tzinfo=timezone.utc),
+        domain="127.0.0.1",  # Match frontend domain
+        path="/",
+        secure=False,
+        httponly=True,
+        samesite="Lax"
+)
+    
+    return response
 
 def logout(response: Response, request: Request) -> dict:
     """
@@ -300,7 +314,9 @@ def handle_refresh_token(response: Response, request: Request) -> dict:
         HTTPException: 403 if token is invalid
                       500 if token verification fails
     """
+    print("hna ntestiz")
     cookies = request.cookies.get("jwt")
+    print(cookies)
     if not cookies:
         return {"no token provided"}
 

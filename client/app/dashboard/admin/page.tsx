@@ -1,4 +1,5 @@
 import { FiSettings, FiPieChart } from "react-icons/fi";
+import RequireAuth from "@/HOC/RequireAuth";
 
 const NavButton = ({ icon: Icon, text, path }) => (
   <a

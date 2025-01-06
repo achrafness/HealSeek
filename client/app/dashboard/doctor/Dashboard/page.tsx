@@ -1,7 +1,7 @@
 import React from 'react'
 import DoctorNavbar from '@/app/Doctor/Settings/_components/DoctorNavbar';
 
-import DashboardContent from '@/app/Admin/Dashboard/_components/DashboardContent';
+import DashboardContent from '@/app/dashboard/admin/Dashboard/_components/DashboardContent';
 import Sidebar from '../Settings/_components/Sidebar';
 export default function page() {
     return (

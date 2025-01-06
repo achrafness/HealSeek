@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from 'next/font/google'
 import "./globals.css";
-import PersistentLogin from "@/HOC/PersistLogin";
+import RouteWrapper from "./_components/RouteWrapper";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -20,13 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    
     <html lang="en">
       <body
         className={`${poppins.variable} antialiased`}
       >
         {/* <PersistentLogin Children={children} /> */}
-        {children}
+        <RouteWrapper>
+          {children}
+        </RouteWrapper>
       </body>
     </html>
+    
   );
 }
