@@ -5,9 +5,24 @@ services:
     image: postgres:13
     container_name: postgres_db
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      JWT_PUBLIC_KEY=0abb78001d1c045b9993cfdbd408e5be
+      JWT_PRIVATE_KEY=8368262cbf03d587d9e8ba37e4ee77a1
+      REFRESH_TOKEN_EXPIRES_IN = 3600
+      ACCESS_TOKEN_EXPIRES_IN = 604800
+      JWT_ALGORITHM=HS256
+      TWOFACTOR_SECRET = TSRLNQJP5DE22IM6HBCC2BQB2X27W6KD
+      GOOGLE_CLIENT_ID = '449721150061-eqankip4ekleq58p1qs712h8lsv0nii4.apps.googleusercontent.com'
+      GOOGLE_CLIENT_SECRET = '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'
+      MY_MAIL = "majdozed@gmail.com"
+      MY_PASS = nnlb qhaw xdkk okzc
+      CLOUD_NAME = "dqnwniezl"
+      API_KEY =   "572694926573561"
+      API_SECRET ="qWWWYCvqb0ig_kTeGFk0Dr_Ar50"
+      DATABASE_HOST=localhost
+      DATABASE_PORT=5432
+      DATABASE_NAME=test
+      DATABASE_USER=postgres
+      DATABASE_PASSWORD=ajhaw22017
     ports:
       - "5432:5432"
     volumes:
