@@ -1,4 +1,3 @@
-import React from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { BiSolidMessageRoundedDetail } from "react-icons/bi";
 import { IoMdNotifications } from "react-icons/io";

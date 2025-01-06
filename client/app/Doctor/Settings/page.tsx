@@ -1,8 +1,8 @@
 import React from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
-import SettingsContent from './_components/SettingsContent';
-import Sidebar from './_components/Sidebar';
-import DoctorNavbar from './_components/DoctorNavbar';
+import SettingsContent from './components/SettingsContent';
+import Sidebar from './components/Sidebar';
+import DoctorNavbar from './components/DoctorNavbar';
 
 export default function page() {
     return (

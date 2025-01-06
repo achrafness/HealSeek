@@ -1,4 +1,3 @@
-import React from 'react'
 import { AppointmentTable } from './AppointmentTable';
 const appointments = [
     {

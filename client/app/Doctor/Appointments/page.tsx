@@ -1,7 +1,6 @@
-import React from 'react'
 import DoctorNavbar from '@/app/Doctor/Settings/_components/DoctorNavbar';
-import Sidebar from '../Settings/_components/Sidebar';
-import AppointmentsContent from './_components/AppointmentsContent';
+import Sidebar from '../Settings/components/Sidebar';
+import AppointmentsContent from './components/AppointmentsContent';
 export default function page() {
     return (
         <div className='h-screen flex '>
