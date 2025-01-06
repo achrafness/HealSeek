@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Navbar from "./_components/Navbar";
-import Footer from "./_components/Footer";
-import LandingPageContent from "./_components/LandingPageContent";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import LandingPageContent from "./components/LandingPageContent";
 
 export default function Home() {
   return (
