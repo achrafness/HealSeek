@@ -9,7 +9,7 @@ import { FiSearch, FiBell } from "react-icons/fi";
 import DashboardContent from "./_components/DashboardContent";
 
 const Sidebar = () => (
-  <aside className="w-80 bg-[#F2F2F0] min-h-screen h-fit max-lg:hidden p-6">
+  <aside className="w-80 bg-[#F2F2F0] min-h-screen max-lg:hidden p-6">
     <div className="bg-primary p-4 rounded-xl text-white flex gap-4 mb-8">
       <Image
         src="/doctorDashboard.svg"
