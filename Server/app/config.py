@@ -16,6 +16,13 @@ class Settings(BaseSettings):
     CLOUD_NAME: str
     API_KEY: str
     API_SECRET: str
+    DATABASE_HOST: str
+    DATABASE_PORT: int
+    DATABASE_NAME: str
+    DATABASE_USER: str
+    DATABASE_PASSWORD : str
+
+
     # CLIENT_ORIGIN: str
 
     # EMAIL_HOST: str

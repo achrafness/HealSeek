@@ -5,6 +5,7 @@ import inflection
 from typing import Any, Dict, List, Optional, Tuple, Union
 from contextlib import contextmanager
 import logging
+from app.config import settings
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -321,4 +322,51 @@ class Language(BaseModel):
     def find(cls, **kwargs):
         query = cls.select(**kwargs)
         return query
-db = Database('localhost', '5432' ,'Test-02', 'postgres', 'Achraf*2017')
+class Prescription(BaseModel):
+    table_name = "prescriptions"
+    prescription_id: int
+    appointment_id: int
+    doctor_id: int
+    patient_id: int
+    diagnosis: str
+    notes: str
+    created_at: datetime
+    updated_at: datetime
+
+    @classmethod
+    def create(cls, **kwargs):
+        query = cls.insert(**kwargs)
+        return query
+
+    @classmethod
+    def find(cls, **kwargs):
+        query = cls.select(**kwargs)
+        return query
+
+    @classmethod
+    def update(cls, **kwargs):
+        # Update the updated_at timestamp
+        kwargs['updated_at'] = datetime.now()
+        query = super().update(**kwargs)
+        return query
+class PrescriptionMedication(BaseModel):
+    table_name = "prescription_medications"
+    medication_id: int
+    prescription_id: int
+    medication_name: str
+    dosage: str
+    frequency: str
+    duration: str
+    instructions: str
+
+    @classmethod
+    def create(cls, **kwargs):
+        query = cls.insert(**kwargs)
+        return query
+
+    @classmethod
+    def find(cls, **kwargs):
+        query = cls.select(**kwargs)
+        return query
+print(settings.DATABASE_PASSWORD)
+db = Database(settings.DATABASE_HOST, settings.DATABASE_PORT ,settings.DATABASE_NAME, settings.DATABASE_USER, settings.DATABASE_PASSWORD)
