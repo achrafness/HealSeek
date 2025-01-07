@@ -43,9 +43,15 @@ def get_patient_appointments(patient_id: int):
 
 def get_doctor_appointments(doctor_id : int):
     try:
+        print("eee")
         doctor_query = ap.find(doctor_id=doctor_id)
         db.execute_query(doctor_query, params=(doctor_id,))
+       
+        print("eee")
         appointments_data = db.fetch_all()
+        
+        print("eee")
+        print(appointments_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while fetching appointments : " + str(e))
     if not appointments_data:

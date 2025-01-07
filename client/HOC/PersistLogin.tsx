@@ -24,7 +24,11 @@ const PersistentLogin = ({
             }
         }
 
-        !accessToken ? verifyToken() : setLoading(false);
+        if (!accessToken) {
+            verifyToken();
+        } else {
+            setLoading(false);
+        }
 
     }, [])
 

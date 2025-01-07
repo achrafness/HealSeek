@@ -1,5 +1,5 @@
 import React from 'react'
-import AppointmentCard from '../../Settings/_components/AppointmentCard'
+import AppointmentCard from '../../Settings/components/AppointmentCard'
 import Link from 'next/link'
 
 const appointments = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

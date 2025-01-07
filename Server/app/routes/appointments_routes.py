@@ -1,7 +1,7 @@
 from fastapi import Request, HTTPException , APIRouter,Depends
 from app.models.appointment import Appointment
 from app.controllers.appointments_controllers import get_all_appointments , get_apointment_by_id , get_patient_appointments , get_doctor_appointments , add_appointment , delete_appointment , update_appointment
-from app.routes.user_routes import resolve_user_temp
+from app.routes.user_routes import resolve_user_temp, resolve_user
 
 router = APIRouter()
 
@@ -14,7 +14,7 @@ def get_patient_appointments_route(request: Request):
     patient_id = request.state.user
     return get_patient_appointments(patient_id)
 
-@router.get("/doctor" , dependencies=[Depends(resolve_user_temp(allowed_roles=["doctor"]))])
+@router.get("/doctor" , dependencies=[Depends(resolve_user(allowed_roles=["doctor"]))])
 def get_doctor_appointments_route(request: Request):
     doctor_id = request.state.user
     return get_doctor_appointments(doctor_id)

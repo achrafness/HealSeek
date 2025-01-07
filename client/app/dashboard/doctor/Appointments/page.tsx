@@ -1,4 +1,4 @@
-import DoctorNavbar from '@/app/Doctor/Settings/_components/DoctorNavbar';
+import DoctorNavbar from '../Settings/components/DoctorNavbar';
 import Sidebar from '../Settings/components/Sidebar';
 import AppointmentsContent from './components/AppointmentsContent';
 export default function page() {

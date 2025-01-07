@@ -1,4 +1,4 @@
-from datetime import datetime ,timedelta , timezone
+from datetime import datetime
 from email import message
 from enum import Enum
 from typing import Annotated
@@ -17,7 +17,6 @@ from app.utils.twoFA import generate_2fa_code, verify_2fa_code
 from app.database.database import User as us, db, Doctor, Patient, Admin
 from app.enums.roles import Roles
 from app.models.user import Registration_input, Login_input
-
 
 class UserRole(str, Enum):
     """Enum for user roles in the system."""
@@ -105,7 +104,7 @@ async def registeration(User: Registration_input) -> Response:
         logger.error(f"Error checking user credentials: {str(e)}")
         raise HTTPException(
             status_code=500, 
-            detail="Error validating user information"
+            detail=f"Error validating user information: {str(e)}"
         )
 
     # Hash password
@@ -234,7 +233,7 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         found_admin = Admin.find(user_id=user_found["user_id"])
         db.execute_query(found_admin, params=(user_found["user_id"],))
         found_admin = db.fetch_one()
-        
+        print(found_admin)
         if found_admin[1]:  # If 2FA is enabled
             generate_2fa_code(receiver=user_found["email"])
             temp_2fa_token = sign_access_token(
@@ -251,24 +250,11 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         Admin_query = Admin.update(last_login=datetime.now().isoformat(), user_id=user_found["user_id"])
         db.execute_query(Admin_query, params=(datetime.now().isoformat(), user_found["user_id"]))
 
-    response =  JSONResponse(
+    return JSONResponse(
         content={"accessToken": access_token},
         status_code=200,
+        headers={"Set-Cookie": f"jwt={refresh_token}; HttpOnly; Max-Age=1800; SameSite=Lax"}
     )
-
-    response.set_cookie(
-        key="jwt",
-        value=refresh_token,
-        max_age=7 * 24 * 60 * 60,
-        expires=(datetime.utcnow() + timedelta(days=7)).replace(tzinfo=timezone.utc),
-        domain="127.0.0.1",  # Match frontend domain
-        path="/",
-        secure=False,
-        httponly=True,
-        samesite="Lax"
-)
-    
-    return response
 
 def logout(response: Response, request: Request) -> dict:
     """
@@ -314,9 +300,7 @@ def handle_refresh_token(response: Response, request: Request) -> dict:
         HTTPException: 403 if token is invalid
                       500 if token verification fails
     """
-    print("hna ntestiz")
     cookies = request.cookies.get("jwt")
-    print(cookies)
     if not cookies:
         return {"no token provided"}
 

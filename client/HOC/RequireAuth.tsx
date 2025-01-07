@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 // components/RequireAuth.tsx
 import { useRouter } from 'next/navigation';
@@ -15,6 +16,7 @@ const RequireAuth = ({
     const router = useRouter();
 
     useEffect(() => {
+        console.log('accessToken', accessToken);
         if (!accessToken) {
             router.push(`/`);
         } else if (!allowedRoles.includes(role!)) {

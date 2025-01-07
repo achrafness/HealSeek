@@ -29,7 +29,10 @@ export const HeroSection = () => {
         </div>
         <Image src="/Login.svg" alt="" width={517} height={679} />
       </div>
-      <StatsBar />
+      <div className="w-1/3 mx-auto">
+        <StatsBar />
+
+      </div>
     </div>
   );
 };
