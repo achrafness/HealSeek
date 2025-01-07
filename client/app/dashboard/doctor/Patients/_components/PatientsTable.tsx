@@ -186,7 +186,7 @@ export function PatientTable({ patients }: PatientTableProps) {
                                     className="hover:bg-gray-100 text-[#252C58] font-light text-[25px] h-28 cursor-pointer"
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => window.location.href = `./Patients/${row.original.id}`}
+                                    onClick={() =>{if(window) window.location.href = `./Patients/${row.original.id}`}}
                                 >
                                     {row.getVisibleCells().map((cell) => {
                                         return (

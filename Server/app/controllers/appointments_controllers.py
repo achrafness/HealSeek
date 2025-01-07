@@ -55,11 +55,6 @@ def get_doctor_appointments(doctor_id : int):
 
 def add_appointment(appointment : Appointment):
     try:
-        if appointment.doctor_id != request.state.user or appointment.patient_id != request.state.user:
-            raise HTTPException(status_code=403, detail="You are not allowed to add appointment for this doctor")
-    except :
-        raise HTTPException(status_code=403, detail="You are not allowed to add appointment for this doctor and user")
-    try:
         existing_doctor = Doctor.find(user_id=appointment.doctor_id)
         db.execute_query(existing_doctor, params=(appointment.doctor_id,))
         existing_doctor = db.fetch_one()

@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'; // For Next.js 13+
 import PersistentLogin from '@/HOC/PersistLogin';
-const publicRoutes = ["/", "/Auth/Login", "/Auth/Register"];
+const publicRoutes = ["/", "/auth/login", "/auth/register"];
 
 const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
