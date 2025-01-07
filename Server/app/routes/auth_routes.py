@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Cookie, File, UploadFile, Depends, Header
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.models.user import Registration_input, Login_input
-from app.controllers.auth_controllers import registeration, login as auth_login, logout as auth_logout, handle_refresh_token, verify_2fa
+from app.controllers.auth_conrtollers import registeration, login as auth_login, logout as auth_logout, handle_refresh_token, verify_2fa
 from app.utils.twoFA import generate_2fa_code, verify_2fa_code
 from app.utils.auth import verify_token
 from fastapi import Response, Request, status

@@ -11,7 +11,7 @@ export default function NavbarServer() {
         <Image
           src="/primaryLogo.svg"
           width={100}
-          height={100} 
+          height={100}
           alt="HealSeak"
           className="object-contain"
         />
@@ -30,20 +30,20 @@ export default function NavbarServer() {
           </li>
           <li>
             <Link
-              href="/about"
+              href="/doctor"
               className="font-normal text-base opacity-80 text-[#6C87AE] hover:text-[#3A8EF6] transition-colors duration-200"
             >
-              About
+              Doctors
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               href="/services"
               className="font-normal text-base opacity-80 text-[#6C87AE] hover:text-[#3A8EF6] transition-colors duration-200"
             >
               Services
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               href="/contact"

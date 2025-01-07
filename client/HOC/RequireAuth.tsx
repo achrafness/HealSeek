@@ -18,7 +18,7 @@ const RequireAuth = ({
     useEffect(() => {
         console.log('accessToken', accessToken);
         if (!accessToken) {
-            router.push(`/`);
+            router.push(`/auth/login`);
         } else if (!allowedRoles.includes(role!)) {
             router.replace('/auth/Forbidden');
         }
