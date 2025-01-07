@@ -4,7 +4,7 @@ import { IoCalendar } from "react-icons/io5";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 import { MdOutlineShowChart } from "react-icons/md";
 import { HiMiniChartPie } from "react-icons/hi2";
-import AppointmentCard from '@/app/Doctor/Settings/_components/AppointmentCard';
+import AppointmentCard from '@/app/dashboard/doctor/Settings/components/AppointmentCard';
 
 const appointments = [1, 2, 3, 4, 5]
 export default function Sidebar() {

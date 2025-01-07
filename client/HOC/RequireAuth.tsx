@@ -16,6 +16,7 @@ const RequireAuth = ({
     const router = useRouter();
 
     useEffect(() => {
+        console.log('accessToken', accessToken);
         if (!accessToken) {
             router.push(`/`);
         } else if (!allowedRoles.includes(role!)) {

@@ -74,20 +74,18 @@ export default function Register() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!validateForm()) return; // Stop submission if validation fails
 
         try {
+            if (!validateForm()) return; // Stop submission if validation fails
+
             const payload = { ...data, role };
-            console.log("payload", payload);
             const result = await axios.post('http://127.0.0.1:8000/auth/register', payload);
             if (result.status === 201) {
-                router.push('/Auth/Login');
+                router.push('/auth/login');
             }
-            console.log(result);
 
-        } catch (error) {
-            console.error(error);
-            alert('Registration failed. Please try again.');
+        } catch (error: any) {
+            setErrors({ ...errors, server: error?.response?.data.detail });
         }
     };
 
@@ -297,6 +295,9 @@ export default function Register() {
                 <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
                     Register
                 </button>
+                {
+                    errors.server && <span className="text-red-500 text-xs">{errors.server}</span>
+                }
                 <div className="text-center text-sm text-[#333333] mt-4">
                     Already have an account?{' '}
                     <Link href="/Auth/Login" className="text-primary font-semibold hover:underline">

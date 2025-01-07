@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import ProfileReview from './ProfileReview'
 import Image from 'next/image'
@@ -10,18 +11,20 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { LuMessageCircle } from "react-icons/lu";
 import Link from 'next/link';
 import { IoReturnUpBackOutline } from "react-icons/io5";
+import { useRouter } from 'next/navigation';
 
 type DoctorProfileContentProps = {
     doctor?: any
 }
 
 export default function DoctorProfileContent({ doctor }: DoctorProfileContentProps) {
+    const router = useRouter()
     return (
         <div className='container mx-auto my-16'>
             <div className='flex gap-4 max-md:flex-col'>
                 <div className='flex gap-8 max-md:flex-col'>
                     <div className='relative rounded-[28px]'>
-                        <Image src={doctor?.image || '/doctorprofile.svg'} alt={doctor?.name || 'doctor'} width={387} height={385} className='w-full overflow-hidden rounded-[28px]' />
+                        <Image src={doctor?.profile_picture_url && doctor?.profile_picture_url === "None" ? '/doctorprofile.svg' : doctor.profile_picture_url} alt={doctor?.name || 'doctor'} width={387} height={385} className='w-full overflow-hidden rounded-[28px]' />
                         <h1 className='bg-white absolute bottom-0 left-0 p-2 rounded-tr-[28px] flex items-center gap-2 font-semibold text-[49px]'>
                             <FaStar className='text-[#FFC909]' />
                             9.9
@@ -31,22 +34,22 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
                         <div>
 
                             <h1 className='font-semibold text-[60px]'>
-                                {doctor?.name || "Dr. Issam"}
+                                {"Dr." + doctor?.name || "Dr. Issam"}
                             </h1>
                             <p className='font-medium text-[48px] text-[#A7A6A5]'>
-                                {doctor?.specialization || "Orthopedic Surgeon"}
+                                {doctor?.speciality || "Orthopedic Surgeon"}
                             </p>
                         </div>
                         <div className='flex gap-10 items-center'>
                             <div className='flex items-center gap-4 text-[32px] font-medium text-[#A7A6A5]'>
                                 <FiMapPin className='text-black' />
                                 {
-                                    doctor?.address || "3891 Rue 110 log Setif 19022"}
+                                    doctor?.office_location || "3891 Rue 110 log Setif 19022"}
                             </div>
                             <div className='flex items-center gap-4 text-[32px] font-medium text-[#A7A6A5]'>
                                 <IoMapOutline className='text-black' />
                                 {
-                                    doctor?.wilaya || "Ain Arnet"}</div>
+                                    doctor?.phone_number || "not mentionned"}</div>
                         </div>
                     </div>
                 </div>
@@ -156,7 +159,8 @@ export default function DoctorProfileContent({ doctor }: DoctorProfileContentPro
                         <Link href='/' className='bg-[#F2F6FF] border-4 border-white shadow-lg rounded-lg h-[70px] w-[70px] flex justify-center items-center '>
                             <IoReturnUpBackOutline className='text-black text-4xl' />
                         </Link>
-                        <button className='w-[80%]  h-[70px] bg-primary text-white rounded-[14.09px] mt-4 md:mt-0'>
+
+                        <button onClick={() => { router.push(`${doctor.user_id}/appointment`) }} className='w-4/5  h-[70px] bg-primary text-white rounded-[14.09px] mt-4 md:mt-0'>
                             book an appointment
                             <span>{'> >'} </span>
                         </button>

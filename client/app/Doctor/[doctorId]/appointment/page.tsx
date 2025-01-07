@@ -2,7 +2,7 @@ import React from 'react'
 import axios from '@/api/axios'
 import { NotFoundBoundary } from 'next/dist/client/components/not-found-boundary'
 import { AxiosError } from 'axios'
-import PublicNavbar from '@/app/Public/_components/PublicNavbar'
+import PublicNavbar from '@/app/dashboard/patient/_components/PublicNavbar'
 import AppointmentContent from './_components/AppointmentContent'
 type Params = {
     params: {

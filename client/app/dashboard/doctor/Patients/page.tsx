@@ -1,6 +1,6 @@
 import React from 'react'
-import DoctorNavbar from '@/app/Doctor/Settings/_components/DoctorNavbar';
-import Sidebar from '../Settings/_components/Sidebar';
+import DoctorNavbar from '../Settings/components/DoctorNavbar';
+import Sidebar from '../Settings/components/Sidebar';
 import PatientContent from './_components/PatientsContent';
 export default function page() {
     return (

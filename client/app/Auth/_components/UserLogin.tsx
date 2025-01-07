@@ -22,6 +22,7 @@ export default function UserLogin() {
             [e.target.name]: e.target.value
         });
     };
+    const [errors, setErrors] = useState<string | null>(null);
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -29,38 +30,38 @@ export default function UserLogin() {
             ///login
             ///const result = await axios.post('/auth/login', formData);
             const result = await axiosPrivate.post('/auth/login', formData);
-            
-            
+
+
             console.log(result);
             const { accessToken } = result.data; //the API returns accessToken,
-            
+
             ///decode the token
-            const decodedToken: { role: string; [key: string]: unknown } = jwtDecode(accessToken);
+            const decodedToken: { role: string;[key: string]: unknown } = jwtDecode(accessToken);
             const { role } = decodedToken; ///grab role
             console.log(decodedToken)
-            setAuthState({ accessToken , role }); // Update the auth store
+            setAuthState({ accessToken, role }); // Update the auth store
 
             ///get profile
-            const user_profile = await axiosPrivate.get("/users/profile" )
+            const user_profile = await axiosPrivate.get("/users/profile")
             console.log(user_profile.data)
 
             // Update the auth store
 
-            setAuthState({user: user_profile });
+            setAuthState({ user: user_profile });
 
             // Redirect based on role
             if (role === 'admin') {
-                router.push('/Admin/Dashboard');
+                router.push('/dashboard/admin');
             } else if (role === 'doctor') {
-                router.push('/Doctor/Dashboard');
+                router.push('/dashboard/doctor');
             } else if (role === 'patient') {
-                router.push('/Doctor');
+                router.push('/doctor');
             } else {
                 router.push('/'); // Default fallback
             }
-        } catch (error) {
-            console.error(error);
-            alert('Login failed. Please check your credentials.');
+        } catch (error: any) {
+            console.log(error)
+            setErrors(error?.response?.data?.detail || 'An error occurred');
         }
     };
 
@@ -99,6 +100,9 @@ export default function UserLogin() {
                 <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
                     Log in
                 </button>
+                {
+                    errors && <p className='text-red-500 text-center'>{errors}</p>
+                }
             </form>
         </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react'
-import Sidebar from '../../Settings/_components/Sidebar'
-import DoctorNavbar from '../../Settings/_components/DoctorNavbar'
+import Sidebar from '../../Settings/components/Sidebar'
+import DoctorNavbar from '../../Settings/components/DoctorNavbar'
 import PatientDetail from '../_components/PatientDetail'
 type Params = {
   params: {
