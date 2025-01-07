@@ -3,10 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useAuthStore } from "@/store/store";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function SettingsContent() {
-    const { user, setUser } = useAuthStore((state) => state);
+    const { user} = useAuthStore((state) => state);
     const axios = useAxiosPrivate();
     const [formData, setFormData] = useState({
         name: user?.name || "",
@@ -107,7 +106,7 @@ export default function SettingsContent() {
                 setSuccess("Profile picture updated successfully!");
                 setError("");
                 // Update the user object in the store with the new profile picture URL
-                setUser({ ...user, profile_picture_url: response.data.pfpUrl });
+                user.profile_picture_url = response.data.pfpUrl
             }
         } catch (error) {
             setError("Failed to upload profile picture. Please try again.");
