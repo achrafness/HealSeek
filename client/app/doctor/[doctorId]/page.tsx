@@ -12,14 +12,16 @@ type Params = {
 
 export default async function page({ params }: Params) {
     const { doctorId } = await params
-    const doctor = await getDoctor(doctorId)
+    const doctor = {
+        "name":"alaa"
+    }
     return (
-        <RequireAuth allowedRoles={['patient', 'doctor', 'admin']}>
+        // <RequireAuth allowedRoles={['patient', 'doctor', 'admin']}>
             <div>
                 <PublicNavbar />
                 <DoctorProfileContent doctor={doctor} />
             </div>
-        </RequireAuth>
+        // </RequireAuth>
     )
 }
 
