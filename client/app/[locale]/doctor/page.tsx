@@ -170,7 +170,7 @@ const DoctorsPage = () => {
 
 
             const response = await fetch(
-                `http://localhost:8000/doctors/search?${params.toString()}`
+                `https://healseek.onrender.com/doctors/search?${params.toString()}`
             );
 
             if (!response.ok) {
