@@ -108,13 +108,13 @@ async def registeration(User: Registration_input) -> Response:
             detail="Error validating user information"
         )
 
-    # # Hash password
-    # try:
-    #     salt = bcrypt.gensalt(10)
-    #     user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
-    # except Exception as e:
-    #     logger.error(f"Password hashing failed: {str(e)}")
-    #     raise HTTPException(status_code=500, detail="Error processing password")
+    # Hash password
+    try:
+        salt = bcrypt.gensalt(10)
+        user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
+    except Exception as e:
+        logger.error(f"Password hashing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error processing password")
 
     # Generate user ID
     userId = int(''.join(filter(str.isdigit, str(uuid4())))[:6])
@@ -264,9 +264,9 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         max_age=7 * 24 * 60 * 60,
         expires=(datetime.utcnow() + timedelta(days=7)).replace(tzinfo=timezone.utc),
         path="/",
-        secure=True,  # Required for cross-site cookies
+        secure=False,  # Required for cross-site cookies
         httponly=True,
-        samesite="None"  # Must be "None" for cross-site cookies
+        samesite="Lax"  # Must be "None" for cross-site cookies
     )
 
     return response

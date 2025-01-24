@@ -215,7 +215,6 @@ export default function Register() {
                         <option value="">{t('selectGender')}</option>
                         <option value="male">{t('male')}</option>
                         <option value="female">{t('female')}</option>
-                        <option value="other">{t('other')}</option>
                     </select>
                     {errors.gender && <span className="text-red-500 text-xs">{errors.gender}</span>}
                 </div>
