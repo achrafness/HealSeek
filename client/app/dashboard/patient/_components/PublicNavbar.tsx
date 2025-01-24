@@ -7,7 +7,7 @@ import { MdDashboard } from "react-icons/md";
 import Link from 'next/link';
 
 export default function PublicNavbar() {
-    const [selected, setSelected] = useState<Boolean>(false)
+    const [selected, setSelected] = useState<boolean>(false)
     return (
         <div className='bg-white flex justify-around items-center h-20' style={{ backdropFilter: 'blur(27.056367874145508px)', boxShadow: '-4.51px 5.64px 31.57px 0px #1B1B1B29' }}>
             <div>

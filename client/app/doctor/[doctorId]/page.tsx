@@ -1,9 +1,8 @@
 import React from 'react'
 import axios from '@/api/axios'
-import { NotFoundBoundary } from 'next/dist/client/components/not-found-boundary'
 import { AxiosError } from 'axios'
 import PublicNavbar from '@/app/dashboard/patient/_components/PublicNavbar'
-import DoctorProfileContent from '@/app/doctor/_components/DoctorProfileContent'
+import DoctorProfileContent from '../_components/DoctorProfileContent'
 import RequireAuth from '@/HOC/RequireAuth'
 type Params = {
     params: {
@@ -13,14 +12,16 @@ type Params = {
 
 export default async function page({ params }: Params) {
     const { doctorId } = await params
-    const doctor = await getDoctor(doctorId)
+    const doctor = {
+        "name":"alaa"
+    }
     return (
-        <RequireAuth allowedRoles={['patient', 'doctor', 'admin']}>
+        // <RequireAuth allowedRoles={['patient', 'doctor', 'admin']}>
             <div>
                 <PublicNavbar />
                 <DoctorProfileContent doctor={doctor} />
             </div>
-        </RequireAuth>
+        // </RequireAuth>
     )
 }
 
