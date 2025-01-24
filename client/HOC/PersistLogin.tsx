@@ -3,6 +3,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import useRefreshToken from '../hooks/useRefreshToken';
 import { useAuthStore } from '../store/store';
+import LoadingComponent from '@/app/[locale]/components/LoadingComponent';
 
 const PersistentLogin = ({
     Children
@@ -35,7 +36,7 @@ const PersistentLogin = ({
     return (
         <>
             {loading ?
-                (<div>Loading...</div>) : Children // adding loading component
+                (<LoadingComponent />) : Children // adding loading component
             }
         </>
     )

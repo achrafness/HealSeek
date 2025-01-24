@@ -4,6 +4,9 @@ import "../globals.css";
 import RouteWrapper from "./components/RouteWrapper";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import Loading from "./components/Loading";
+import { Suspense } from "react";
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -35,7 +38,9 @@ export default async function RootLayout({
       {/* <PersistentLogin Children={children} /> */}
       <RouteWrapper>
         <NextIntlClientProvider messages={messages} locale={locale}>
+          <Suspense fallback={<Loading/>}>
         {children}
+        </Suspense>
         </NextIntlClientProvider>
       </RouteWrapper>
       </body>
