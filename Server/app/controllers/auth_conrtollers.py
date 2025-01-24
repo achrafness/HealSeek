@@ -17,6 +17,9 @@ from app.database.database import User as us, db, Doctor, Patient, Admin
 from app.enums.roles import Roles
 from app.models.user import Registration_input, Login_input
 from passlib.hash import bcrypt
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+ph = PasswordHasher()
 
 
 class UserRole(str, Enum):
@@ -34,6 +37,48 @@ async def check_phone_number(user, db):
     user_query_phone_number = us.find(phone_number=user["phone_number"])
     db.execute_query(user_query_phone_number, params=(user["phone_number"],))
     return db.fetch_one()
+
+
+def hash_password(password: str) -> str:
+    """
+    Hash a password using Argon2.
+
+    Args:
+        password (str): The plaintext password to hash.
+
+    Returns:
+        str: The hashed password.
+    """
+    try:
+        # Hash the password
+        hashed_password = ph.hash(password)
+        return hashed_password
+    except Exception as e:
+        # Log the error and raise an exception
+        logger.error(f"Password hashing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error processing password")
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    """
+    Verify a password against its hashed version.
+
+    Args:
+        password (str): The plaintext password to verify.
+        hashed_password (str): The hashed password to compare against.
+
+    Returns:
+        bool: True if the password matches, False otherwise.
+    """
+    try:
+        # Verify the password
+        return ph.verify(hashed_password, password)
+    except VerifyMismatchError:
+        # Password does not match
+        return False
+    except Exception as e:
+        # Log the error and raise an exception
+        logger.error(f"Password verification failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error verifying password")
 
 async def registeration(User: Registration_input) -> Response:
     """
@@ -112,9 +157,10 @@ async def registeration(User: Registration_input) -> Response:
 
 
     try:
-        hashed_password = bcrypt.hash(user['password'])
-        user["password"] = hashed_password
+        # Hash the password
+        user["password"] = hash_password(user["password"])
     except Exception as e:
+        # Log the error and raise an exception
         logger.error(f"Password hashing failed: {str(e)}")
         raise HTTPException(status_code=500, detail="Error processing password")
 
@@ -218,11 +264,8 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
 
     #Verify password
 
-    try:
-        if not bcrypt.verify(password, user_found["password"]):
-            raise HTTPException(status_code=400, detail="Invalid credentials")
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid credentials")
+    if not verify_password(password,user_found["password"]):
+        raise HTTPException(status_code=400, detail="Wrong password")
 
     # Generate tokens
     access_token = sign_access_token({"email": user_found["email"], "role": user_found["role"]}, 'access')
