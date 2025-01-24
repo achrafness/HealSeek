@@ -109,13 +109,13 @@ async def registeration(User: Registration_input) -> Response:
         )
 
     # Hash password
-    try:
+    """     try:
         salt = bcrypt.gensalt(10)
         print(salt)
         user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
     except Exception as e:
         logger.error(f"Password hashing failed: {str(e)}" , exc_info=True)
-        raise HTTPException(status_code=500, detail="Error processing password" + str(e))
+        raise HTTPException(status_code=500, detail="Error processing password" + str(e)) """
 
     # Generate user ID
     userId = int(''.join(filter(str.isdigit, str(uuid4())))[:6])
@@ -216,11 +216,11 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
     }
 
     #Verify password
-    try:
+    """ try:
         if not bcrypt.checkpw(password.encode('utf-8'), user_found["password"].encode('utf-8')):
             raise HTTPException(status_code=400, detail="Invalid credentials")
     except Exception:
-        raise HTTPException(status_code=400, detail="Invalid credentials")
+        raise HTTPException(status_code=400, detail="Invalid credentials") """
 
     # Generate tokens
     access_token = sign_access_token({"email": user_found["email"], "role": user_found["role"]}, 'access')
