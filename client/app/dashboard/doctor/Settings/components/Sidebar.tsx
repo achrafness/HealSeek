@@ -9,10 +9,12 @@ import AppointmentCard from './AppointmentCard';
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useLogout from '@/hooks/useLogout';
+import { useAuthStore } from '@/store/store';
 
 
 const appointments = [1, 2, 3, 4, 5]
 export default function Sidebar() {
+    const { user, accessToken } = useAuthStore((state) => state)
     const router = useRouter()
     const singout = useLogout()
     const pathname = usePathname().split('/')[3]
@@ -28,6 +30,7 @@ export default function Sidebar() {
     }
     useEffect(() => {
         console.log('pathname : ', pathname)
+        console.log(accessToken)
     }, [])
     return (
         <div className='w-1/4 bg-[#F2F2F0] min-h-screen h-fit max-md:hidden flex flex-col gap-10 items-center'>
@@ -35,9 +38,9 @@ export default function Sidebar() {
                 <div>
                     <Image src='/doctorDashboard.svg' width={100} height={100} alt='doctor' />
                 </div>
-                <div className='flex flex-col justify-center '>
-                    <h1 className='font-bold text-[25px]'>Dr.issam</h1>
-                    <p className='font-normal text-lg'>JohnDie@gmail.com</p>
+                <div className='flex flex-col justify-center w-3/4 '>
+                    <h1 className='font-bold text-[25px]'>{user?.name || "Dr.issam"}</h1>
+                    <p className='font-normal text-lg overflow-hidden text-wrap'>{user?.email || "JohnDie@gmail.com"}</p>
                     <p className='font-normal text-lg'>public health doctor</p>
                 </div>
             </div>

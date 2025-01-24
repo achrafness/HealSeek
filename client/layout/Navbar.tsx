@@ -61,7 +61,7 @@ export default function NavbarServer() {
           {" "}
           <CustomButton className="rounded-[100px] h-10 px-5 py-2 flex items-center gap-2 bg-[#3A8EF6] text-white hover:bg-[#2C6DBF] transition-colors duration-200">
             <FiMessageCircle className="text-lg" />
-            <span>Book Now</span>
+            <span>Login</span>
           </CustomButton>
         </Link>
       </div>

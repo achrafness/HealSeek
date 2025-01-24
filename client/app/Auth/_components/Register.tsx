@@ -300,7 +300,7 @@ export default function Register() {
                 }
                 <div className="text-center text-sm text-[#333333] mt-4">
                     Already have an account?{' '}
-                    <Link href="/Auth/Login" className="text-primary font-semibold hover:underline">
+                    <Link href="/auth/login" className="text-primary font-semibold hover:underline">
                         Login instead
                     </Link>
                 </div>
