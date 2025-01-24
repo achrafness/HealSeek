@@ -100,9 +100,9 @@ export default function Register() {
             };
 
             // Submit the form
-            const result = await axios.post('http://127.0.0.1:8000/auth/register', payload);
+            const result = await axios.post('/auth/register', payload);
             if (result.status === 201) {
-                router.push('/auth/login');
+                router.push('/');
             }
         } catch (error: any) {
             setErrors({ ...errors, server: error?.response?.data.detail || error.message });
@@ -215,7 +215,6 @@ export default function Register() {
                         <option value="">{t('selectGender')}</option>
                         <option value="male">{t('male')}</option>
                         <option value="female">{t('female')}</option>
-                        <option value="other">{t('other')}</option>
                     </select>
                     {errors.gender && <span className="text-red-500 text-xs">{errors.gender}</span>}
                 </div>

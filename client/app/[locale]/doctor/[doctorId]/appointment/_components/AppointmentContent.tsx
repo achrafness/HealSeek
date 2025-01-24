@@ -16,6 +16,7 @@ type DoctorAppointmentContentProps = {
 export default function AppointmentContent({ doctorID }: DoctorAppointmentContentProps) {
     const axios = useAxiosPrivate();
     const { user } = useAuthStore((state) => state);
+    console.log(user)
     const t = useTranslations("appointmentContent");
     const [doctor, setDoctor] = useState<any>();
     const [appointmentTime, setAppointmentTime] = useState<string>('');
@@ -54,6 +55,10 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         }
 
         if (!doctorID || !user?.user_id) {
+            console.log("hhhhhhhhhh")
+            console.log(doctorID)
+            console.log(user)
+            console.log(user.user_id)
             setError(t('missingDoctorOrUser'));
             return;
         }

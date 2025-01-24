@@ -37,6 +37,7 @@ export default function UserLogin() {
             const { role } = decodedToken; ///grab role
             setAuthState({ accessToken, role }); // Update the auth store
             const user_profile = await axiosPrivate.get("/users/profile");
+            console.log(user_profile)
             setAuthState({ user: user_profile.data });
 
             // Redirect based on role

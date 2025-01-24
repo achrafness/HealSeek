@@ -1,9 +1,7 @@
 import React from 'react'
 import axios from '@/api/axios'
-import { AxiosError } from 'axios'
 import PublicNavbar from '../../dashboard/patient/_components/PublicNavbar'
 import DoctorProfileContent from '../_components/DoctorProfileContent'
-import RequireAuth from '@/HOC/RequireAuth'
 type Params = {
     params: {
         doctorId: string;

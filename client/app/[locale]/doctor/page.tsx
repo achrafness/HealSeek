@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Map from "./_components/MapComponent";
 import { useTranslations } from "next-intl";
+import axios from "@/api/axios";
 
 const DoctorCard = ({ doctor }: any) => {
     const t = useTranslations("doctorsPage");
@@ -132,20 +133,12 @@ const DoctorsPage = () => {
             // Add user_longitude and user_latitude to the API reques
 
 
-            const response = await fetch(
-                `http://localhost:8000/doctors/search?${params.toString()}`
+            const data = await axios.get(
+                `/doctors/search?${params.toString()}`
             );
 
-            if (!response.ok) {
-                throw new Error(
-                    response.status === 404
-                        ? "No doctors found"
-                        : "Failed to fetch doctors"
-                );
-            }
-
-            const data = await response.json();
-            setDoctors(data.doctors || []);
+            
+            setDoctors(data.data.doctors || []);
         } catch (err: any) {
             setError(err?.message);
             setDoctors([]);
@@ -170,7 +163,7 @@ const DoctorsPage = () => {
 
 
             const response = await fetch(
-                `http://localhost:8000/doctors/search?${params.toString()}`
+                `https://healseek.onrender.com/doctors/search?${params.toString()}`
             );
 
             if (!response.ok) {
