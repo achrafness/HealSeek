@@ -263,11 +263,10 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         value=refresh_token,
         max_age=7 * 24 * 60 * 60,
         expires=(datetime.utcnow() + timedelta(days=7)).replace(tzinfo=timezone.utc),
-        domain=".healseek.vercel.app" if secure_flag else None,  # Use leading dot for subdomains
         path="/",
-        secure=secure_flag,
+        secure=True,  # Required for cross-site cookies
         httponly=True,
-        samesite="None" if secure_flag else "Lax",
+        samesite="None"  # Must be "None" for cross-site cookies
     )
 
     return response
