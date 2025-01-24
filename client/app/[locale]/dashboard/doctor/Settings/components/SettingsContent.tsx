@@ -7,7 +7,7 @@ export default function SettingsContent() {
         <div className='w-[75%] my-20 mx-auto max-md:w-full flex-grow flex max-md:flex-col justify-center items-centerg gap-10'>
             <div className='flex flex-col  gap-4'>
                 <div className='min-w-[320px] min-h-[325px] flex justify-center items-center flex-col rounded-[20px]' style={{ boxShadow: '0px 2px 4px 0px #00000030' }}>
-                    <Image src='/user.svg' alt='' width={200} height={200} className='rounded-full' />
+                    <Image src='/user.svg' alt='' width={200} height={200} className='rounded-full aspect-square' />
                     <h1 className='text-primary font-semibold text-lg'>John Doe</h1>
                     <p className='text-[#888888] text-sm font-semibold'>Johndoe@gmail.com</p>
                 </div>

@@ -41,10 +41,11 @@ export default function Sidebar() {
         <div className="w-4/5 mx-auto bg-primary p-3 rounded-[10px] mt-3 text-white flex">
           <div>
             <Image
-              src="/doctorDashboard.svg"
+              src={user?.profile_picture_url ? user?.profile_picture_url : "/doctorDashboard.svg"}
               width={100}
               height={100}
               alt="doctor"
+              className='rounded-full aspect-square object-cover' 
             />
           </div>
           <div className="flex flex-col justify-center w-3/4 ">

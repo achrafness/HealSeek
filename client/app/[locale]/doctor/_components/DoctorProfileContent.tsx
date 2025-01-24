@@ -28,7 +28,7 @@ export default function DoctorProfileContent({ doctor, reviewsData }: DoctorProf
             <div className='flex gap-4 max-md:flex-col'>
                 <div className='flex gap-8 max-md:flex-col'>
                     <div className='relative rounded-[28px]'>
-                        <Image src={(doctor?.profile_picture_url === null || doctor?.profile_picture_url === "None") ? '/doctorprofile.svg' : doctor?.profile_picture_url} alt={doctor?.name || 'doctor'} width={387} height={385} className='w-full overflow-hidden rounded-[28px]' />
+                        <Image src={(doctor?.profile_picture_url === null || doctor?.profile_picture_url === "None") ? '/doctorprofile.svg' : doctor?.profile_picture_url} alt={doctor?.name || 'doctor'} width={387} height={385} className='w-2/5 object-cover overflow-hidden rounded-[28px] aspect-square ' />
                         <h1 className='bg-white absolute bottom-0 left-0 p-2 rounded-tr-[28px] flex items-center gap-2 font-semibold text-[49px]'>
                             <FaStar className='text-[#FFC909]' />
                             9.9
@@ -58,7 +58,7 @@ export default function DoctorProfileContent({ doctor, reviewsData }: DoctorProf
                 <div>
                     <div className='flex justify-center items-center mt-10 -translate-x-1/2 max-md:translate-x-0'>
                         <div className='flex flex-col md:flex-row justify-center items-center p-8 gap-8 w-full max-w-[300.59px] h-auto bg-[#F2F6FF] border-4 border-white shadow-lg rounded-[30.711px]'>
-                            <div className='flex justify-center items-center w-[84.46px] h-[84.46px] bg-[#050505] rounded-full'>
+                            <div className='flex justify-center items-center w-[84.46px] h-[84.46px] aspect-square bg-[#050505] rounded-full'>
                                 <LuMessageCircle className='text-white w-[38.39px] h-[38.39px]' />
                             </div>
                             <div className='flex flex-col justify-center items-start gap-4'>
