@@ -3,7 +3,8 @@
 // components/RequireAuth.tsx
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useAuthStore } from '../store/store';
+import { useAuthStore, useLanguageStore } from '../store/store';
+import { Languages } from 'lucide-react';
 type RequireAuthProps = {
     allowedRoles: string[],
     children: React.ReactNode
@@ -14,11 +15,12 @@ const RequireAuth = ({
 }: RequireAuthProps) => {
     const { accessToken, role } = useAuthStore(state => state)
     const router = useRouter();
+    const {language} = useLanguageStore((state=>state))
 
     useEffect(() => {
         console.log('accessToken', accessToken);
         if (!accessToken) {
-            router.push(`/auth/login`);
+            router.push(`${language}/auth/login`);
         } else if (!allowedRoles.includes(role!)) {
             router.replace('/auth/Forbidden');
         }
