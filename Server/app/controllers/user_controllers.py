@@ -7,7 +7,7 @@ from datetime import datetime
 import cloudinary
 from cloudinary.uploader import upload
 from typing import Optional
-from auth_conrtollers import hash_password , verify_password
+from app.controllers.auth_conrtollers import hash_password , verify_password
 
 cloudinary.config(
     cloud_name = settings.CLOUD_NAME,
