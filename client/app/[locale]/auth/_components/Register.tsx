@@ -102,7 +102,7 @@ export default function Register() {
             // Submit the form
             const result = await axios.post('/auth/register', payload);
             if (result.status === 201) {
-                router.push('/auth/login');
+                router.push('/');
             }
         } catch (error: any) {
             setErrors({ ...errors, server: error?.response?.data.detail || error.message });
