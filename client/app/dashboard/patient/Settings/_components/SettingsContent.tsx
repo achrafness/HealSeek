@@ -5,7 +5,7 @@ import { useAuthStore } from "@/store/store";
 import Image from "next/image";
 
 export default function SettingsContent() {
-    const { user} = useAuthStore((state) => state);
+    const { user, setAuthState } = useAuthStore((state) => state);
     const axios = useAxiosPrivate();
     const [formData, setFormData] = useState({
         name: user?.name || "",
@@ -106,7 +106,13 @@ export default function SettingsContent() {
                 setSuccess("Profile picture updated successfully!");
                 setError("");
                 // Update the user object in the store with the new profile picture URL
-                user.profile_picture_url = response?.data?.pfpUrl
+                // user.profile_picture_url = response?.data?.pfpUrl;
+                setAuthState({
+                    user: {
+                        ...user,
+                        profile_picture_url: response?.data?.pfpUrl,
+                    },
+                });
             }
         } catch (error) {
             setError("Failed to upload profile picture. Please try again.");
@@ -138,7 +144,7 @@ export default function SettingsContent() {
                     style={{ boxShadow: "0px 2px 4px 0px #00000030" }}
                 >
                     <Image
-                        src={user?.profile_picture_url === "None" ? "/user.svg" : user?.profile_picture_url}
+                        src={(user?.profile_picture_url === "None" || user?.profile_picture_url === "") ? "/user.svg" : user?.profile_picture_url}
                         alt="Profile Picture"
                         width={200}
                         height={200}

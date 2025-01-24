@@ -4,15 +4,19 @@ import { FiSearch, FiMessageCircle } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { MdLocationOn, MdOutlinePersonSearch } from "react-icons/md";
+import PublicNavbar from "../dashboard/patient/_components/PublicNavbar";
+import Image from "next/image";
 import Link from "next/link";
 const DoctorCard = ({ doctor }: any) => {
     return (
         <Link href={`./doctor/${doctor.user_id}`} className="bg-white rounded-[32px] p-8 shadow-md hover:shadow-xl transition-all">
             <div className="flex gap-6">
-                <img
-                    src={doctor.profile_picture_url || "/api/placeholder/150/150"}
+                <Image
+                    src={doctor?.profile_picture_url === "None" ? "/user.svg" : doctor?.profile_picture_url}
                     alt={doctor.name}
                     className="w-28 h-28 rounded-2xl object-cover"
+                    width={112}
+                    height={112}
                 />
                 <div className="flex-1">
                     <p className="text-[#00BFA5] text-lg font-medium mb-1">
@@ -143,6 +147,7 @@ const DoctorsPage = () => {
 
     return (
         <div className="bg-[#F2F7FF] min-h-screen py-12">
+            <PublicNavbar/>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h1 className="font-bold text-[48px] mb-4">

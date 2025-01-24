@@ -38,7 +38,7 @@ def get_patient_appointments(patient_id: int):
         raise HTTPException(status_code=500, detail="Error while fetching appointments : " + str(e))
     if not appointments_data:
         raise HTTPException(status_code=404, detail="No appointments found")
-    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"doctor_id": appointment[3], "patient_id": appointment[4]} for appointment in appointments_data]
+    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"type": appointment[3], "doctor_id": appointment[4] , "patient_id" : appointment[5]} for appointment in appointments_data]
     return JSONResponse(content=appointments_data, status_code=200)
 
 def get_doctor_appointments(doctor_id : int):
@@ -46,7 +46,6 @@ def get_doctor_appointments(doctor_id : int):
         print("eee")
         doctor_query = ap.find(doctor_id=doctor_id)
         db.execute_query(doctor_query, params=(doctor_id,))
-       
         print("eee")
         appointments_data = db.fetch_all()
         
@@ -56,7 +55,24 @@ def get_doctor_appointments(doctor_id : int):
         raise HTTPException(status_code=500, detail="Error while fetching appointments : " + str(e))
     if not appointments_data:
         raise HTTPException(status_code=404, detail="No appointments found")
-    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"doctor_id": appointment[3], "patient_id": appointment[4]} for appointment in appointments_data]
+    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"type": appointment[3],"doctor_id": appointment[4] ,"patient_id": appointment[5]} for appointment in appointments_data]
+    print(appointments_data)
+    #get patient
+    for appointment in appointments_data :
+        patient_query = us.find(user_id = appointment["patient_id"])
+        db.execute_query(patient_query , params=(appointment["patient_id"],))
+        patient_data = db.fetch_one()
+        #re-order data
+        appointment["patient"] = {
+            "name": patient_data[1],
+            "email": patient_data[3],
+            "phone": patient_data[4],
+            "date_of_birth": patient_data[5],
+            "gender" : patient_data[7],
+        }
+        
+    
+    
     return JSONResponse(content=appointments_data, status_code=200)
 
 def add_appointment(appointment : Appointment):
@@ -66,22 +82,28 @@ def add_appointment(appointment : Appointment):
         existing_doctor = db.fetch_one()
         if not existing_doctor:
             raise HTTPException(status_code=404, detail="Doctor ID is wrong")
-        
         existing_patient = Patient.find(user_id=appointment.patient_id)
         db.execute_query(existing_patient, params=(appointment.patient_id,))
         existing_patient = db.fetch_one()
+
         if not existing_patient:
             raise HTTPException(status_code=404, detail="Patient ID is wrong")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while checking doctor or patient ID : " + str(e))
     try:
-        if datetime.fromisoformat(appointment.appointment_time)< datetime.now():
+        print(appointment.appointment_time)
+        appointment_time = datetime.fromisoformat(appointment.appointment_time)
+        if appointment_time.tzinfo is not None:
+            appointment_time = appointment_time.replace(tzinfo=None)
+        current_time = datetime.now()
+        if appointment_time < current_time:
             raise HTTPException(status_code=400, detail="Appointment time should be in future")
+
         appointment_query = ap.insert(**appointment.dict())
         db.execute_query(appointment_query)
         return JSONResponse(content=appointment.dict(), status_code=200)
     except Exception as e: 
-        return HTTPException(status_code=500 , detail="error : "+str(e))
+        raise HTTPException(status_code=500 , detail="error : "+str(e))
 
 def update_appointment(request:Request,appointment_id: int, appointment_data: dict):
     try:

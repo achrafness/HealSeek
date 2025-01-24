@@ -1,21 +1,22 @@
 import React from 'react';
 import PublicNavbar from '@/app/dashboard/patient/_components/PublicNavbar';
 import AppointmentContent from './_components/AppointmentContent';
-
+import axios from '@/api/axios';
 type Params = {
     params: {
         doctorId: string;
     };
 };
 
-export default function Page({ params }: Params) {
-    const { doctorId } = params; // Remove `await`
-    console.log(doctorId);
-
+export default async function Page({ params }: Params) {
+    const { doctorId } = await params;
     return (
         <div>
             <PublicNavbar />
-            <AppointmentContent />
+            <AppointmentContent doctorID={doctorId} />
         </div>
     );
 }
+
+
+
