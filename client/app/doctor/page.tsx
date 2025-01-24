@@ -7,6 +7,7 @@ import { MdLocationOn, MdOutlinePersonSearch } from "react-icons/md";
 import PublicNavbar from "../dashboard/patient/_components/PublicNavbar";
 import Image from "next/image";
 import Link from "next/link";
+import Map from "./_components/MapComponent";
 const DoctorCard = ({ doctor }: any) => {
     return (
         <Link href={`./doctor/${doctor.user_id}`} className="bg-white rounded-[32px] p-8 shadow-md hover:shadow-xl transition-all">
@@ -186,6 +187,9 @@ const DoctorsPage = () => {
                                     setFilters((prev) => ({ ...prev, location: e.target.value }))
                                 }
                             />
+                        </div>
+                        <div>
+                            <Map/>
                         </div>
 
                         <div>
