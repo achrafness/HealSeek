@@ -133,7 +133,7 @@ const DoctorsPage = () => {
 
 
             const response = await fetch(
-                `https://healseek.onrender.com//doctors/search?${params.toString()}`
+                `https://healseek.onrender.com/doctors/search?${params.toString()}`
             );
 
             if (!response.ok) {
