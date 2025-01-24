@@ -256,6 +256,8 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         status_code=200,
     )
 
+    secure_flag = True
+    
     response.set_cookie(
         key="jwt",
         value=refresh_token,
