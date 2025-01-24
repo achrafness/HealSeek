@@ -39,8 +39,7 @@ import {
 export type Appointment = {
     id: number
     patient: {
-        firstname: string
-        lastname: string
+        name: string
     }
     reason: string
     location: string
@@ -53,7 +52,7 @@ export const columns: ColumnDef<Appointment>[] = [
         accessorKey: "patient",
         header: "Patient",
         cell: ({ row }) => (
-            <div>{`${row.original.patient.firstname} ${row.original.patient.lastname}`}</div>
+            <div>{`${row.original.patient?.name || "john doe"}`}</div>
         ),
     },
     {

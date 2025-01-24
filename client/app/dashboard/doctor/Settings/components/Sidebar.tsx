@@ -10,7 +10,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useLogout from '@/hooks/useLogout';
 import { useAuthStore } from '@/store/store';
-
+import { FiSettings } from 'react-icons/fi';
 
 const appointments = [1, 2, 3, 4, 5]
 export default function Sidebar() {
@@ -20,9 +20,10 @@ export default function Sidebar() {
     const pathname = usePathname().split('/')[3]
     const links = [
         { href: '', label: 'Overview', icon: <BiSolidCategoryAlt /> },
-        { href: 'Calendar', label: 'Calendar', icon: <IoCalendar /> },
+        // { href: 'Calendar', label: 'Calendar', icon: <IoCalendar /> },
         { href: 'Appointments', label: 'Appointments', icon: <HiMiniChartPie /> },
-        { href: 'Patients', label: 'Patients', icon: <MdOutlineShowChart /> }
+        { href: 'Patients', label: 'Patients', icon: <MdOutlineShowChart /> },
+        { href: 'Settings', label: 'Settings', icon: <FiSettings /> }
     ]
     const logout = () => {
         singout()

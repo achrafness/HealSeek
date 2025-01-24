@@ -106,7 +106,7 @@ export default function SettingsContent() {
                 setSuccess("Profile picture updated successfully!");
                 setError("");
                 // Update the user object in the store with the new profile picture URL
-                user.profile_picture_url = response.data.pfpUrl
+                user.profile_picture_url = response?.data?.pfpUrl
             }
         } catch (error) {
             setError("Failed to upload profile picture. Please try again.");
