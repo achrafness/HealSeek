@@ -252,7 +252,7 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         db.execute_query(Admin_query, params=(datetime.now().isoformat(), user_found["user_id"]))
 
     response =  JSONResponse(
-        content={"zazaaccessToken": access_token},
+        content={"accessToken": access_token},
         status_code=200,
     )
 
