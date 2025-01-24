@@ -5,7 +5,6 @@ from typing import Annotated
 from uuid import uuid4
 import json
 import jwt
-import bcrypt
 import asyncio
 from fastapi import HTTPException, Request, Response, Form, Cookie
 from fastapi.responses import JSONResponse, RedirectResponse
