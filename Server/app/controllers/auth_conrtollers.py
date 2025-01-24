@@ -111,9 +111,10 @@ async def registeration(User: Registration_input) -> Response:
     # Hash password
     try:
         salt = bcrypt.gensalt(10)
+        print(salt)
         user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
     except Exception as e:
-        logger.error(f"Password hashing failed: {str(e)}")
+        logger.error(f"Password hashing failed: {str(e)}" , exc_info=True)
         raise HTTPException(status_code=500, detail="Error processing password")
 
     # Generate user ID
