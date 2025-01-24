@@ -24,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${poppins.variable} antialiased`}
+        cz-shortcut-listen="true"
       >
         {/* <PersistentLogin Children={children} /> */}
         <RouteWrapper>

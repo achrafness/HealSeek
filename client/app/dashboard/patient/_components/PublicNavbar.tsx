@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { IoMdSettings } from "react-icons/io";
-import { BiSolidMessageRoundedDetail } from "react-icons/bi";
+///import { BiSolidMessageRoundedDetail } from "react-icons/bi";
+import { MdDashboard } from "react-icons/md";
 import Link from 'next/link';
 
 export default function PublicNavbar() {
@@ -23,9 +24,12 @@ export default function PublicNavbar() {
                         <Link href='/dashboard/doctor'><li className='font-normal text-base opacity-80 text-[#6C87AE]'>Doctors</li></Link>
                     </ul>
                 </div>
+                
                 <div className='text-black flex text-4xl max-md:text-lg gap-2 mx-2'>
-                    <BiSolidMessageRoundedDetail />
-
+                <Link href='/dashboard/patient'>
+                    <MdDashboard />
+                </Link>
+                
                     <Link href='/dashboard/patient/Settings'>
                         <IoMdSettings />
                     </Link>

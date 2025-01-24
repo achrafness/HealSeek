@@ -8,6 +8,8 @@ def verify_jwt(request: Request,allowed_roles: list = None):
     try:
         # Extract the Authorization header
         access_token = request.headers.get("Authorization") or request.headers.get("authorization")
+        print(request.headers)
+        print(access_token)
         if not access_token:
             raise HTTPException(status_code=401, detail="Unauthenticated: Token missing")
 

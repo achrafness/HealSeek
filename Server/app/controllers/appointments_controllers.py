@@ -38,7 +38,7 @@ def get_patient_appointments(patient_id: int):
         raise HTTPException(status_code=500, detail="Error while fetching appointments : " + str(e))
     if not appointments_data:
         raise HTTPException(status_code=404, detail="No appointments found")
-    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"doctor_id": appointment[3], "patient_id": appointment[4]} for appointment in appointments_data]
+    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"type": appointment[3], "doctor_id": appointment[4] , "patient_id" : appointment[5]} for appointment in appointments_data]
     return JSONResponse(content=appointments_data, status_code=200)
 
 def get_doctor_appointments(doctor_id : int):
@@ -46,7 +46,6 @@ def get_doctor_appointments(doctor_id : int):
         print("eee")
         doctor_query = ap.find(doctor_id=doctor_id)
         db.execute_query(doctor_query, params=(doctor_id,))
-       
         print("eee")
         appointments_data = db.fetch_all()
         
@@ -56,7 +55,24 @@ def get_doctor_appointments(doctor_id : int):
         raise HTTPException(status_code=500, detail="Error while fetching appointments : " + str(e))
     if not appointments_data:
         raise HTTPException(status_code=404, detail="No appointments found")
-    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"doctor_id": appointment[3], "patient_id": appointment[4]} for appointment in appointments_data]
+    appointments_data = [{"appointment_id": appointment[0] ,"appointment_time" : appointment[1].isoformat(),"status" : appointment[2] ,"type": appointment[3],"doctor_id": appointment[4] ,"patient_id": appointment[5]} for appointment in appointments_data]
+    print(appointments_data)
+    #get patient
+    for appointment in appointments_data :
+        patient_query = us.find(user_id = appointment["patient_id"])
+        db.execute_query(patient_query , params=(appointment["patient_id"],))
+        patient_data = db.fetch_one()
+        #re-order data
+        appointment["patient"] = {
+            "name": patient_data[1],
+            "email": patient_data[3],
+            "phone": patient_data[4],
+            "date_of_birth": patient_data[5],
+            "gender" : patient_data[7],
+        }
+        
+    
+    
     return JSONResponse(content=appointments_data, status_code=200)
 
 def add_appointment(appointment : Appointment):

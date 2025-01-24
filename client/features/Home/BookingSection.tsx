@@ -2,7 +2,7 @@ import { FiMessageCircle } from "react-icons/fi";
 export const BookingSection = () => {
   return (
     <div className="bg-white">
-      <div className="container mx-auto py-24 flex flex-col justify-around items-center">
+      <div className="container mx-auto py-24 flex flex-col justify-around items-center hover:translate-y[-10px] transition-all duration-300">
         <h1 className="my-2 font-medium text-[22px] text-[#00BFA5]">
           Book an appointment
         </h1>
