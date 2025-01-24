@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/store'; // Import your auth store
 import { jwtDecode } from 'jwt-decode';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
+import Link from 'next/link';
 
 export default function UserLogin() {
     const [formData, setFormData] = useState({
@@ -100,6 +101,13 @@ export default function UserLogin() {
                 <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
                     Log in
                 </button>
+                <p className='text-center'>
+                    or
+                    <Link href={'/auth/register'} className='text-primary mx-2'>
+                        Register Now
+                    </Link>
+                </p>
+
                 {
                     errors && <p className='text-red-500 text-center'>{errors}</p>
                 }

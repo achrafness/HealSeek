@@ -63,8 +63,11 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
             patient_id: user.user_id,
         };
         console.log(payload);
+        console.log('hh')
         try {
+            console.log('hh')
             const response = await axios.post('/appointments/', payload);
+            console.log(response)
             if (response.status === 200) {
                 console.log(response)
                 setSuccess('Appointment scheduled successfully!');

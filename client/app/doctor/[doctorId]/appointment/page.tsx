@@ -9,7 +9,7 @@ type Params = {
 };
 
 export default async function Page({ params }: Params) {
-    const { doctorId } = await params; // Remove await
+    const { doctorId } = await params;
     return (
         <div>
             <PublicNavbar />
@@ -17,5 +17,6 @@ export default async function Page({ params }: Params) {
         </div>
     );
 }
+
 
 

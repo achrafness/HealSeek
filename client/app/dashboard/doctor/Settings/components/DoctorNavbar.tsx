@@ -15,8 +15,8 @@ export default function DoctorNavbar() {
       </div>
 
       <div className='flex items-center gap-4 text-4xl max-md:text-lg'>
-        <BiSolidMessageRoundedDetail />
-        <IoMdNotifications className='hover:text-[#50C878]' />
+        {/* <BiSolidMessageRoundedDetail />
+        <IoMdNotifications className='hover:text-[#50C878]' /> */}
       </div>
     </div>
   )
