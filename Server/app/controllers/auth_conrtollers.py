@@ -261,9 +261,9 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         value=refresh_token,
         max_age=7 * 24 * 60 * 60,
         expires=(datetime.utcnow() + timedelta(days=7)).replace(tzinfo=timezone.utc),
-        domain="127.0.0.1",  # Match frontend domain
+        domain="https://healseek.vercel.app/",  # Match frontend domain
         path="/",
-        secure=False,
+        secure=True,
         httponly=True,
         samesite="Lax"
 )
