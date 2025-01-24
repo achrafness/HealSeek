@@ -100,7 +100,7 @@ export default function Register() {
             };
 
             // Submit the form
-            const result = await axios.post('http://127.0.0.1:8000/auth/register', payload);
+            const result = await axios.post('/auth/register', payload);
             if (result.status === 201) {
                 router.push('/auth/login');
             }
