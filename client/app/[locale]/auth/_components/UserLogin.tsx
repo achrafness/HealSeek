@@ -9,11 +9,13 @@ import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useLanguageStore } from '@/store/store';
+
 export default function UserLogin() {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+    const [loading, setLoading] = useState(false); // Add loading state
     const router = useRouter();
     const { language } = useLanguageStore((state) => state)
     const t = useTranslations("userLogin");
@@ -29,6 +31,9 @@ export default function UserLogin() {
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true); // Set loading to true when the form is submitted
+        setErrors(null); // Clear any previous errors
+
         try {
             const result = await axiosPrivate.post('/auth/login', formData);
             console.log(result)
@@ -52,6 +57,8 @@ export default function UserLogin() {
             }
         } catch (error: any) {
             setErrors(error?.response?.data?.detail || 'An error occurred');
+        } finally {
+            setLoading(false); // Set loading to false when the request completes
         }
     };
 
@@ -87,8 +94,12 @@ export default function UserLogin() {
                         className='focus:outline-none flex flex-row justify-center items-center p-5  gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'
                     />
                 </div>
-                <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
-                    {t('login')}
+                <button 
+                    type='submit' 
+                    disabled={loading} // Disable the button when loading
+                    className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px] disabled:opacity-50'
+                >
+                    {loading ? t('loggingIn') : t('login')} {/* Show loading text or login text */}
                 </button>
                 <p className='text-center'>
                     {t('or')}

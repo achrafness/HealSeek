@@ -7,11 +7,15 @@ import Link from 'next/link';
 import { geocodeAddress } from '@/lib/geocode'; // Import the geocoding utility
 import { useTranslations } from 'next-intl';
 import { useLanguageStore } from '@/store/store';
+import SpecialitySelector from './SpecialtySelector';
+import specialities from "./specialities.json"
+
 export default function Register() {
     const axios = useAxiosPrivate();
     const router = useRouter();
-    const { language } = useLanguageStore((state) => state)
+    const { language } = useLanguageStore((state) => state);
     const t = useTranslations("register");
+
     const [data, setFormData] = useState({
         name: '',
         email: '',
@@ -31,6 +35,7 @@ export default function Register() {
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [role, setRole] = useState<'patient' | 'doctor'>('patient');
+    const [loading, setLoading] = useState(false); // Add loading state
 
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
@@ -45,7 +50,14 @@ export default function Register() {
         { name: 'Neurology', color: '#FD71AF' },
         { name: 'Pediatrics', color: '#49CCF9' },
         { name: 'Orthopedics', color: '#00B884' },
+        { name: 'Dermatology', color: '#FFA500' },
+        { name: 'Oncology', color: '#8B0000' },
+        { name: 'Psychiatry', color: '#4B0082' },
+        { name: 'Endocrinology', color: '#FFD700' },
+        { name: 'Gastroenterology', color: '#228B22' },
+        { name: 'Pulmonology', color: '#4682B4' }
     ];
+
 
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
@@ -77,6 +89,8 @@ export default function Register() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true); // Set loading to true when the form is submitted
+        setErrors({}); // Clear previous errors
 
         try {
             if (!validateForm()) return;
@@ -106,7 +120,13 @@ export default function Register() {
             }
         } catch (error: any) {
             setErrors({ ...errors, server: error?.response?.data.detail || error.message });
+        } finally {
+            setLoading(false); // Set loading to false when the request completes
         }
+    };
+
+    const handleSpecialitySelect = (speciality: string) => {
+        setFormData({ ...data, speciality });
     };
 
     return (
@@ -148,8 +168,6 @@ export default function Register() {
                     {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                 </div>
 
-
-
                 <div className='flex flex-col'>
                     <label htmlFor="email" className='font-medium text-xs text-[#333333] my-4'>{t('email')}</label>
                     <input
@@ -163,6 +181,7 @@ export default function Register() {
                     />
                     {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                 </div>
+
                 <div className='flex flex-col'>
                     <label htmlFor="password" className='font-medium text-xs text-[#333333] my-4'>{t('password')}</label>
                     <input
@@ -176,6 +195,7 @@ export default function Register() {
                     />
                     {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                 </div>
+
                 <div className='flex flex-col'>
                     <label htmlFor="phone_number" className='font-medium text-xs text-[#333333] my-4'>{t('phoneNumber')}</label>
                     <input
@@ -189,6 +209,7 @@ export default function Register() {
                     />
                     {errors.phone_number && <span className="text-red-500 text-xs">{errors.phone_number}</span>}
                 </div>
+
                 <div className='flex flex-col'>
                     <label htmlFor="date_of_birth" className='font-medium text-xs text-[#333333] my-4'>{t('dateOfBirth')}</label>
                     <input
@@ -202,6 +223,7 @@ export default function Register() {
                     />
                     {errors.date_of_birth && <span className="text-red-500 text-xs">{errors.date_of_birth}</span>}
                 </div>
+
                 <div className='flex flex-col'>
                     <label htmlFor="gender" className='font-medium text-xs text-[#333333] my-4'>{t('gender')}</label>
                     <select
@@ -223,21 +245,17 @@ export default function Register() {
                 {role === 'doctor' && (
                     <>
                         <div className='flex flex-col'>
-                            <label htmlFor="speciality" className='font-medium text-xs text-[#333333] my-4'>{t('speciality')}</label>
-                            <div id="speciality" className='focus:outline-none flex flex-row max-lg:grid max-lg:grid-rows-2 max-lg:grid-cols-2 max-lg:gap-6 max-lg:py-4 justify-center items-center p-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'>
-                                {specialities.map((speciality, index) => (
-                                    <div
-                                        key={index}
-                                        onClick={() => setFormData({ ...data, speciality: speciality.name })}
-                                        className={`flex flex-row text-[8px] font-semibold justify-center items-center py-2 px-2 gap-6 w-fit h-[20px] rounded-[21.8513px] order-3 flex-grow-0 bg-opacity-100 cursor-pointer`}
-                                        style={{ backgroundColor: `${speciality.color}4D`, color: speciality.color }}
-                                    >
-                                        {speciality.name}
-                                    </div>
-                                ))}
-                            </div>
+                            <label htmlFor="speciality" className='font-medium text-xs text-[#333333] my-4'>
+                                Speciality
+                            </label>
+                            <SpecialitySelector
+                                specialities={specialities}
+                                selectedSpeciality={data.speciality}
+                                onSelect={handleSpecialitySelect}
+                            />
                             {errors.speciality && <span className="text-red-500 text-xs">{errors.speciality}</span>}
                         </div>
+
                         <div className='flex flex-col'>
                             <label htmlFor="experience" className='font-medium text-xs text-[#333333] my-4'>{t('experience')}</label>
                             <input
@@ -251,6 +269,7 @@ export default function Register() {
                             />
                             {errors.experience && <span className="text-red-500 text-xs">{errors.experience}</span>}
                         </div>
+
                         <div className='flex flex-col'>
                             <label htmlFor="max_appointments_in_day" className='font-medium text-xs text-[#333333] my-4'>{t('maxAppointmentsPerDay')}</label>
                             <input
@@ -264,6 +283,7 @@ export default function Register() {
                             />
                             {errors.max_appointments_in_day && <span className="text-red-500 text-xs">{errors.max_appointments_in_day}</span>}
                         </div>
+
                         <div className='flex flex-col'>
                             <label htmlFor="appointment_duration_minutes" className='font-medium text-xs text-[#333333] my-4'>{t('appointmentDuration')}</label>
                             <input
@@ -276,7 +296,9 @@ export default function Register() {
                                 required
                             />
                             {errors.appointment_duration_minutes && <span className="text-red-500 text-xs">{errors.appointment_duration_minutes}</span>}
-                        </div><div className='flex flex-col'>
+                        </div>
+
+                        <div className='flex flex-col'>
                             <label htmlFor="teleconsultation_available" className='font-medium text-xs text-[#333333] my-4'>{t('teleconsultationAvailable')}</label>
                             <select
                                 name="teleconsultation_available"
@@ -291,6 +313,7 @@ export default function Register() {
                             </select>
                             {errors.teleconsultation_available && <span className="text-red-500 text-xs">{errors.teleconsultation_available}</span>}
                         </div>
+
                         <div className='flex flex-col'>
                             <label htmlFor="office_location" className='font-medium text-xs text-[#333333] my-4'>{t('officeLocation')}</label>
                             <input
@@ -307,19 +330,22 @@ export default function Register() {
                     </>
                 )}
 
-                <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
-                    {t('register')}
+                <button
+                    type='submit'
+                    disabled={loading} // Disable the button when loading
+                    className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px] disabled:opacity-50'
+                >
+                    {loading ? t('registering') : t('register')} {/* Show loading text or register text */}
                 </button>
-                {
-                    errors.server && <span className="text-red-500 text-xs">{errors.server}</span>
-                }
+
+                {errors.server && <span className="text-red-500 text-xs">{errors.server}</span>}
+
                 <div className="text-center text-sm text-[#333333] mt-4">
                     {t('alreadyHaveAccount')} {' '}
                     <Link href={`/${language}/auth/login`} className="text-primary font-semibold hover:underline">
                         {t('loginInstead')}
                     </Link>
                 </div>
-
             </form>
         </div>
     );
