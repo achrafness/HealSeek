@@ -112,7 +112,7 @@ def add_appointment(appointment : Appointment):
         #
         return JSONResponse(content=appointment.dict(), status_code=200)
     except Exception as e: 
-        raise HTTPException(status_code=500 , detail="error : "+str(e))
+        raise HTTPException(status_code=500 , detail="error : "+str(e) + appointment.appointment_time)
 
 def update_appointment(request:Request,appointment_id: int, appointment_data: dict):
     try:
