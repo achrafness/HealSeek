@@ -22,6 +22,15 @@ interface Prescription {
     diagnosis: string;
     notes: string;
     created_at: string;
+    medications: Medication[];
+}
+
+interface Medication {
+    medication_name: string;
+    dosage: string;
+    frequency: string;
+    duration: string;
+    instructions: string;
 }
 
 interface Doctor {
@@ -38,6 +47,7 @@ export default function PatientDashboard() {
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
     const [doctorsMap, setDoctorsMap] = useState<{ [key: number]: Doctor }>({}); // Map to store fetched doctors
+    const [expandedPrescriptionId, setExpandedPrescriptionId] = useState<number | null>(null); // Track expanded prescription
 
     // Fetch appointments and prescriptions on component mount
     useEffect(() => {
@@ -71,6 +81,7 @@ export default function PatientDashboard() {
                 const prescriptionsResponse = await axios.get(
                     `/prescription/patient/${user.user_id}`
                 );
+                console.log(prescriptionsResponse.data);
                 setPrescriptions(prescriptionsResponse.data.prescriptions);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -79,6 +90,15 @@ export default function PatientDashboard() {
 
         fetchData();
     }, []);
+
+    // Toggle medication visibility for a prescription
+    const toggleMedications = (prescriptionId: number) => {
+        if (expandedPrescriptionId === prescriptionId) {
+            setExpandedPrescriptionId(null); // Collapse if already expanded
+        } else {
+            setExpandedPrescriptionId(prescriptionId); // Expand the clicked prescription
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -168,6 +188,50 @@ export default function PatientDashboard() {
                                         <span className="font-medium">Notes:</span>{" "}
                                         {prescription.notes || "No notes"}
                                     </p>
+                                    {prescription.medications.length !== 0 ? (
+                                        <div>
+                                            <button
+                                                onClick={() => toggleMedications(prescription.prescription_id)}
+                                                className="text-sm text-green-600 font-medium hover:underline"
+                                            >
+                                                {expandedPrescriptionId === prescription.prescription_id
+                                                    ? "Hide medications"
+                                                    : "Show medications"}
+                                            </button>
+                                            {expandedPrescriptionId === prescription.prescription_id && (
+                                                <div className="mt-4">
+                                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                                        Medications
+                                                    </h3>
+                                                    <ul className="text-sm text-gray-600 space-y-2">
+                                                        {prescription.medications.map((medication, index) => (
+                                                            <li key={index} className="p-2 bg-white rounded-lg shadow-sm">
+                                                                <div>
+                                                                    <span className="font-medium">Name:</span> {medication.medication_name}
+                                                                </div>
+                                                                <div>
+                                                                    <span className="font-medium">Dosage:</span> {medication.dosage}
+                                                                </div>
+                                                                <div>
+                                                                    <span className="font-medium">Frequency:</span> {medication.frequency}
+                                                                </div>
+                                                                <div>
+                                                                    <span className="font-medium">Duration:</span> {medication.duration}
+                                                                </div>
+                                                                <div>
+                                                                    <span className="font-medium">Instructions:</span> {medication.instructions}
+                                                                </div>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-red-600">
+                                            <span className="font-medium">No medications</span>
+                                        </p>
+                                    )}
                                 </div>
                             ))}
                         </div>

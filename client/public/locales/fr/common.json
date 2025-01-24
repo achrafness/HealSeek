@@ -8,6 +8,24 @@
         "french": "Français",
         "arabic": "Arabe"
     },
+    "prescription": {
+    "diagnosis": "Diagnostic",
+    "notes": "Notes",
+    "medications": "Médicaments",
+    "medicationName": "Nom du médicament",
+    "dosage": "Dosage",
+    "frequency": "Fréquence",
+    "duration": "Durée",
+    "instructions": "Instructions",
+    "addMedication": "Ajouter un médicament",
+    "submitPrescription": "Soumettre la prescription",
+    "diagnosisRequired": "Le diagnostic est requis",
+    "notesRequired": "Les notes sont requises",
+    "medicationNameRequired": "Le nom du médicament est requis",
+    "dosageRequired": "Le dosage est requis",
+    "frequencyRequired": "La fréquence est requise",
+    "durationRequired": "La durée est requise"
+    },
     "Footer": {
         "companyInfo": "Infos sur l'entreprise",
         "about": "À propos",

@@ -337,13 +337,13 @@ def logout(response: Response, request: Request) -> dict:
     user_data = db.fetch_one()
     
     if not user_data:
-        response.delete_cookie('jwt')
+        response.delete_cookie('jwt' , path='/')
         return {"message": "No active session found"}
     
     # Clear refresh token
     logged_user_query = us.update(refresh_token="", user_id=user_data[0])
     db.execute_query(logged_user_query, params=("", user_data[0]))
-    response.delete_cookie('jwt')
+    response.delete_cookie('jwt', path="/")
     return {"message": "User has been logged out"}
 
 def handle_refresh_token(response: Response, request: Request) -> dict:

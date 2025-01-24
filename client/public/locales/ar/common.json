@@ -8,6 +8,24 @@
         "french": "فرنسي",
         "arabic": "عربي"
     },
+    "prescription": {
+        "diagnosis": "التشخيص",
+        "notes": "ملاحظات",
+        "medications": "الأدوية",
+        "medicationName": "اسم الدواء",
+        "dosage": "الجرعة",
+        "frequency": "التكرار",
+        "duration": "المدة",
+        "instructions": "التعليمات",
+        "addMedication": "إضافة دواء",
+        "submitPrescription": "إرسال الوصفة الطبية",
+        "diagnosisRequired": "التشخيص مطلوب",
+        "notesRequired": "الملاحظات مطلوبة",
+        "medicationNameRequired": "اسم الدواء مطلوب",
+        "dosageRequired": "الجرعة مطلوبة",
+        "frequencyRequired": "التكرار مطلوب",
+        "durationRequired": "المدة مطلوبة"
+    },
     "Footer": {
         "companyInfo": "معلومات الشركة",
         "about": "حول",

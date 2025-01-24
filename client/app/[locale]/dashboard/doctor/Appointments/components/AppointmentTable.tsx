@@ -17,6 +17,7 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import PrescriptionForm from "./Prescription";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -37,6 +38,7 @@ import {
 } from "@/components/ui/table";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { AxiosInstance } from "axios";
+import AddModal from "./AddModal";
 
 export type Appointment = {
     appointment_id: number;
@@ -50,19 +52,24 @@ export type Appointment = {
     location: string;
     appointment_time: string;
     status: string;
+    patient_id: number;
+    doctor_id: number;
 };
 
 type AppointmentTableProps = {
     appointments: Appointment[];
     setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>;
 };
+import { useAuthStore } from "@/store/store";
 
 export function AppointmentTable({ appointments, setAppointments }: AppointmentTableProps) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const [open , setOpen] = React.useState(false)
     const axiosPrivate = useAxiosPrivate();
+    const {user}= useAuthStore()
 
     const columns: ColumnDef<Appointment>[] = React.useMemo(
         () => [
@@ -161,12 +168,23 @@ export function AppointmentTable({ appointments, setAppointments }: AppointmentT
                                 /* : appointment.status=="cancelled" ?  <p className="text-red-500">Rejected</p>
                                 : null */
                             }
+                            {
+                                appointment.status=="completed" && <button className="text-green-500" onClick={()=>{setOpen(true)
+                                    console.log(open)
+                                }}>add prescription</button>
+                
+                            }
+                            <AddModal open={open} onClose={() => setOpen(false)}>
+                                <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
+                                    <PrescriptionForm setOpen={setOpen} appointmentId={appointment.appointment_id} patientId={row.original.patient_id} />
+                                </div>
+                            </AddModal>
                         </div>
                     );
                 },
             },
         ],
-        [axiosPrivate, setAppointments]
+        [axiosPrivate, setAppointments , open]
     );
 
     const table = useReactTable({

@@ -34,6 +34,24 @@
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam proin nibh cursus at sed sagittis amet, sed.",
         "bookAppointment": "Book an appointment"
     },
+    "prescription": {
+    "diagnosis": "Diagnosis",
+    "notes": "Notes",
+    "medications": "Medications",
+    "medicationName": "Medication Name",
+    "dosage": "Dosage",
+    "frequency": "Frequency",
+    "duration": "Duration",
+    "instructions": "Instructions",
+    "addMedication": "Add Medication",
+    "submitPrescription": "Submit Prescription",
+    "diagnosisRequired": "Diagnosis is required",
+    "notesRequired": "Notes are required",
+    "medicationNameRequired": "Medication name is required",
+    "dosageRequired": "Dosage is required",
+    "frequencyRequired": "Frequency is required",
+    "durationRequired": "Duration is required"
+    },
     "bookingSection": {
         "title": "Book an appointment",
         "headline": "Schedule a virtual or presential appointment today",

@@ -51,7 +51,7 @@ export default function PublicNavbar() {
                 <div>
                     <ul className='flex gap-10'>
 
-                        <Link href={`/${language}`}><li className={`font-normal text-base opacity-80 ${selected ? 'text-[#3A8EF6]' : 'text-[#6C87AE]'} `}>Home</li></Link>
+                        <Link href={`/${language}/dashboard/patient`}><li className={`font-normal text-base opacity-80 ${selected ? 'text-[#3A8EF6]' : 'text-[#6C87AE]'} `}>History</li></Link>
                         <Link href={`/${language}/doctor`}><li className='font-normal text-base opacity-80 text-[#6C87AE]'>Doctors</li></Link>
                     </ul>
                 </div>
