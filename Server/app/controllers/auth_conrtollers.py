@@ -109,7 +109,7 @@ async def registeration(User: Registration_input) -> Response:
         )
 
     # Hash password
-    """     try:
+    """try:
         salt = bcrypt.gensalt(10)
         print(salt)
         user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
