@@ -146,7 +146,7 @@ const DoctorsPage = () => {
     }, [filters]);
 
     return (
-        <div className="bg-[#F2F7FF] min-h-screen py-12">
+        <div className="bg-[#F2F7FF] min-h-screen pb-12 flex flex-col">
             <PublicNavbar/>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">

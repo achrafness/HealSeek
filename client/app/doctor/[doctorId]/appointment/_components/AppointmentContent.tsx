@@ -26,6 +26,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         try {
             const res = await axios.get(`/doctors/${doctorID}`);
             setDoctor(res.data);
+            console.log(res.data);
         } catch (error) {
             const err = error as AxiosError;
             console.log(err);
@@ -65,6 +66,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         try {
             const response = await axios.post('/appointments/', payload);
             if (response.status === 200) {
+                console.log(response)
                 setSuccess('Appointment scheduled successfully!');
                 setError('');
                 // Reset form fields

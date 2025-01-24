@@ -26,7 +26,9 @@ def get_apointment_by_id_route(request:Request,appointment_id: int):
 
 @router.post("/" , dependencies=[Depends(resolve_user_temp(allowed_roles=["doctor" , "patient"]))])
 def add_appointment_route(appointment : Appointment):
+    print("yes")
     return add_appointment(appointment)
+    print("done")
 
 @router.delete("/{appointment_id}" , dependencies=[Depends(resolve_user_temp(allowed_roles=["doctor"]))])
 def delete_appointment_route(request:Request,appointment_id: int):

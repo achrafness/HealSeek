@@ -82,22 +82,28 @@ def add_appointment(appointment : Appointment):
         existing_doctor = db.fetch_one()
         if not existing_doctor:
             raise HTTPException(status_code=404, detail="Doctor ID is wrong")
-        
         existing_patient = Patient.find(user_id=appointment.patient_id)
         db.execute_query(existing_patient, params=(appointment.patient_id,))
         existing_patient = db.fetch_one()
+
         if not existing_patient:
             raise HTTPException(status_code=404, detail="Patient ID is wrong")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while checking doctor or patient ID : " + str(e))
     try:
-        if datetime.fromisoformat(appointment.appointment_time)< datetime.now():
+        print(appointment.appointment_time)
+        appointment_time = datetime.fromisoformat(appointment.appointment_time)
+        if appointment_time.tzinfo is not None:
+            appointment_time = appointment_time.replace(tzinfo=None)
+        current_time = datetime.now()
+        if appointment_time < current_time:
             raise HTTPException(status_code=400, detail="Appointment time should be in future")
+
         appointment_query = ap.insert(**appointment.dict())
         db.execute_query(appointment_query)
         return JSONResponse(content=appointment.dict(), status_code=200)
     except Exception as e: 
-        return HTTPException(status_code=500 , detail="error : "+str(e))
+        raise HTTPException(status_code=500 , detail="error : "+str(e))
 
 def update_appointment(request:Request,appointment_id: int, appointment_data: dict):
     try:
