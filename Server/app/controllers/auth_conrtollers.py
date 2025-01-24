@@ -214,12 +214,12 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         "user_id": user_found[0]
     }
 
-    # Verify password
-    # try:
-    #     if not bcrypt.checkpw(password.encode('utf-8'), user_found["password"].encode('utf-8')):
-    #         raise HTTPException(status_code=400, detail="Invalid credentials")
-    # except Exception:
-    #     raise HTTPException(status_code=400, detail="Invalid credentials")
+    #Verify password
+    try:
+        if not bcrypt.checkpw(password.encode('utf-8'), user_found["password"].encode('utf-8')):
+            raise HTTPException(status_code=400, detail="Invalid credentials")
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid credentials")
 
     # Generate tokens
     access_token = sign_access_token({"email": user_found["email"], "role": user_found["role"]}, 'access')
