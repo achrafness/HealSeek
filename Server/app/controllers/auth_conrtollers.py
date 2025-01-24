@@ -264,9 +264,9 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         max_age=7 * 24 * 60 * 60,
         expires=(datetime.utcnow() + timedelta(days=7)).replace(tzinfo=timezone.utc),
         path="/",
-        secure=False,  # Required for cross-site cookies
+        secure=True,  # Required for cross-site cookies
         httponly=True,
-        samesite="Lax"  # Must be "None" for cross-site cookies
+        samesite="None"  # Must be "None" for cross-site cookies
     )
 
     return response
