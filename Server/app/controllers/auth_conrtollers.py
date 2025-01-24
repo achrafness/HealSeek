@@ -17,6 +17,7 @@ from app.utils.twoFA import generate_2fa_code, verify_2fa_code
 from app.database.database import User as us, db, Doctor, Patient, Admin
 from app.enums.roles import Roles
 from app.models.user import Registration_input, Login_input
+from passlib.hash import bcrypt
 
 
 class UserRole(str, Enum):
@@ -109,13 +110,14 @@ async def registeration(User: Registration_input) -> Response:
         )
 
     # Hash password
-    """try:
-        salt = bcrypt.gensalt(10)
-        print(salt)
-        user["password"] = bcrypt.hashpw(user['password'].encode('utf-8'), salt).decode('utf-8')
+
+
+    try:
+        hashed_password = bcrypt.hash(user['password'])
+        user["password"] = hashed_password
     except Exception as e:
-        logger.error(f"Password hashing failed: {str(e)}" , exc_info=True)
-        raise HTTPException(status_code=500, detail="Error processing password" + str(e)) """
+        logger.error(f"Password hashing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error processing password")
 
     # Generate user ID
     userId = int(''.join(filter(str.isdigit, str(uuid4())))[:6])
@@ -126,7 +128,7 @@ async def registeration(User: Registration_input) -> Response:
             db.execute_query(us.create(
                 user_id=userId,
                 Name=user['name'],
-                Email=user["email"],
+                Email=user["email"].lower(),
                 PhoneNumber=user.get("phone_number"),
                 DateOfBirth=user.get("date_of_birth"),
                 Password=user["password"],
@@ -197,7 +199,7 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
         HTTPException: 400 if credentials are invalid
     """
     userCredentials = dict(userCredentials)
-    email = userCredentials["email"]
+    email = userCredentials["email"].lower()
     password = userCredentials["password"]
 
     # Find user
@@ -216,11 +218,12 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
     }
 
     #Verify password
-    """ try:
-        if not bcrypt.checkpw(password.encode('utf-8'), user_found["password"].encode('utf-8')):
+
+    try:
+        if not bcrypt.verify(password, user_found["password"]):
             raise HTTPException(status_code=400, detail="Invalid credentials")
     except Exception:
-        raise HTTPException(status_code=400, detail="Invalid credentials") """
+        raise HTTPException(status_code=400, detail="Invalid credentials")
 
     # Generate tokens
     access_token = sign_access_token({"email": user_found["email"], "role": user_found["role"]}, 'access')
