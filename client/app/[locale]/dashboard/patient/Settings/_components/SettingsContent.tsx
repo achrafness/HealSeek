@@ -3,10 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useAuthStore } from "@/store/store";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function SettingsContent() {
     const { user, setAuthState } = useAuthStore((state) => state);
     const axios = useAxiosPrivate();
+    const t = useTranslations("settingsContent");
     const [formData, setFormData] = useState({
         name: user?.name || "user name",
         email: user?.email || "user email",
@@ -21,15 +23,13 @@ export default function SettingsContent() {
 
     // Update form data when user changes
     useEffect(() => {
-        
-            setFormData({
-                name: user?.name,
-                email: user?.email,
-                phone_number: user?.phone_number,
-                newPassword: "", // Reset password fields
-                confirmNewPassword: "", // Reset password fields
-            });
-        
+        setFormData({
+            name: user?.name,
+            email: user?.email,
+            phone_number: user?.phone_number,
+            newPassword: "", // Reset password fields
+            confirmNewPassword: "", // Reset password fields
+        });
     }, [user]);
 
     // Handle changes in the form
@@ -47,7 +47,7 @@ export default function SettingsContent() {
 
         // Check if new passwords match (only if newPassword is provided)
         if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
-            setError("New passwords do not match.");
+            setError(t('passwordsDoNotMatch'));
             return;
         }
 
@@ -66,7 +66,7 @@ export default function SettingsContent() {
         try {
             const response = await axios.put(`/users/${user?.user_id}`, payload);
             if (response.status === 200) {
-                setSuccess("User details updated successfully!");
+                setSuccess(t('userDetailsUpdated'));
                 setError("");
                 // Reset password fields after successful update
                 setFormData((prev) => ({
@@ -76,7 +76,7 @@ export default function SettingsContent() {
                 }));
             }
         } catch (error) {
-            setError("Failed to update user details. Please try again.");
+            setError(t('failedToUpdateUserDetails'));
             setSuccess("");
         }
     };
@@ -84,7 +84,7 @@ export default function SettingsContent() {
     // Handle profile picture upload
     const handlePfpUpload = async () => {
         if (!pfpFile) {
-            setError("Please select a file to upload.");
+            setError(t('pleaseSelectFile'));
             return;
         }
 
@@ -103,13 +103,9 @@ export default function SettingsContent() {
             );
 
             if (response.status === 200) {
-                setSuccess("Profile picture updated successfully!");
+                setSuccess(t('profilePictureUpdated'));
                 setError("");
-                console.log(response?.data)
-                setPfpFile(response?.data)
-                // Update the user object in the store with the new profile picture URL
-                // user.profile_picture_url = response?.data?.pfpUrl;
-                console.log(response)
+                setPfpFile(response?.data);
                 setAuthState({
                     user: {
                         ...user,
@@ -118,7 +114,7 @@ export default function SettingsContent() {
                 });
             }
         } catch (error) {
-            setError("Failed to upload profile picture. Please try again.");
+            setError(t('failedToUploadProfilePicture'));
             setSuccess("");
         }
     };
@@ -166,14 +162,14 @@ export default function SettingsContent() {
                         onClick={triggerFileInput}
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-3"
                     >
-                        Change Profile Picture
+                        {t('changeProfilePicture')}
                     </button>
                     {pfpFile && (
                         <button
                             onClick={handlePfpUpload}
                             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mt-3"
                         >
-                            Upload
+                            {t('upload')}
                         </button>
                     )}
                 </div>
@@ -183,20 +179,20 @@ export default function SettingsContent() {
                     className="min-w-[320px] min-h-[325px] flex justify-center items-center mb-3 flex-col rounded-[20px]"
                     style={{ boxShadow: "0px 2px 4px 0px #00000030" }}
                 >
-                    <h1 className="font-semibold text-lg">Information</h1>
+                    <h1 className="font-semibold text-lg">{t('information')}</h1>
                     <ul>
                         <li className="font-semibold text-lg">
-                            Name: <span className="text-base font-normal">{user?.name}</span>
+                            {t('name')}: <span className="text-base font-normal">{user?.name}</span>
                         </li>
                         <li className="font-semibold text-lg">
-                            Email: <span className="text-base font-normal">{user?.email}</span>
+                            {t('email')}: <span className="text-base font-normal">{user?.email}</span>
                         </li>
                         <li className="font-semibold text-lg">
-                            Tel:{" "}
+                            {t('phoneNumber')}:{" "}
                             <span className="text-base font-normal">{user?.phone_number}</span>
                         </li>
                         <li className="font-semibold text-lg">
-                            Role: <span className="text-base font-normal">{user?.role}</span>
+                            {t('role')}: <span className="text-base font-normal">{user?.role}</span>
                         </li>
                     </ul>
                 </div>
@@ -208,16 +204,16 @@ export default function SettingsContent() {
                 style={{ boxShadow: "0px 2px 4px 0px #00000030" }}
             >
                 <div className="w-full flex-1 h-full max-w-lg bg-white py-12 rounded-[20px]">
-                    <h2 className="text-xl font-semibold mb-4">User Settings</h2>
+                    <h2 className="text-xl font-semibold mb-4">{t('userSettings')}</h2>
 
                     {/* User Details Form */}
                     <form onSubmit={handleUserDetailsSubmit} className="mb-6">
-                        <h3 className="text-lg font-medium mb-2">Details</h3>
+                        <h3 className="text-lg font-medium mb-2">{t('details')}</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <input
                                 type="text"
                                 name="name"
-                                placeholder="Full Name"
+                                placeholder={t('fullName')}
                                 value={formData.name}
                                 onChange={handleFormChange}
                                 className="border rounded-lg px-3 py-2 w-full"
@@ -225,7 +221,7 @@ export default function SettingsContent() {
                             <input
                                 type="email"
                                 name="email"
-                                placeholder="Email"
+                                placeholder={t('email')}
                                 value={formData.email}
                                 onChange={handleFormChange}
                                 className="border rounded-lg px-3 py-2 w-full"
@@ -235,7 +231,7 @@ export default function SettingsContent() {
                             <input
                                 type="text"
                                 name="phone_number"
-                                placeholder="Phone Number"
+                                placeholder={t('phoneNumber')}
                                 value={formData.phone_number}
                                 onChange={handleFormChange}
                                 className="border rounded-lg px-3 py-2 w-full"
@@ -247,7 +243,7 @@ export default function SettingsContent() {
                             <input
                                 type="password"
                                 name="newPassword"
-                                placeholder="New Password"
+                                placeholder={t('newPassword')}
                                 value={formData.newPassword}
                                 onChange={handleFormChange}
                                 className="border rounded-lg px-3 py-2 w-full"
@@ -257,7 +253,7 @@ export default function SettingsContent() {
                             <input
                                 type="password"
                                 name="confirmNewPassword"
-                                placeholder="Confirm New Password"
+                                placeholder={t('confirmNewPassword')}
                                 value={formData.confirmNewPassword}
                                 onChange={handleFormChange}
                                 className="border rounded-lg px-3 py-2 w-full"
@@ -268,7 +264,7 @@ export default function SettingsContent() {
                             type="submit"
                             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-3"
                         >
-                            Save changes
+                            {t('saveChanges')}
                         </button>
                     </form>
 

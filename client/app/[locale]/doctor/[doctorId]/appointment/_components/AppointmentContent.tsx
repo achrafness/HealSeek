@@ -7,6 +7,7 @@ import { IoMapOutline } from 'react-icons/io5';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import { AxiosError } from 'axios';
 import { useAuthStore } from '@/store/store';
+import { useTranslations } from 'next-intl';
 
 type DoctorAppointmentContentProps = {
     doctorID?: string;
@@ -15,6 +16,7 @@ type DoctorAppointmentContentProps = {
 export default function AppointmentContent({ doctorID }: DoctorAppointmentContentProps) {
     const axios = useAxiosPrivate();
     const { user } = useAuthStore((state) => state);
+    const t = useTranslations("appointmentContent");
     const [doctor, setDoctor] = useState<any>();
     const [appointmentTime, setAppointmentTime] = useState<string>('');
     const [appointmentType, setAppointmentType] = useState<'in_person' | 'teleconsultation'>('in_person');
@@ -30,7 +32,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         } catch (error) {
             const err = error as AxiosError;
             console.log(err);
-            setError('Failed to fetch doctor details. Please try again.');
+            setError(t('fetchDoctorError'));
         }
     };
 
@@ -38,7 +40,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         if (doctorID) {
             getDoctor();
         } else {
-            setError('Doctor ID is missing. Please try again.');
+            setError(t('missingDoctorID'));
         }
     }, [doctorID]);
 
@@ -47,12 +49,12 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         e.preventDefault();
 
         if (!appointmentTime) {
-            setError('Please select an appointment date and time.');
+            setError(t('missingAppointmentTime'));
             return;
         }
 
         if (!doctorID || !user?.user_id) {
-            setError('Doctor ID or user information is missing. Please try again.');
+            setError(t('missingDoctorOrUser'));
             return;
         }
 
@@ -70,7 +72,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
             console.log(response)
             if (response.status === 200) {
                 console.log(response)
-                setSuccess('Appointment scheduled successfully!');
+                setSuccess(t('successMessage'));
                 setError('');
                 // Reset form fields
                 setAppointmentTime('');
@@ -79,7 +81,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
         } catch (error) {
             const err = error as AxiosError;
             console.log(err);
-            setError('Failed to schedule appointment. Please try again.');
+            setError(t('errorMessage'));
             setSuccess('');
         }
     };
@@ -139,7 +141,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
                         className='flex items-center justify-center w-full text-white p-4 rounded-[28.4px] h-[1/4] font-semibold text-[57px] mb-8'
                         style={{ background: 'linear-gradient(145.08deg, #1678F2 3.73%, #65A8FB 132.69%)' }}
                     >
-                        Request an appointment
+                        {t('requestAppointment')}
                     </button>
 
                     {/* Appointment Form */}
@@ -148,7 +150,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
                             {/* Appointment Date and Time */}
                             <div className="mb-4">
                                 <label className="block text-[#1c1f1e] text-[24px] font-normal mb-2">
-                                    Appointment Date and Time:
+                                    {t('appointmentDateTime')}
                                 </label>
                                 <input
                                     type="datetime-local"
@@ -162,7 +164,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
                             {/* Appointment Type */}
                             <div className="mb-4">
                                 <label className="block text-[#1c1f1e] text-[24px] font-normal mb-2">
-                                    Type of Appointment:
+                                    {t('typeOfAppointment')}
                                 </label>
                                 <div className="text-[#9599a7] text-[20px] font-normal flex flex-col justify-center items-start">
                                     <label>
@@ -174,7 +176,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
                                             onChange={() => setAppointmentType('in_person')}
                                             className="mr-2 w-5 h-5 rounded-md"
                                         />
-                                        In-Person
+                                        {t('inPerson')}
                                     </label>
                                     <label>
                                         <input
@@ -185,7 +187,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
                                             onChange={() => setAppointmentType('teleconsultation')}
                                             className="mr-2 w-5 h-5 rounded-md"
                                         />
-                                        Teleconsultation
+                                        {t('teleconsultation')}
                                     </label>
                                 </div>
                             </div>
@@ -195,7 +197,7 @@ export default function AppointmentContent({ doctorID }: DoctorAppointmentConten
                                 type="submit"
                                 className="w-fit font-semibold text-[24px] min-w-[200px] h-[60px] flex justify-around items-center my-6 bg-primary text-white p-2 rounded-[12px] hover:bg-blue-600"
                             >
-                                Submit
+                                {t('submit')}
                                 <span> {"> >"}</span>
                             </button>
                         </form>

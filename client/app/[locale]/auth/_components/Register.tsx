@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { geocodeAddress } from '@/lib/geocode'; // Import the geocoding utility
 import { useTranslations } from 'next-intl';
-
+import { useLanguageStore } from '@/store/store';
 export default function Register() {
     const axios = useAxiosPrivate();
     const router = useRouter();
+    const { language } = useLanguageStore((state) => state)
     const t = useTranslations("register");
     const [data, setFormData] = useState({
         name: '',
@@ -315,7 +316,7 @@ export default function Register() {
                 }
                 <div className="text-center text-sm text-[#333333] mt-4">
                     {t('alreadyHaveAccount')} {' '}
-                    <Link href="/auth/login" className="text-primary font-semibold hover:underline">
+                    <Link href={`/${language}/auth/login`} className="text-primary font-semibold hover:underline">
                         {t('loginInstead')}
                     </Link>
                 </div>

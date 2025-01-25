@@ -1,9 +1,9 @@
-import React from 'react';
-import axios from '@/api/axios';
-import PublicNavbar from '../../dashboard/patient/_components/PublicNavbar';
-import DoctorProfileContent from '../_components/DoctorProfileContent';
-/* import RequireAuth from '@/HOC/RequireAuth' */
-
+import React from 'react'
+import axios from '@/api/axios'
+import { AxiosError } from 'axios'
+import PublicNavbar from '../../dashboard/patient/_components/PublicNavbar'
+import DoctorProfileContent from '../_components/DoctorProfileContent'
+import RequireAuth from '@/HOC/RequireAuth'
 type Params = {
     params: {
         doctorId: string;
@@ -37,7 +37,9 @@ const getDoctor = async (doctorId: string) => {
 const getReviews = async (doctorId: string) => {
     try {
         const response = await axios.get(`/ratings/doctor/${doctorId}`);
+        console.log(response)
         return response.data; // Return the data part of the response
+
     } catch (error) {
         console.log(error);
         return null; // Handle the error appropriately

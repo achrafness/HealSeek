@@ -20,12 +20,12 @@ export default function ProfileReview({ review }: ProfileReviewProps) {
                     {review?.review_text || 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.'}
                 </p>
                 <div className='flex items-center gap-2 mt-2'>
-                    
-                        {[...Array(review?.rating_score || 0)].map((_, i) => (
-                            <FaStar key={i} className='text-yellow-500' />
-                        ))}
-                    
-                    
+
+                    {[...Array(review?.rating_score || 0)].map((_, i) => (
+                        <FaStar key={i} className='text-yellow-500' />
+                    ))}
+
+
 
                     <span className='text-base text-gray-600'>
                         {review?.rating}
