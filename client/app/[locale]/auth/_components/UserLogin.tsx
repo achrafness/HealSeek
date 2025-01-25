@@ -2,21 +2,23 @@
 
 import React from 'react';
 import { useState } from 'react';
-// import axios from '@/api/axios';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/store'; // Import your auth store
 import { jwtDecode } from 'jwt-decode';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import Link from 'next/link';
-
+import { useTranslations } from 'next-intl';
+import { useLanguageStore } from '@/store/store';
 export default function UserLogin() {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     const router = useRouter();
+    const { language } = useLanguageStore((state) => state)
+    const t = useTranslations("userLogin");
     const { setAuthState } = useAuthStore(); // Destructure the setAuthState method
-    const axiosPrivate = useAxiosPrivate()
+    const axiosPrivate = useAxiosPrivate();
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -28,39 +30,26 @@ export default function UserLogin() {
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            ///login
-            ///const result = await axios.post('/auth/login', formData);
             const result = await axiosPrivate.post('/auth/login', formData);
-
-
-            console.log(result);
+            console.log(result)
             const { accessToken } = result.data; //the API returns accessToken,
-
-            ///decode the token
             const decodedToken: { role: string;[key: string]: unknown } = jwtDecode(accessToken);
             const { role } = decodedToken; ///grab role
-            console.log(decodedToken)
             setAuthState({ accessToken, role }); // Update the auth store
-
-            ///get profile
-            const user_profile = await axiosPrivate.get("/users/profile")
-
-            // Update the auth store
-
+            const user_profile = await axiosPrivate.get("/users/profile");
             setAuthState({ user: user_profile.data });
 
             // Redirect based on role
             if (role === 'admin') {
-                router.push('/dashboard/admin');
+                router.push(`/${language}/dashboard/admin`);
             } else if (role === 'doctor') {
-                router.push('/dashboard/doctor');
+                router.push(`/${language}/dashboard/doctor`);
             } else if (role === 'patient') {
-                router.push('/doctor');
+                router.push(`/${language}/doctor`);
             } else {
                 router.push('/'); // Default fallback
             }
         } catch (error: any) {
-            console.log(error)
             setErrors(error?.response?.data?.detail || 'An error occurred');
         }
     };
@@ -69,12 +58,12 @@ export default function UserLogin() {
         <div className='w-1/2 h-fit mx-auto'>
             <div className='w-full h-20 relative my-12'>
                 <div className='absolute -top-10 right-0 -translate-y-full w-0 h-0  border-t-[50px] border-t-transparent border-r-[50px] border-r-primary  border-b-[50px] border-b-transparent'></div>
-                <h1 className='font-medium text-5xl flex items-center'>Log in</h1>
+                <h1 className='font-medium text-5xl flex items-center'>{t('login')}</h1>
                 <div className='absolute -bottom-12 left-0  w-0 h-0 border-t-[20px] border-t-transparent  border-l-[20px] border-l-primary border-b-transparent border-b-[20px] border-b-primary'></div>
             </div>
             <form method='Post' className='w-full' onSubmit={handleFormSubmit}>
                 <div className='flex flex-col'>
-                    <label htmlFor="email" className=' font-medium text-xs text-[#333333] my-4'>Email</label>
+                    <label htmlFor="email" className=' font-medium text-xs text-[#333333] my-4'>{t('email')}</label>
                     <input
                         onChange={handleFormChange}
                         value={formData.email}
@@ -86,7 +75,7 @@ export default function UserLogin() {
                     />
                 </div>
                 <div className='flex flex-col'>
-                    <label htmlFor="password" className=' font-medium text-xs text-[#333333] my-4'>Password</label>
+                    <label htmlFor="password" className=' font-medium text-xs text-[#333333] my-4'>{t('password')}</label>
                     <input
                         onChange={handleFormChange}
                         value={formData.password}
@@ -98,12 +87,12 @@ export default function UserLogin() {
                     />
                 </div>
                 <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
-                    Log in
+                    {t('login')}
                 </button>
                 <p className='text-center'>
-                    or
-                    <Link href={'/auth/register'} className='text-primary mx-2'>
-                        Register Now
+                    {t('or')}
+                    <Link href={`/${language}/auth/register`} className='text-primary mx-2'>
+                        {t('registerNow')}
                     </Link>
                 </p>
 

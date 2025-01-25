@@ -8,8 +8,10 @@ import PublicNavbar from "../dashboard/patient/_components/PublicNavbar";
 import Image from "next/image";
 import Link from "next/link";
 import Map from "./_components/MapComponent";
+import { useTranslations } from "next-intl";
 
 const DoctorCard = ({ doctor }: any) => {
+    const t = useTranslations("doctorsPage");
     return (
         <Link href={`./doctor/${doctor.user_id}`} className="bg-white rounded-[32px] p-8 shadow-md hover:shadow-xl transition-all">
             <div className="flex gap-6">
@@ -69,14 +71,14 @@ const DoctorCard = ({ doctor }: any) => {
                         }}
                     >
                         <FiMessageCircle />
-                        Teleconsult
+                        {t('teleconsult')}
                     </div>
                 )}
             </div>
 
             <div className="mt-6 flex items-center justify-between">
                 <div>
-                    <span className="text-[#6C87AE]">Available slots/day</span>
+                    <span className="text-[#6C87AE]">{t('availableSlots')}</span>
                     <p className="font-semibold text-xl">
                         {doctor.max_appointments_per_day}
                     </p>
@@ -90,7 +92,7 @@ const DoctorCard = ({ doctor }: any) => {
                     }}
                 >
                     <FiMessageCircle />
-                    Book Now
+                    {t('bookNow')}
                 </button>
             </div>
         </Link>
@@ -98,6 +100,7 @@ const DoctorCard = ({ doctor }: any) => {
 };
 
 const DoctorsPage = () => {
+    const t = useTranslations("doctorsPage");
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -190,12 +193,12 @@ const DoctorsPage = () => {
 
 
     useEffect(() => {
-        if(!checked) {
-        fetchDoctors()
-        } else{
-        fetchDoctorsUsingCredentials()
+        if (!checked) {
+            fetchDoctors()
+        } else {
+            fetchDoctorsUsingCredentials()
         }
-    }, [filters, userLocation ,checked]);
+    }, [filters, userLocation, checked]);
 
 
     return (
@@ -204,11 +207,10 @@ const DoctorsPage = () => {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h1 className="font-bold text-[48px] mb-4">
-                        Find Your Perfect Doctor
+                        {t('findDoctor')}
                     </h1>
                     <p className="text-[#6C87AE] text-xl font-normal max-w-2xl mx-auto">
-                        Search through our network of qualified healthcare professionals to
-                        find the right doctor for your needs
+                        {t('searchDescription')}
                     </p>
                 </div>
 
@@ -218,7 +220,7 @@ const DoctorsPage = () => {
                         <MdOutlinePersonSearch className="text-2xl text-[#3A8EF6]" />
                         <input
                             type="text"
-                            placeholder="Search by doctor name or speciality..."
+                            placeholder={t('searchPlaceholder')}
                             className="bg-transparent flex-1 outline-none text-lg"
                             value={filters.speciality}
                             onChange={(e) =>
@@ -229,10 +231,10 @@ const DoctorsPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="flex flex-col gap-4">
-                            <label className="block text-[#6C87AE] mb-2">Location</label>
+                            <label className="block text-[#6C87AE] mb-2">{t('location')}</label>
                             <input
                                 type="text"
-                                placeholder="Enter location"
+                                placeholder={t('enterLocation')}
                                 className="w-full p-4 rounded-xl border border-gray-200"
                                 value={filters.location}
                                 onChange={(e) =>
@@ -242,14 +244,14 @@ const DoctorsPage = () => {
                             <div className="flex flex-col gap-2">
                                 <Map filters={filters} setFilters={setFilters} setUserLocation={setUserLocation} userLocation={userLocation} />
                                 <div className="flex items-center content-center justify-center gap-2">
-                                    <input 
-                                        onChange={() =>setChecked(!checked)} 
-                                        type="checkbox" 
-                                        name="nearbyDoctors" 
-                                        checked={checked} 
+                                    <input
+                                        onChange={() => setChecked(!checked)}
+                                        type="checkbox"
+                                        name="nearbyDoctors"
+                                        checked={checked}
                                     />
                                     <label className="block text-[#6C87AE] mb-2" htmlFor="nearbyDoctors">
-                                        Enable nearby doctors finding
+                                        {t('enableNearbyDoctors')}
                                     </label>
                                 </div>
                             </div>
@@ -257,7 +259,7 @@ const DoctorsPage = () => {
 
                         <div>
                             <label className="block text-[#6C87AE] mb-2">
-                                Teleconsultation
+                                {t('teleconsultation')}
                             </label>
                             <select
                                 className="w-full p-4 rounded-xl border border-gray-200"
@@ -274,19 +276,19 @@ const DoctorsPage = () => {
                                     }))
                                 }
                             >
-                                <option value="">All Options</option>
-                                <option value="true">Available</option>
-                                <option value="false">Not Available</option>
+                                <option value="">{t('allOptions')}</option>
+                                <option value="true">{t('available')}</option>
+                                <option value="false">{t('notAvailable')}</option>
                             </select>
                         </div>
 
                         <div>
                             <label className="block text-[#6C87AE] mb-2">
-                                Max Duration (minutes)
+                                {t('maxDuration')}
                             </label>
                             <input
                                 type="number"
-                                placeholder="Enter max duration"
+                                placeholder={t('enterMaxDuration')}
                                 className="w-full p-4 rounded-xl border border-gray-200"
                                 value={filters.maxDuration}
                                 onChange={(e) =>
@@ -306,7 +308,7 @@ const DoctorsPage = () => {
                     <div className="text-center py-12">
                         <div className="w-16 h-16 border-4 border-[#3A8EF6] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                         <p className="text-xl text-[#6C87AE]">
-                            Finding the best doctors for you...
+                            {t('findingDoctors')}
                         </p>
                     </div>
                 )}
@@ -314,7 +316,7 @@ const DoctorsPage = () => {
                 {/* Error State */}
                 {error && (
                     <div className="text-center py-12">
-                        <p className="text-xl text-red-600">Error: {error}</p>
+                        <p className="text-xl text-red-600">{t('error')}: {error}</p>
                     </div>
                 )}
 
@@ -322,7 +324,7 @@ const DoctorsPage = () => {
                 {!loading && !error && doctors.length > 0 && (
                     <>
                         <p className="text-[#00BFA5] text-xl font-medium mb-8">
-                            Found {doctors.length} doctors
+                            {t('foundDoctors', { count: doctors.length })}
                         </p>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {doctors.map((doctor: any) => (
@@ -337,9 +339,9 @@ const DoctorsPage = () => {
                     <div className="text-center py-12">
                         <MdOutlinePersonSearch className="text-6xl text-[#6C87AE] mx-auto mb-4" />
                         <p className="text-2xl text-gray-800 font-semibold mb-2">
-                            No doctors found
+                            {t('noDoctorsFound')}
                         </p>
-                        <p className="text-[#6C87AE]">Try adjusting your search criteria</p>
+                        <p className="text-[#6C87AE]">{t('adjustSearch')}</p>
                     </div>
                 )}
             </div>
