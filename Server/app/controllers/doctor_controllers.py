@@ -2,6 +2,8 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from app.database.database import Doctor, db
 from typing import Optional
+from typing import List, Dict
+from haversine import haversine, Unit
 
 def get_all_doctors():
     try:
@@ -146,14 +148,25 @@ def update_doctor(doctor_id: int, doctor_data: dict):
             detail=f"Error updating doctor: {str(e)}"
         )
 
+
+
+def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """
+    Calculate the distance between two coordinates in kilometers.
+    """
+    print("eeeeeeeeeeeeeeeeeeeeeeeeeee",haversine((lat1, lon1), (lat2, lon2), unit=Unit.KILOMETERS))
+    return haversine((lat1, lon1), (lat2, lon2), unit=Unit.KILOMETERS)
+
 def search_doctors(
     speciality: Optional[str] = None,
     location: Optional[str] = None,
     teleconsultation: Optional[bool] = None,
-    max_duration: Optional[int] = None
+    max_duration: Optional[int] = None,
+    user_latitude: Optional[float] = None,
+    user_longitude: Optional[float] = None
 ):
     try:
-        print("1111111111")
+        # Fetch all doctors from the database
         query = """
             SELECT u.*, d.*
             FROM users u
@@ -178,8 +191,6 @@ def search_doctors(
             query += " AND d.appointment_duration_minutes <= %s"
             params.append(max_duration)
             
-        print("2222222222")
-        
         query += " ORDER BY d.experience DESC, u.name ASC"
         
         db.execute_query(query, params)
@@ -205,19 +216,39 @@ def search_doctors(
             for doc in result
         ]
         
+        # Filter doctors within a 2km radius (if user coordinates are provided)
+        if user_latitude is not None and user_longitude is not None and user_latitude != 0 and user_longitude != 0:
+            filtered_doctors = []
+            for doctor in doctors_data:
+                if doctor["office_location_url"]:
+                    # Extract latitude and longitude from office_location_url
+                    doctor_latitude, doctor_longitude = map(float, doctor["office_location_url"].split(','))
+                    print(doctor_latitude, doctor_longitude)
+                    # Calculate the distance
+                    distance = calculate_distance(
+                        user_latitude, user_longitude,
+                        doctor_latitude, doctor_longitude
+                    )
+                    print("hadi distance",distance)
+                    
+                    # Add the doctor if within 2km
+                    if distance <= 4:
+                        doctor["distance"] = distance  # Add distance to the doctor's data
+                        filtered_doctors.append(doctor)
+                        print(doctor)
+            
+            doctors_data = filtered_doctors
+        
         if not doctors_data:
             raise HTTPException(
                 status_code=404,
                 detail="No doctors found matching the search criteria"
             )
             
-        return JSONResponse(
-            content={
-                "total": len(doctors_data),
-                "doctors": doctors_data
-            },
-            status_code=200
-        )
+        return {
+            "total": len(doctors_data),
+            "doctors": doctors_data
+        }
     except HTTPException as he:
         raise he
     except Exception as e:

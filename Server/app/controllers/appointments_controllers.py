@@ -48,8 +48,6 @@ def get_doctor_appointments(doctor_id : int):
         db.execute_query(doctor_query, params=(doctor_id,))
         print("eee")
         appointments_data = db.fetch_all()
-        
-        print("eee")
         print(appointments_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while fetching appointments : " + str(e))
@@ -67,7 +65,7 @@ def get_doctor_appointments(doctor_id : int):
             "name": patient_data[1],
             "email": patient_data[3],
             "phone": patient_data[4],
-            "date_of_birth": patient_data[5],
+            "date_of_birth": patient_data[5].isoformat() if patient_data[5] else None,
             "gender" : patient_data[7],
         }
         

@@ -219,7 +219,7 @@ def change_pfp(file: UploadFile, user_id:int):
         user = us.update(profile_picture_url=result["secure_url"], user_id=user_id)
         db.execute_query(user, params=(result["secure_url"], user_id))
         return JSONResponse(
-            content={"message": "Profile picture updated successfully", "user_id": user_id}, 
+            content=result["secure_url"], 
             status_code=200
         )
     except Exception as e:

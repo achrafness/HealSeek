@@ -49,17 +49,22 @@ def get_doctors():
         500: {"description": "Internal server error"}
     }
 )
+
 def search_doctors_route(
     speciality: Optional[str] = Query(None, description="Filter by speciality"),
     location: Optional[str] = Query(None, description="Filter by office location"),
     teleconsultation: Optional[bool] = Query(None, description="Filter by teleconsultation availability"),
-    max_duration: Optional[int] = Query(None, gt=0, description="Maximum appointment duration in minutes")
+    max_duration: Optional[int] = Query(None, gt=0, description="Maximum appointment duration in minutes"),
+    user_latitude: Optional[float] = Query(None, description="User's latitude for geospatial filtering"),
+    user_longitude: Optional[float] = Query(None, description="User's longitude for geospatial filtering")
 ):
     return search_doctors(
         speciality=speciality,
         location=location,
         teleconsultation=teleconsultation,
-        max_duration=max_duration
+        max_duration=max_duration,
+        user_latitude=user_latitude,
+        user_longitude=user_longitude
     )
 
 @router.get('/{doctor_id}',
