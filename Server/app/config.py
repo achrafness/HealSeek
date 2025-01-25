@@ -1,6 +1,6 @@
 from pydantic import EmailStr
 from pydantic_settings import BaseSettings
-
+from pathlib import Path
 
 class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRES_IN: int
@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     # EMAIL_FROM: EmailStr
 
     class Config:
-        env_file = './.env'
+        env_file = Path(__file__).parent.parent.parent / '.env'
 
 
 settings = Settings()
