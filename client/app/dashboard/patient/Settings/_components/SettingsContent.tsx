@@ -8,8 +8,8 @@ export default function SettingsContent() {
     const { user, setAuthState } = useAuthStore((state) => state);
     const axios = useAxiosPrivate();
     const [formData, setFormData] = useState({
-        name: user?.name || "",
-        email: user?.email || "",
+        name: user?.name || "user name",
+        email: user?.email || "user email",
         phone_number: user?.phone_number || "",
         newPassword: "", // Add newPassword to formData
         confirmNewPassword: "", // Add confirmNewPassword to formData
@@ -21,15 +21,15 @@ export default function SettingsContent() {
 
     // Update form data when user changes
     useEffect(() => {
-        if (user) {
+        
             setFormData({
-                name: user.name,
-                email: user.email,
-                phone_number: user.phone_number,
+                name: user?.name,
+                email: user?.email,
+                phone_number: user?.phone_number,
                 newPassword: "", // Reset password fields
                 confirmNewPassword: "", // Reset password fields
             });
-        }
+        
     }, [user]);
 
     // Handle changes in the form
@@ -105,12 +105,14 @@ export default function SettingsContent() {
             if (response.status === 200) {
                 setSuccess("Profile picture updated successfully!");
                 setError("");
+                console.log(response?.data)
+                setPfpFile(response?.data)
                 // Update the user object in the store with the new profile picture URL
                 // user.profile_picture_url = response?.data?.pfpUrl;
                 setAuthState({
                     user: {
                         ...user,
-                        profile_picture_url: response?.data?.pfpUrl,
+                        profile_picture_url: response?.data,
                     },
                 });
             }
@@ -144,7 +146,7 @@ export default function SettingsContent() {
                     style={{ boxShadow: "0px 2px 4px 0px #00000030" }}
                 >
                     <Image
-                        src={(user?.profile_picture_url === "None" || user?.profile_picture_url === "") ? "/user.svg" : user?.profile_picture_url}
+                        src={(user?.profile_picture_url === "None" || !user?.profile_picture_url) ? "/user.svg" : user?.profile_picture_url}
                         alt="Profile Picture"
                         width={200}
                         height={200}

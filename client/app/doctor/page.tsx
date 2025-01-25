@@ -8,6 +8,7 @@ import PublicNavbar from "../dashboard/patient/_components/PublicNavbar";
 import Image from "next/image";
 import Link from "next/link";
 import Map from "./_components/MapComponent";
+
 const DoctorCard = ({ doctor }: any) => {
     return (
         <Link href={`./doctor/${doctor.user_id}`} className="bg-white rounded-[32px] p-8 shadow-md hover:shadow-xl transition-all">
@@ -100,12 +101,17 @@ const DoctorsPage = () => {
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [checked, setChecked] = useState(false);
     const [filters, setFilters] = useState({
         speciality: "",
         location: "",
         teleconsultation: null as boolean | null,
         maxDuration: "",
+    });
+
+    const [userLocation, setUserLocation] = useState({
+        user_longitude: 0,
+        user_latitude: 0,
     });
 
     const fetchDoctors = async () => {
@@ -119,6 +125,9 @@ const DoctorsPage = () => {
                     params.append(key, value.toString());
                 }
             });
+
+            // Add user_longitude and user_latitude to the API reques
+
 
             const response = await fetch(
                 `http://localhost:8000/doctors/search?${params.toString()}`
@@ -142,13 +151,56 @@ const DoctorsPage = () => {
         }
     };
 
+    const fetchDoctorsUsingCredentials = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const params = new URLSearchParams();
+            Object.entries(userLocation).forEach(([key, value]) => {
+                if (value !== null && value !== 0) {
+                    params.append(key, value.toString());
+                }
+            });
+
+            // Add user_longitude and user_latitude to the API request
+
+
+            const response = await fetch(
+                `http://localhost:8000/doctors/search?${params.toString()}`
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    response.status === 404
+                        ? "No doctors found"
+                        : "Failed to fetch doctors"
+                );
+            }
+
+            const data = await response.json();
+            setDoctors(data.doctors || []);
+        } catch (err: any) {
+            setError(err?.message);
+            setDoctors([]);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
     useEffect(() => {
-        fetchDoctors();
-    }, [filters]);
+        if(!checked) {
+        fetchDoctors()
+        } else{
+        fetchDoctorsUsingCredentials()
+        }
+    }, [filters, userLocation ,checked]);
+
 
     return (
         <div className="bg-[#F2F7FF] min-h-screen pb-12 flex flex-col">
-            <PublicNavbar/>
+            <PublicNavbar />
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h1 className="font-bold text-[48px] mb-4">
@@ -176,7 +228,7 @@ const DoctorsPage = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
+                        <div className="flex flex-col gap-4">
                             <label className="block text-[#6C87AE] mb-2">Location</label>
                             <input
                                 type="text"
@@ -187,9 +239,20 @@ const DoctorsPage = () => {
                                     setFilters((prev) => ({ ...prev, location: e.target.value }))
                                 }
                             />
-                        </div>
-                        <div>
-                            <Map/>
+                            <div className="flex flex-col gap-2">
+                                <Map filters={filters} setFilters={setFilters} setUserLocation={setUserLocation} userLocation={userLocation} />
+                                <div className="flex items-center content-center justify-center gap-2">
+                                    <input 
+                                        onChange={() =>setChecked(!checked)} 
+                                        type="checkbox" 
+                                        name="nearbyDoctors" 
+                                        checked={checked} 
+                                    />
+                                    <label className="block text-[#6C87AE] mb-2" htmlFor="nearbyDoctors">
+                                        Enable nearby doctors finding
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div>

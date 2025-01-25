@@ -40,10 +40,14 @@ export type Appointment = {
     id: number
     patient: {
         name: string
+        email: string
+        phone: string
+        date_of_birth: string
+        gender: string
     }
-    reason: string
     location: string
-    date: string
+
+    appointment_time: string
     status: string
 }
 
@@ -56,16 +60,25 @@ export const columns: ColumnDef<Appointment>[] = [
         ),
     },
     {
-        accessorKey: "reason",
-        header: "Reason",
+        accessorKey: "patient phone",
+        header: "patient phone",
+        cell: ({ row }) => (
+            <div>{`${row.original.patient?.phone || "No phone number"}`}</div>
+        ),
     },
     {
-        accessorKey: "location",
-        header: "Location",
+        accessorKey: "gender",
+        header: "Gender",
+        cell: ({ row }) => (
+            <div>{`${row.original.patient?.gender || "Not specified"}`}</div>
+        ),
     },
     {
         accessorKey: "date",
         header: "Date",
+        cell: ({ row }) => (
+            <div>{`${row.original.appointment_time?.replace('T', ' ').slice(0, 16) || "Not specified"}`}</div>
+        ),
     },
     {
         accessorKey: "status",
@@ -107,6 +120,7 @@ type AppointmentTableProps = {
 }
 
 export function AppointmentTable({ appointments }: AppointmentTableProps) {
+    console.log(appointments)
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
