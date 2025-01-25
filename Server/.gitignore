@@ -13,6 +13,10 @@ venv
 *.so
 *.log
 # Python cache files
+**/__pycache__/
+Server/app/controllers/__pycache__/
+Server/app/middlewares/__pycache__/
+*.pyc
 __pycache__/
 */__pycache__/
 */*/__pycache__/
