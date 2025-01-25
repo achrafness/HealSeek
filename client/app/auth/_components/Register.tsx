@@ -1,10 +1,10 @@
-"use client"
-import React from 'react'
+"use client";
+import React from 'react';
 import { useState } from 'react';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
+import { geocodeAddress } from '@/lib/geocode'; // Import the geocoding utility
 
 export default function Register() {
     const axios = useAxiosPrivate();
@@ -20,20 +20,20 @@ export default function Register() {
         experience: 2,
         max_appointments_in_day: 2,
         appointment_duration_minutes: 30,
-        teleconsultation_available: 'false', // Default to "No"
+        teleconsultation_available: 'false',
         office_location: '',
+        office_location_url: '', // Add this field
         pfpUrl: 'None',
     });
 
-    const [errors, setErrors] = useState<{ [key: string]: string }>({}); // To store validation errors
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [role, setRole] = useState<'patient' | 'doctor'>('patient');
 
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...data,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
-        // Clear errors when the user starts typing
         setErrors((prevErrors) => ({ ...prevErrors, [e.target.name]: '' }));
     };
 
@@ -69,34 +69,45 @@ export default function Register() {
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0; // Return true if no errors
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            if (!validateForm()) return; // Stop submission if validation fails
+            if (!validateForm()) return;
 
-            const payload = { ...data, role };
+            // Geocode the office_location (if provided)
+            let officeLocationUrl = null;
+            if (role === 'doctor' && data.office_location.trim()) {
+                const coordinates = await geocodeAddress(data.office_location);
+                if (coordinates) {
+                    officeLocationUrl = `${coordinates.lat},${coordinates.lon}`;
+                } else {
+                    throw new Error("Failed to geocode office location");
+                }
+            }
+
+            // Prepare the payload
+            const payload = {
+                ...data,
+                role,
+                office_location_url: officeLocationUrl, // Add the geocoded coordinates
+            };
+
+            // Submit the form
             const result = await axios.post('http://127.0.0.1:8000/auth/register', payload);
             if (result.status === 201) {
                 router.push('/auth/login');
             }
-
         } catch (error: any) {
-            setErrors({ ...errors, server: error?.response?.data.detail });
+            setErrors({ ...errors, server: error?.response?.data.detail || error.message });
         }
     };
 
     return (
         <div className='w-1/2 h-fit mx-auto'>
-            <div className='w-full h-20 relative my-12'>
-                <div className='absolute -top-10 right-0 -translate-y-full w-0 h-0  border-t-[50px] border-t-transparent border-r-[50px] border-r-primary  border-b-[50px] border-b-transparent'></div>
-                <h1 className='font-medium text-5xl flex items-center'>Register</h1>
-                <div className='absolute -bottom-12 left-0  w-0 h-0 border-t-[20px] border-t-transparent  border-l-[20px] border-l-primary border-b-transparent border-b-[20px] border-b-primary'></div>
-            </div>
-
             {/* Role Selection Cards */}
             <div className='flex flex-row gap-4 my-8'>
                 <div
@@ -133,6 +144,9 @@ export default function Register() {
                     />
                     {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                 </div>
+
+
+
                 <div className='flex flex-col'>
                     <label htmlFor="email" className='font-medium text-xs text-[#333333] my-4'>Email</label>
                     <input
@@ -304,6 +318,7 @@ export default function Register() {
                         Login instead
                     </Link>
                 </div>
+
             </form>
         </div>
     );
