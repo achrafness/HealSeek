@@ -9,10 +9,10 @@ export default function DoctorNavbar() {
         <h1 className='font-bold text-[30px] max-md:text-[25px]'>Dashboard</h1>
         <p className='text-[20px] max-md:text-[16px] font-normal text-[#7F7F7F]'>account information</p>
       </div>
-      <div className='flex items-center gap-2 w-1/2 p-2 h-12 max-w-[440px]  max-md:p-1 bg-[#F2F2F0] border border-[#A2A2A1] rounded-[16px]'>
+      {/* <div className='flex items-center gap-2 w-1/2 p-2 h-12 max-w-[440px]  max-md:p-1 bg-[#F2F2F0] border border-[#A2A2A1] rounded-[16px]'>
         <FaSearch className='text-lg text-black' />
         <input type='text' className="outline-none text-lg max-md:w-24 font-normal text-black bg-transparent" placeholder='Search' />
-      </div>
+      </div> */}
 
       <div className='flex items-center gap-4 text-4xl max-md:text-lg'>
         {/* <BiSolidMessageRoundedDetail />

@@ -109,6 +109,7 @@ export default function SettingsContent() {
                 setPfpFile(response?.data)
                 // Update the user object in the store with the new profile picture URL
                 // user.profile_picture_url = response?.data?.pfpUrl;
+                console.log(response)
                 setAuthState({
                     user: {
                         ...user,
@@ -152,7 +153,7 @@ export default function SettingsContent() {
                         height={200}
                         className="rounded-full"
                     />
-                    <h1 className="text-primary font-semibold text-lg">{user?.name}</h1>
+                    <h1 className="text-primary font-semibold text-lg">{formData?.name}</h1>
                     <p className="text-[#888888] text-sm font-semibold">{user?.email}</p>
                     <input
                         type="file"

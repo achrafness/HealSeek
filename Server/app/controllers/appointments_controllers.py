@@ -70,7 +70,6 @@ def get_doctor_appointments(doctor_id : int):
         }
         
     
-    
     return JSONResponse(content=appointments_data, status_code=200)
 
 def add_appointment(appointment : Appointment):

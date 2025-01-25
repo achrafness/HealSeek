@@ -90,26 +90,25 @@ export const columns: ColumnDef<Appointment>[] = [
         cell: ({ row }) => {
             const appointment = row.original
 
+            const handleAccept = () => {
+                // Handle accept logic here
+                console.log(`Accepted appointment ID: ${appointment.id}`)
+            }
+
+            const handleReject = () => {
+                // Handle reject logic here
+                console.log(`Rejected appointment ID: ${appointment.id}`)
+            }
+
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(appointment.id.toString())}
-                        >
-                            Copy appointment ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View patient</DropdownMenuItem>
-                        <DropdownMenuItem>View appointment details</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex space-x-2">
+                    <Button variant="default" onClick={handleAccept}>
+                        Accept
+                    </Button>
+                    <Button variant="destructive" className='text-red-500' onClick={handleReject}>
+                        Reject
+                    </Button>
+                </div>
             )
         },
     },
