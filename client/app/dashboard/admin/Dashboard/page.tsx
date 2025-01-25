@@ -9,13 +9,21 @@ import { FiSearch, FiBell } from "react-icons/fi";
 import DashboardContent from "./_components/DashboardContent";
 import { useAuthStore } from "@/store/store";
 import { useEffect } from "react";
-
-const Sidebar = () => {
+import { FiSettings } from "react-icons/fi";
+import useLogout from "@/hooks/useLogout";
+import { useRouter } from "next/navigation";
+export const Sidebar = () => {
   const { user } = useAuthStore((state) => state)
+  const logout = useLogout()
+  const router = useRouter()
   useEffect(() => {
     console.log('hhh')
     console.log(user)
   }, [])
+  const signout = async () => {
+    await logout()
+    router.push('/')
+  }
   return (
     <aside className="w-80 bg-[#F2F2F0] min-h-screen max-lg:hidden p-6">
       <div className="bg-primary p-4 rounded-xl text-white flex gap-4 mb-8">
@@ -27,31 +35,32 @@ const Sidebar = () => {
           className="rounded-lg"
         />
         <div>
-          <h2 className="font-bold text-2xl">{user.name || 'Dr. Issam'}</h2>
-          <p className="text-gray-100">JohnDie@gmail.com</p>
-          <p className="text-gray-100">Public Health Doctor</p>
+          <h2 className="font-bold text-2xl">{user?.name || 'Dr. Issam'}</h2>
+          <p className="text-gray-100">{user?.email || 'JohnDie@gmail.com'}</p>
+          <p className="text-gray-100">Admin</p>
         </div>
       </div>
 
       <nav className="space-y-2 mb-8">
         {[
-          { icon: <BiSolidCategoryAlt />, text: "Overview", active: true },
-          { icon: <IoCalendar />, text: "Calendar", active: false },
-          { icon: <HiMiniChartPie />, text: "Appointments", active: false },
-          { icon: <MdOutlineShowChart />, text: "Patients", active: false },
+          { icon: <BiSolidCategoryAlt />, text: "Overview", active: false, href: '/dashboard/admin/Dashboard' },
+          // { icon: <IoCalendar />, text: "Calendar", active: false },
+          { icon: <HiMiniChartPie />, text: "Users", active: false, href: '/dashboard/admin/Users' },
+          { icon: <FiSettings />, text: "Settings", active: false, href: '/dashboard/admin/Settings' },
         ].map((item, index) => (
-          <button
+          <Link
+            href={item.href}
             key={index}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-lg transition-colors ${item.active ? "bg-primary text-white" : "hover:bg-primary/10"
               }`}
           >
             {item.icon}
             <span>{item.text}</span>
-          </button>
+          </Link>
         ))}
       </nav>
 
-      <button className="w-full border-2 border-primary text-primary font-medium rounded-xl px-6 py-2 hover:bg-primary hover:text-white transition-colors">
+      <button onClick={signout} className="w-full border-2 border-primary text-primary font-medium rounded-xl px-6 py-2 hover:bg-primary hover:text-white transition-colors">
         Logout
       </button>
     </aside>
@@ -69,9 +78,9 @@ const DoctorNavbar = () => (
       <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
     </div>
     <div className="flex items-center gap-4">
-      <button className="p-2 hover:bg-gray-100 rounded-full">
+      {/* <button className="p-2 hover:bg-gray-100 rounded-full">
         <FiBell className="w-6 h-6" />
-      </button>
+      </button> */}
       <div className="flex items-center gap-3">
         <Image
           src="/user.svg"
@@ -80,7 +89,7 @@ const DoctorNavbar = () => (
           height={40}
           className="rounded-full"
         />
-        <span className="font-medium">Dr. Issam</span>
+        {/* <span className="font-medium">Dr. Issam</span> */}
       </div>
     </div>
   </header>

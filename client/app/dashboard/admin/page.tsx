@@ -31,8 +31,8 @@ export default function AdminPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <NavButton icon={FiPieChart} text="Dashboard" path="/Admin/Dashboard" />
-            <NavButton icon={FiSettings} text="Settings" path="/Admin/Settings" />
+            <NavButton icon={FiPieChart} text="Dashboard" path="/dashboard/admin/Dashboard" />
+            <NavButton icon={FiSettings} text="Settings" path="/dashboard/admin/Settings" />
           </div>
         </div>
       </div>

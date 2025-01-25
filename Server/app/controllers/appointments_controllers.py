@@ -67,11 +67,10 @@ def get_doctor_appointments(doctor_id : int):
             "name": patient_data[1],
             "email": patient_data[3],
             "phone": patient_data[4],
-            "date_of_birth": patient_data[5],
+            "date_of_birth": patient_data[5].isoformat(),
             "gender" : patient_data[7],
         }
         
-    
     
     return JSONResponse(content=appointments_data, status_code=200)
 

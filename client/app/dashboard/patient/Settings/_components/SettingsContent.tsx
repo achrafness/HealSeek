@@ -21,6 +21,7 @@ export default function SettingsContent() {
 
     // Update form data when user changes
     useEffect(() => {
+        console.log(user)
         if (user) {
             setFormData({
                 name: user.name,
@@ -107,6 +108,7 @@ export default function SettingsContent() {
                 setError("");
                 // Update the user object in the store with the new profile picture URL
                 // user.profile_picture_url = response?.data?.pfpUrl;
+                console.log(response)
                 setAuthState({
                     user: {
                         ...user,
@@ -144,13 +146,14 @@ export default function SettingsContent() {
                     style={{ boxShadow: "0px 2px 4px 0px #00000030" }}
                 >
                     <Image
-                        src={(user?.profile_picture_url === "None" || user?.profile_picture_url === "") ? "/user.svg" : user?.profile_picture_url}
+                        // src={(user?.profile_picture_url === "None" || user?.profile_picture_url === "") ? "/user.svg" : user?.profile_picture_url}
+                        src={user?.profile_picture_url || "/user.svg"}
                         alt="Profile Picture"
                         width={200}
                         height={200}
                         className="rounded-full"
                     />
-                    <h1 className="text-primary font-semibold text-lg">{user?.name}</h1>
+                    <h1 className="text-primary font-semibold text-lg">{formData?.name}</h1>
                     <p className="text-[#888888] text-sm font-semibold">{user?.email}</p>
                     <input
                         type="file"

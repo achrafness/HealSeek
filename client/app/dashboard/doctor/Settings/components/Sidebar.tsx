@@ -22,7 +22,7 @@ export default function Sidebar() {
         { href: '', label: 'Overview', icon: <BiSolidCategoryAlt /> },
         // { href: 'Calendar', label: 'Calendar', icon: <IoCalendar /> },
         { href: 'Appointments', label: 'Appointments', icon: <HiMiniChartPie /> },
-        { href: 'Patients', label: 'Patients', icon: <MdOutlineShowChart /> },
+        // { href: 'Patients', label: 'Patients', icon: <MdOutlineShowChart /> },
         { href: 'Settings', label: 'Settings', icon: <FiSettings /> }
     ]
     const logout = () => {

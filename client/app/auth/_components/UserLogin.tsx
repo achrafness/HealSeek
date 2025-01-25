@@ -44,11 +44,10 @@ export default function UserLogin() {
 
             ///get profile
             const user_profile = await axiosPrivate.get("/users/profile")
-            console.log(user_profile.data)
 
             // Update the auth store
 
-            setAuthState({ user: user_profile });
+            setAuthState({ user: user_profile.data });
 
             // Redirect based on role
             if (role === 'admin') {

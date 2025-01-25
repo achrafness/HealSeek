@@ -40,10 +40,14 @@ export type Appointment = {
     id: number
     patient: {
         name: string
+        email: string
+        phone: string
+        date_of_birth: string
+        gender: string
     }
-    reason: string
     location: string
-    date: string
+
+    appointment_time: string
     status: string
 }
 
@@ -56,16 +60,25 @@ export const columns: ColumnDef<Appointment>[] = [
         ),
     },
     {
-        accessorKey: "reason",
-        header: "Reason",
+        accessorKey: "patient phone",
+        header: "patient phone",
+        cell: ({ row }) => (
+            <div>{`${row.original.patient?.phone || "No phone number"}`}</div>
+        ),
     },
     {
-        accessorKey: "location",
-        header: "Location",
+        accessorKey: "gender",
+        header: "Gender",
+        cell: ({ row }) => (
+            <div>{`${row.original.patient?.gender || "Not specified"}`}</div>
+        ),
     },
     {
         accessorKey: "date",
         header: "Date",
+        cell: ({ row }) => (
+            <div>{`${row.original.appointment_time?.replace('T', ' ').slice(0, 16) || "Not specified"}`}</div>
+        ),
     },
     {
         accessorKey: "status",
@@ -77,26 +90,25 @@ export const columns: ColumnDef<Appointment>[] = [
         cell: ({ row }) => {
             const appointment = row.original
 
+            const handleAccept = () => {
+                // Handle accept logic here
+                console.log(`Accepted appointment ID: ${appointment.id}`)
+            }
+
+            const handleReject = () => {
+                // Handle reject logic here
+                console.log(`Rejected appointment ID: ${appointment.id}`)
+            }
+
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(appointment.id.toString())}
-                        >
-                            Copy appointment ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View patient</DropdownMenuItem>
-                        <DropdownMenuItem>View appointment details</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex space-x-2">
+                    <Button variant="default" onClick={handleAccept}>
+                        Accept
+                    </Button>
+                    <Button variant="destructive" className='text-red-500' onClick={handleReject}>
+                        Reject
+                    </Button>
+                </div>
             )
         },
     },
@@ -107,6 +119,7 @@ type AppointmentTableProps = {
 }
 
 export function AppointmentTable({ appointments }: AppointmentTableProps) {
+    console.log(appointments)
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
