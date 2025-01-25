@@ -33,7 +33,6 @@ class Settings(BaseSettings):
     # EMAIL_FROM: EmailStr
 
     class Config:
-        env_file = Path(__file__).parent.parent.parent / '.env'
-
+        env_file = './.env'
 
 settings = Settings()
