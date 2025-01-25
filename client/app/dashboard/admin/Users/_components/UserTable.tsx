@@ -77,11 +77,9 @@ export const userColumns: ColumnDef<User>[] = [
                 // Add your delete logic here
                 console.log(`Deleting user with ID: ${user.user_id}`)
             }
-
             return (
-                <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleDelete}>
-                    <span className="sr-only">Delete user</span>
-                    <MoreHorizontal />
+                <Button variant="destructive" onClick={handleDelete} className="bg-red-500 text-white">
+                    Delete
                 </Button>
             )
         },
