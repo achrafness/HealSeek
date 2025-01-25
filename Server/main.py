@@ -119,7 +119,12 @@ def create_app() -> FastAPI:
         "https://localhost:3000",
         "http://127.0.0.1:8000",
         "http://localhost:3000",
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:3000",
+        "https://healseek.vercel.app",
+        "https://healseek.vercel.app/en",
+        "https://healseek.vercel.app/ar",
+        "https://healseek.vercel.app/fr",
+        "https://healseek.onrender.com/",
     ]
 
     app.add_middleware(
