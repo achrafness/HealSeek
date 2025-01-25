@@ -190,5 +190,13 @@
         "missingDoctorID": "Doctor ID is missing. Please try again.",
         "missingAppointmentTime": "Please select an appointment date and time.",
         "missingDoctorOrUser": "Doctor ID or user information is missing. Please try again."
+    },
+    "doctorProfileContent": {
+        "commentedOnThisDoctor": "Commented on this doctor",
+        "specializations": "Specializations",
+        "pastJobsAndExperiences": "Past jobs and Experiences",
+        "languagesSpoken": "Languages Spoken",
+        "bookAnAppointment": "Book an appointment",
+        "noReviewsAvailable": "No reviews available for this doctor"
     }
 }

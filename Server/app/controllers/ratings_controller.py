@@ -16,11 +16,6 @@ def get_all_ratings():
 
 def add_rating(request : Request,rating : Rating):
     try:
-        check_id = request.state.user
-        if rating.patient_id != check_id:
-            raise HTTPException(status_code=403, detail="You can't rate using someone's else Id")
-        if rating.doctor_id == rating.patient_id:
-            raise HTTPException(status_code=400, detail="You can't rate yourself")
         existing_doctor = doc.find(user_id=rating.doctor_id)
         db.execute_query(existing_doctor, params=(rating.doctor_id,))
         existing_doctor = db.fetch_one()
@@ -32,6 +27,7 @@ def add_rating(request : Request,rating : Rating):
         existing_patient = db.fetch_one()
         if not existing_patient:
             raise HTTPException(status_code=404, detail="Patient ID is wrong")
+
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while checking doctor or patient ID : " + str(e))
     try:
@@ -109,22 +105,27 @@ def delete_rating(rating_id : int):
 
 def get_ratings_by_doctor(doctor_id: int):
     try:
-        query = rt.find(doctor_id=doctor_id)
-        db.execute_query(query, params=(doctor_id,))
+        db.execute_query(f"SELECT * FROM ratings JOIN users ON ratings.patient_id = users.user_id WHERE doctor_id = {doctor_id}")
         result = db.fetch_all()
+        print(result)
         
         if not result:
             raise HTTPException(status_code=404, detail=f"No ratings found for doctor {doctor_id}")
-            
+        print(result)
         ratings_data = [
             {
                 "rating_id": rating[0],
                 "rating_score": rating[1],
                 "review_text": rating[2],
                 "doctor_id": rating[3],
-                "patient_id": rating[4]
+                "patient_id": rating[4],
+                "user" : {
+                    "name" : rating[6],
+                    "profile_picture_url" : rating[13]
+                }
             } for rating in result
         ]
+        print(ratings_data)
         return JSONResponse(content=ratings_data, status_code=200)
     except Exception as e:
         raise HTTPException(

@@ -190,5 +190,13 @@
         "missingDoctorID": "معرف الطبيب مفقود. حاول مرة اخرى.",
         "missingAppointmentTime": "يرجى تحديد تاريخ ووقت الموعد.",
         "missingDoctorOrUser": "معرف الطبيب أو معلومات المستخدم مفقودة. حاول مرة اخرى."
+    },
+    "doctorProfileContent": {
+        "commentedOnThisDoctor": "علق على هذا الطبيب",
+        "specializations": "التخصصات",
+        "pastJobsAndExperiences": "الوظائف والخبرات السابقة",
+        "languagesSpoken": "اللغات المحكية",
+        "bookAnAppointment": "حجز موعد",
+        "noReviewsAvailable": "لا توجد مراجعات متاحة لهذا الطبيب"
     }
 }

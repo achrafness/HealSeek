@@ -190,5 +190,13 @@
         "missingDoctorID": "L'ID du médecin est manquant. Veuillez réessayer.",
         "missingAppointmentTime": "Veuillez sélectionner une date et une heure de rendez-vous.",
         "missingDoctorOrUser": "L'ID du médecin ou les informations de l'utilisateur sont manquants. Veuillez réessayer."
+    },
+    "doctorProfileContent": {
+        "commentedOnThisDoctor": "A commenté ce médecin",
+        "specializations": "Spécialisations",
+        "pastJobsAndExperiences": "Emplois et expériences passés",
+        "languagesSpoken": "Langues parlées",
+        "bookAnAppointment": "Prendre rendez-vous",
+        "noReviewsAvailable": "Aucun avis disponible pour ce médecin"
     }
 }
