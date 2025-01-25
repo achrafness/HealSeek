@@ -1,0 +1,80 @@
+{
+    "Navbar": {
+        "home": "Home",
+        "doctors": "Doctors",
+        "contact": "Contact",
+        "login": "Login",
+        "english": "English",
+        "french": "Français",
+        "arabic": "العربية"
+    },
+    "Footer": {
+        "companyInfo": "Company Info",
+        "about": "About",
+        "services": "Services",
+        "blog": "Blog",
+        "bookNow": "Book Now",
+        "appointment": "Appointment",
+        "contact": "Contact",
+        "phone": "+213 123 456 789",
+        "email": "healseek@gmail.com",
+        "address1": "8 W. South St.Buford, GA 30518",
+        "address2": "5 Briarwood Lane Vienna, VA 22180",
+        "rightsReserved": "© Heelseak all rights reserved - 2024"
+    },
+    "heroSection": {
+        "doctorName": "Dr. Mathew Anderson",
+        "headline": "A dedicated doctor you can trust",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Elementum eget vel, nunc nulla feugiat. Metus ut.",
+        "bookAppointment": "Book an appointment"
+    },
+    "aboutSection": {
+        "aboutMe": "About me",
+        "headline": "A dedicated doctor with the core mission to help",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam proin nibh cursus at sed sagittis amet, sed.",
+        "bookAppointment": "Book an appointment"
+    },
+    "bookingSection": {
+        "title": "Book an appointment",
+        "headline": "Schedule a virtual or presential appointment today",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egestas egestas viverra turpis.",
+        "bookAppointment": "Book an appointment"
+    },
+    "servicesSection": {
+        "title": "Services",
+        "headline": "Experienced in multiple medical practices",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egestas egestas viverra turpis habitant.",
+        "bookAppointment": "Book an appointment"
+    },
+    "testimonialsSection": {
+        "title": "What our great customers say about Dr. Matthew Anderson",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
+    },
+    "register": {
+        "patient": "Patient",
+        "registerAsPatient": "Register as a patient",
+        "doctor": "Doctor",
+        "registerAsDoctor": "Register as a doctor",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "phoneNumber": "Phone Number",
+        "dateOfBirth": "Date of Birth",
+        "gender": "Gender",
+        "selectGender": "Select Gender",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "speciality": "Speciality",
+        "experience": "Experience (Years)",
+        "maxAppointmentsPerDay": "Max Appointments Per Day",
+        "appointmentDuration": "Appointment Duration (Minutes)",
+        "teleconsultationAvailable": "Teleconsultation Available",
+        "yes": "Yes",
+        "no": "No",
+        "officeLocation": "Office Location",
+        "register": "Register",
+        "alreadyHaveAccount": "Already have an account?",
+        "loginInstead": "Login instead"
+    }
+}

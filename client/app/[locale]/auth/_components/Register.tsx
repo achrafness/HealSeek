@@ -5,10 +5,12 @@ import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { geocodeAddress } from '@/lib/geocode'; // Import the geocoding utility
+import { useTranslations } from 'next-intl';
 
 export default function Register() {
     const axios = useAxiosPrivate();
     const router = useRouter();
+    const t = useTranslations("register");
     const [data, setFormData] = useState({
         name: '',
         email: '',
@@ -48,24 +50,24 @@ export default function Register() {
         const newErrors: { [key: string]: string } = {};
 
         // Common Fields Validation
-        if (!data.name.trim()) newErrors.name = 'Name is required';
+        if (!data.name.trim()) newErrors.name = t('name') + ' is required';
         if (!data.email.trim()) {
-            newErrors.email = 'Email is required';
+            newErrors.email = t('email') + ' is required';
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-            newErrors.email = 'Invalid email format';
+            newErrors.email = 'Invalid ' + t('email') + ' format';
         }
-        if (!data.password.trim()) newErrors.password = 'Password is required';
-        if (!data.phone_number.trim()) newErrors.phone_number = 'Phone number is required';
-        if (!data.date_of_birth.trim()) newErrors.date_of_birth = 'Date of birth is required';
-        if (!data.gender.trim()) newErrors.gender = 'Gender is required';
+        if (!data.password.trim()) newErrors.password = t('password') + ' is required';
+        if (!data.phone_number.trim()) newErrors.phone_number = t('phoneNumber') + ' is required';
+        if (!data.date_of_birth.trim()) newErrors.date_of_birth = t('dateOfBirth') + ' is required';
+        if (!data.gender.trim()) newErrors.gender = t('gender') + ' is required';
 
         // Doctor-Specific Fields Validation
         if (role === 'doctor') {
-            if (!data.speciality.trim()) newErrors.speciality = 'Speciality is required';
-            if (isNaN(data.experience) || data.experience <= 0) newErrors.experience = 'Experience is required';
-            if (isNaN(data.max_appointments_in_day) || data.max_appointments_in_day <= 0) newErrors.max_appointments_in_day = 'Max appointments per day is required';
-            if (!data.appointment_duration_minutes) newErrors.appointment_duration_minutes = 'Appointment duration is required';
-            if (!data.office_location.trim()) newErrors.office_location = 'Office location is required';
+            if (!data.speciality.trim()) newErrors.speciality = t('speciality') + ' is required';
+            if (isNaN(data.experience) || data.experience <= 0) newErrors.experience = t('experience') + ' is required';
+            if (isNaN(data.max_appointments_in_day) || data.max_appointments_in_day <= 0) newErrors.max_appointments_in_day = t('maxAppointmentsPerDay') + ' is required';
+            if (!data.appointment_duration_minutes) newErrors.appointment_duration_minutes = t('appointmentDuration') + ' is required';
+            if (!data.office_location.trim()) newErrors.office_location = t('officeLocation') + ' is required';
         }
 
         setErrors(newErrors);
@@ -115,16 +117,16 @@ export default function Register() {
                     className={`flex-1 p-6 rounded-lg cursor-pointer transition-all duration-300 ${role === 'patient' ? 'bg-primary text-white' : 'bg-[#FFF3F3] text-[#333333]'
                         }`}
                 >
-                    <h2 className='text-xl font-semibold'>Patient</h2>
-                    <p className='text-sm'>Register as a patient</p>
+                    <h2 className='text-xl font-semibold'>{t('patient')}</h2>
+                    <p className='text-sm'>{t('registerAsPatient')}</p>
                 </div>
                 <div
                     onClick={() => setRole('doctor')}
                     className={`flex-1 p-6 rounded-lg cursor-pointer transition-all duration-300 ${role === 'doctor' ? 'bg-primary text-white' : 'bg-[#FFF3F3] text-[#333333]'
                         }`}
                 >
-                    <h2 className='text-xl font-semibold'>Doctor</h2>
-                    <p className='text-sm'>Register as a doctor</p>
+                    <h2 className='text-xl font-semibold'>{t('doctor')}</h2>
+                    <p className='text-sm'>{t('registerAsDoctor')}</p>
                 </div>
             </div>
 
@@ -132,7 +134,7 @@ export default function Register() {
             <form onSubmit={handleSubmit} className='w-full'>
                 {/* Common Fields */}
                 <div className='flex flex-col'>
-                    <label htmlFor="name" className='font-medium text-xs text-[#333333] my-4'>Name</label>
+                    <label htmlFor="name" className='font-medium text-xs text-[#333333] my-4'>{t('name')}</label>
                     <input
                         type="text"
                         name="name"
@@ -148,7 +150,7 @@ export default function Register() {
 
 
                 <div className='flex flex-col'>
-                    <label htmlFor="email" className='font-medium text-xs text-[#333333] my-4'>Email</label>
+                    <label htmlFor="email" className='font-medium text-xs text-[#333333] my-4'>{t('email')}</label>
                     <input
                         type="email"
                         name="email"
@@ -161,7 +163,7 @@ export default function Register() {
                     {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                 </div>
                 <div className='flex flex-col'>
-                    <label htmlFor="password" className='font-medium text-xs text-[#333333] my-4'>Password</label>
+                    <label htmlFor="password" className='font-medium text-xs text-[#333333] my-4'>{t('password')}</label>
                     <input
                         type="password"
                         name="password"
@@ -174,7 +176,7 @@ export default function Register() {
                     {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                 </div>
                 <div className='flex flex-col'>
-                    <label htmlFor="phone_number" className='font-medium text-xs text-[#333333] my-4'>Phone Number</label>
+                    <label htmlFor="phone_number" className='font-medium text-xs text-[#333333] my-4'>{t('phoneNumber')}</label>
                     <input
                         type="text"
                         name="phone_number"
@@ -187,7 +189,7 @@ export default function Register() {
                     {errors.phone_number && <span className="text-red-500 text-xs">{errors.phone_number}</span>}
                 </div>
                 <div className='flex flex-col'>
-                    <label htmlFor="date_of_birth" className='font-medium text-xs text-[#333333] my-4'>Date of Birth</label>
+                    <label htmlFor="date_of_birth" className='font-medium text-xs text-[#333333] my-4'>{t('dateOfBirth')}</label>
                     <input
                         type="date"
                         name="date_of_birth"
@@ -200,7 +202,7 @@ export default function Register() {
                     {errors.date_of_birth && <span className="text-red-500 text-xs">{errors.date_of_birth}</span>}
                 </div>
                 <div className='flex flex-col'>
-                    <label htmlFor="gender" className='font-medium text-xs text-[#333333] my-4'>Gender</label>
+                    <label htmlFor="gender" className='font-medium text-xs text-[#333333] my-4'>{t('gender')}</label>
                     <select
                         name="gender"
                         id="gender"
@@ -209,10 +211,10 @@ export default function Register() {
                         className='focus:outline-none flex flex-row justify-center items-center px-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'
                         required
                     >
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="">{t('selectGender')}</option>
+                        <option value="male">{t('male')}</option>
+                        <option value="female">{t('female')}</option>
+                        <option value="other">{t('other')}</option>
                     </select>
                     {errors.gender && <span className="text-red-500 text-xs">{errors.gender}</span>}
                 </div>
@@ -221,7 +223,7 @@ export default function Register() {
                 {role === 'doctor' && (
                     <>
                         <div className='flex flex-col'>
-                            <label htmlFor="speciality" className='font-medium text-xs text-[#333333] my-4'>Speciality</label>
+                            <label htmlFor="speciality" className='font-medium text-xs text-[#333333] my-4'>{t('speciality')}</label>
                             <div id="speciality" className='focus:outline-none flex flex-row max-lg:grid max-lg:grid-rows-2 max-lg:grid-cols-2 max-lg:gap-6 max-lg:py-4 justify-center items-center p-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'>
                                 {specialities.map((speciality, index) => (
                                     <div
@@ -237,7 +239,7 @@ export default function Register() {
                             {errors.speciality && <span className="text-red-500 text-xs">{errors.speciality}</span>}
                         </div>
                         <div className='flex flex-col'>
-                            <label htmlFor="experience" className='font-medium text-xs text-[#333333] my-4'>Experience (Years)</label>
+                            <label htmlFor="experience" className='font-medium text-xs text-[#333333] my-4'>{t('experience')}</label>
                             <input
                                 type="number"
                                 name="experience"
@@ -250,7 +252,7 @@ export default function Register() {
                             {errors.experience && <span className="text-red-500 text-xs">{errors.experience}</span>}
                         </div>
                         <div className='flex flex-col'>
-                            <label htmlFor="max_appointments_in_day" className='font-medium text-xs text-[#333333] my-4'>Max Appointments Per Day</label>
+                            <label htmlFor="max_appointments_in_day" className='font-medium text-xs text-[#333333] my-4'>{t('maxAppointmentsPerDay')}</label>
                             <input
                                 type="number"
                                 name="max_appointments_in_day"
@@ -263,7 +265,7 @@ export default function Register() {
                             {errors.max_appointments_in_day && <span className="text-red-500 text-xs">{errors.max_appointments_in_day}</span>}
                         </div>
                         <div className='flex flex-col'>
-                            <label htmlFor="appointment_duration_minutes" className='font-medium text-xs text-[#333333] my-4'>Appointment Duration (Minutes)</label>
+                            <label htmlFor="appointment_duration_minutes" className='font-medium text-xs text-[#333333] my-4'>{t('appointmentDuration')}</label>
                             <input
                                 type="number"
                                 name="appointment_duration_minutes"
@@ -274,9 +276,8 @@ export default function Register() {
                                 required
                             />
                             {errors.appointment_duration_minutes && <span className="text-red-500 text-xs">{errors.appointment_duration_minutes}</span>}
-                        </div>
-                        <div className='flex flex-col'>
-                            <label htmlFor="teleconsultation_available" className='font-medium text-xs text-[#333333] my-4'>Teleconsultation Available</label>
+                        </div><div className='flex flex-col'>
+                            <label htmlFor="teleconsultation_available" className='font-medium text-xs text-[#333333] my-4'>{t('teleconsultationAvailable')}</label>
                             <select
                                 name="teleconsultation_available"
                                 id="teleconsultation_available"
@@ -285,13 +286,13 @@ export default function Register() {
                                 className='focus:outline-none flex flex-row justify-center items-center px-5 gap-2 w-full h-[51px] bg-[#FFF3F3] rounded-[10px] order-3 flex-grow-0'
                                 required
                             >
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
+                                <option value="true">{t('yes')}</option>
+                                <option value="false">{t('no')}</option>
                             </select>
                             {errors.teleconsultation_available && <span className="text-red-500 text-xs">{errors.teleconsultation_available}</span>}
                         </div>
                         <div className='flex flex-col'>
-                            <label htmlFor="office_location" className='font-medium text-xs text-[#333333] my-4'>Office Location</label>
+                            <label htmlFor="office_location" className='font-medium text-xs text-[#333333] my-4'>{t('officeLocation')}</label>
                             <input
                                 type="text"
                                 name="office_location"
@@ -307,15 +308,15 @@ export default function Register() {
                 )}
 
                 <button type='submit' className='flex flex-row text-white text-xl justify-center items-center p-2 my-10 gap-2 w-full h-[48px] bg-primary rounded-[15px]'>
-                    Register
+                    {t('register')}
                 </button>
                 {
                     errors.server && <span className="text-red-500 text-xs">{errors.server}</span>
                 }
                 <div className="text-center text-sm text-[#333333] mt-4">
-                    Already have an account?{' '}
+                    {t('alreadyHaveAccount')} {' '}
                     <Link href="/auth/login" className="text-primary font-semibold hover:underline">
-                        Login instead
+                        {t('loginInstead')}
                     </Link>
                 </div>
 

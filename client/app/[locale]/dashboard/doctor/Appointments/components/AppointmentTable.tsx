@@ -98,11 +98,11 @@ export function AppointmentTable({ appointments, setAppointments }: AppointmentT
                 accessorKey: "status",
                 header: "Status",
                 cell: ({ row }) => (
-                    <div>{`${row.original.status==="cancelled" ?
-                        "rejected" : row.original.status==="completed"? "accepted"
-                        :row.original.status
-                    
-                    }`}</div>
+                    <div>{`${row.original.status === "cancelled" ?
+                        "rejected" : row.original.status === "completed" ? "accepted"
+                            : row.original.status
+
+                        }`}</div>
                 ),
             },
             {
@@ -112,9 +112,7 @@ export function AppointmentTable({ appointments, setAppointments }: AppointmentT
                     const appointment = row.original;
 
                     const handleAccept = async () => {
-                        console.log(`Rejecting appointment ID: ${appointment.appointment_id}`);
                         const response = await axiosPrivate.put(`/appointments/${appointment.appointment_id}`, { status: "completed" });
-                        console.log(response);
 
                         // Remove the rejected appointment from the list
                         setAppointments((prevAppointments) =>
@@ -124,7 +122,6 @@ export function AppointmentTable({ appointments, setAppointments }: AppointmentT
                                     : prevAppointment
                             )
                         );
-                        console.log(`Accepted appointment ID: ${appointment.appointment_id}`);
                     };
 
                     const handleReject = async () => {
@@ -150,19 +147,19 @@ export function AppointmentTable({ appointments, setAppointments }: AppointmentT
 
                     return (
                         <div className="flex space-x-2">
-                            {appointment.status =="scheduled"&&
-                            
+                            {appointment.status == "scheduled" &&
+
                                 <Button variant="default" onClick={handleAccept}>
-                                Accept
-                            </Button>
-                          /*   : appointment.status=="completed" ? <p className="text-green-500">Accepted</p>  
-                            : null  */ 
-                        }
-                            {appointment.status == "scheduled" &&<Button variant="destructive" className="text-red-500" onClick={handleReject}>
+                                    Accept
+                                </Button>
+                                /*   : appointment.status=="completed" ? <p className="text-green-500">Accepted</p>  
+                                  : null  */
+                            }
+                            {appointment.status == "scheduled" && <Button variant="destructive" className="text-red-500" onClick={handleReject}>
                                 Reject
                             </Button>
-                            /* : appointment.status=="cancelled" ?  <p className="text-red-500">Rejected</p>
-                            : null */
+                                /* : appointment.status=="cancelled" ?  <p className="text-red-500">Rejected</p>
+                                : null */
                             }
                         </div>
                     );

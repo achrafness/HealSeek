@@ -1,23 +1,22 @@
-import CustomButton from "../../app/components/CustomButton";
+import CustomButton from "@/app/[locale]/components/CustomButton";
 import Image from "next/image";
 import { FiMessageCircle } from "react-icons/fi";
-import LandingCard from "../../app/components/LandingCard";
+import LandingCard from "@/app/[locale]/components/LandingCard";
+import { useTranslations } from "next-intl";
+
 export const ServicesSection = () => {
+  const t = useTranslations("servicesSection");
+
   return (
     <>
       <div className="container mx-auto py-24 flex justify-around items-center">
         <div className="w-1/3">
-          <p className="text-[#00BFA5] text-[22px] font-medium">Services</p>
-          <h1 className="font-bold text-[48px]">
-            Experienced in multiple medical practices
-          </h1>
-          <p className="text-[#6C87AE] text-base font-normal">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egestas
-            egestas viverra turpis habitant.
-          </p>
+          <p className="text-[#00BFA5] text-[22px] font-medium">{t("title")}</p>
+          <h1 className="font-bold text-[48px]">{t("headline")}</h1>
+          <p className="text-[#6C87AE] text-base font-normal">{t("description")}</p>
           <CustomButton className="rounded-[100px] h-14 px-7 py-4 w-fit">
             <FiMessageCircle />
-            Book an appointment
+            {t("bookAppointment")}
           </CustomButton>
         </div>
         <Image src="/landing3.svg" alt="" width={517} height={679} />

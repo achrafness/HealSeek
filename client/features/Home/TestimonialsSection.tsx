@@ -1,16 +1,17 @@
-// TestimonialsSection.js
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import ReviewCard from "../../app/components/ReviewCard";
+import ReviewCard from "@/app/[locale]/components/ReviewCard";
+import { useTranslations } from "next-intl";
 
 export const TestimonialsSection = () => {
+  const t = useTranslations("testimonialsSection");
+
   return (
     <div className="container mx-auto py-24 text-center">
       <h1 className="font-semibold text-[32px]">
-        What our great customers say about Dr. Matthew Anderson
+        {t("title")}
       </h1>
       <p className="text-base font-normal text-[#6C87AE]">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt
+        {t("description")}
       </p>
       <div className="flex justify-center items-center gap-6">
         <MdKeyboardArrowLeft className="text-7xl" />

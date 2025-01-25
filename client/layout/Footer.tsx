@@ -1,10 +1,14 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from 'next/image';
+import React from 'react';
 import Link from 'next/link';
 import { FiYoutube } from "react-icons/fi";
 import { LiaFacebookSquare } from "react-icons/lia";
 import { FaWhatsapp } from "react-icons/fa";
+import { useTranslations } from 'next-intl';
+
 export default function Footer() {
+    const t = useTranslations("Footer");
+
     return (
         <div className='bg-[#1678F2] w-full h-fit relative top-full text-white'>
             <div className='flex justify-around items-center py-10'>
@@ -13,65 +17,61 @@ export default function Footer() {
                         <Image src={'secondaryLogo.svg'} height={100} width={140} alt='healseek' />
                     </div>
                     <div className='max-w-80 text-wrap text-base italic font-light'>
-                        8 W. South St.Buford, GA 30518
-                        5Briarwood LaneVienna, VA 22180 RER
+                        {t("address1")}
+                        <br />
+                        {t("address2")}
                     </div>
                     <div className='flex gap-10 items-center'>
                         <Link href='https://www.youtube.com/'>
                             <FiYoutube className='text-3xl' />
-
                         </Link>
                         <Link href='https://www.youtube.com/'>
                             <LiaFacebookSquare className='text-3xl' />
-
                         </Link>
-
                         <Link href='https://www.youtube.com/'>
                             <FaWhatsapp className='text-3xl' />
                         </Link>
-
                     </div>
                 </div>
-                <div className='flex gap-10 text-base  font-light'>
+                <div className='flex gap-10 text-base font-light'>
                     <ul>
                         <li className='text-xl font-semibold'>
-                            Company Info
+                            {t("companyInfo")}
                         </li>
                         <li>
-                            About
+                            {t("about")}
                         </li>
                         <li>
-                            Services
+                            {t("services")}
                         </li>
                         <li>
-                            Blog
+                            {t("blog")}
                         </li>
                     </ul>
                     <ul>
                         <li className='text-xl font-semibold'>
-                            Book Now
+                            {t("bookNow")}
                         </li>
                         <li>
-                            Appointment
+                            {t("appointment")}
                         </li>
                     </ul>
                     <ul>
                         <li className='text-xl font-semibold'>
-                            Contact
+                            {t("contact")}
                         </li>
                         <li>
-                            +213 123 456 789
+                            {t("phone")}
                         </li>
                         <li>
-                            healseek@gmail.com
+                            {t("email")}
                         </li>
                     </ul>
                 </div>
-
             </div>
             <div className='text-white text-center py-4'>
-                © Heelseak all rights reserved - 2024
+                {t("rightsReserved")}
             </div>
         </div>
-    )
+    );
 }

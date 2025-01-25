@@ -13,20 +13,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import {
     Table,
     TableBody,
@@ -35,7 +22,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-
+import useAxiosPrivate from "@/hooks/useAxiosPrivate"
 export type User = {
     user_id: number
     name: string
@@ -46,55 +33,65 @@ export type User = {
     role: string
 }
 
-export const userColumns: ColumnDef<User>[] = [
-    {
-        accessorKey: "name",
-        header: "Name",
-    },
-    {
-        accessorKey: "date_of_birth",
-        header: "Date of Birth",
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-    },
-    {
-        accessorKey: "gender",
-        header: "Gender",
-    },
-    {
-        accessorKey: "phone_number",
-        header: "Phone Number",
-    },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            const user = row.original
 
-            const handleDelete = () => {
-                // Add your delete logic here
-                console.log(`Deleting user with ID: ${user.user_id}`)
-            }
-            return (
-                <Button variant="destructive" onClick={handleDelete} className="bg-red-500 text-white">
-                    Delete
-                </Button>
-            )
-        },
-    },
-]
 
 type UserTableProps = {
     users: User[]
+    setUsers: React.Dispatch<React.SetStateAction<User[]>>
 }
 
-export function UserTable({ users }: UserTableProps) {
+export function UserTable({ users, setUsers }: UserTableProps) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+    const axiosPrivate = useAxiosPrivate()
+    const userColumns: ColumnDef<User>[] = [
+        {
+            accessorKey: "name",
+            header: "Name",
+        },
+        {
+            accessorKey: "date_of_birth",
+            header: "Date of Birth",
+        },
+        {
+            accessorKey: "email",
+            header: "Email",
+        },
+        {
+            accessorKey: "gender",
+            header: "Gender",
+        },
+        {
+            accessorKey: "phone_number",
+            header: "Phone Number",
+        },
+        {
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                const user = row.original
+
+                const handleDelete = async () => {
+                    try {
+                        const response = await axiosPrivate.delete(`/users/${user.user_id}`);
+                        setUsers((prevUsers) =>
+                            prevUsers.filter((prevUser) => prevUser.user_id !== user.user_id)
+                        );
+                    } catch (error) {
+                        console.error("Failed to reject appointment:", error);
+                    }
+                };
+                return (
+                    <Button variant="destructive" onClick={handleDelete} className="bg-red-500 text-white">
+                        Delete
+                    </Button>
+                )
+            },
+        },
+    ]
+
 
     const table = useReactTable({
         data: users,
@@ -114,7 +111,6 @@ export function UserTable({ users }: UserTableProps) {
             rowSelection,
         },
     })
-
     return (
         <div className="w-full">
             <div className="flex items-center py-4">
