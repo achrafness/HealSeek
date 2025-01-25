@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     DATABASE_PASSWORD : str
 
 
+
     # CLIENT_ORIGIN: str
 
     # EMAIL_HOST: str

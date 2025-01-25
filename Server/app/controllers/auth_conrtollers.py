@@ -137,7 +137,7 @@ async def registeration(User: Registration_input) -> Response:
             # Create role-specific profile
             if user['role'] == "doctor":
                 if not all(k in user for k in ['speciality', 'experience', 'max_appointments_in_day', 
-                                             'appointment_duration_minutes']):
+                                            'appointment_duration_minutes']):
                     raise HTTPException(status_code=400, detail="Missing required doctor information")
                     
                 db.execute_query(Doctor.create(
@@ -244,7 +244,7 @@ def login(userCredentials: Login_input, response: Response) -> JSONResponse:
             return JSONResponse(
                 content={"message": "2FA code sent to your email."},
                 status_code=200,
-                headers={"Set-Cookie": f"temp_2fa_token={temp_2fa_token}; HttpOnly; Max-Age=300; SameSite=Lax"}
+                headers={"Set-Cookie": f"temp_2fa_token={temp_2fa_token}; HttpOnly; Max-Age=300; SameSite=None ;"}
             )
 
         # Update admin last login
