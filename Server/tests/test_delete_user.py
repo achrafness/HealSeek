@@ -15,19 +15,12 @@ except ImportError as e:
 
 client = TestClient(app)
 
-def test_create_appointment():
+def test_delete_user():
     try:
-        response = client.post(
-            "/appointments",
-            json={
-                "appointment_time": "2025-01-31 18:48:00",
-                "status": "scheduled",
-                "type": "in_person",
-                "doctor_id": "177607",
-                "patient_id": "349095"
-            }
-        )
+        response = client.delete("/users/1")
+
         assert response.status_code == 200
+        assert len(response.json()) > 0
     except Exception as e:
         print(f"Test Error: {e}")
         raise
