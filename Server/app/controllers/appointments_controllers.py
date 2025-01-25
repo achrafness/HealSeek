@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from app.models.appointment import Appointment
 from app.database.database import db , Appointment as ap , Doctor , Patient , User as us
 from datetime import datetime
+from app.utils.mail_sender import send_mail
 
 def get_all_appointments():
     try : 
@@ -98,6 +99,17 @@ def add_appointment(appointment : Appointment):
 
         appointment_query = ap.insert(**appointment.dict())
         db.execute_query(appointment_query)
+        #sending mail
+            #get doctor email
+        doctor_user = us.find(user_id=appointment.doctor_id)
+        db.execute_query(doctor_user, params=(appointment.doctor_id,))
+        doctor_user = db.fetch_one()
+        
+        subject = "Appointment Request"
+        message = "You have a new appointment request , check your appointments to accept or reject it"
+        subheading = "Appointment Request"
+        send_mail(doctor_user[3],subject,message , subheading=subheading)
+        #
         return JSONResponse(content=appointment.dict(), status_code=200)
     except Exception as e: 
         raise HTTPException(status_code=500 , detail="error : "+str(e))
@@ -109,14 +121,24 @@ def update_appointment(request:Request,appointment_id: int, appointment_data: di
         appointment = db.fetch_one()
         if not appointment:
             raise HTTPException(status_code=404, detail="No appointment found")
-        if request.state.user != appointment[3]:
-            raise HTTPException(status_code=403, detail="You are not allowed to delete this appointment")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while fetching appointment : " + str(e))
     
     try:
         appointment_query = ap.update(**appointment_data, appointment_id=appointment_id)
         db.execute_query(appointment_query, params=(*[value for _, value in appointment_data.items()],appointment_id,))
+        #send mail
+        if appointment_data["status"]:
+            if appointment_data["status"] == "completed":
+                subject = "Appointment Accepted"
+                message = "Your appointment has been accepted"
+            else:
+                subject = "Appointment Rejected"
+                message = "Your appointment has been rejected"
+            patient_query = us.find(user_id=appointment[5])
+            db.execute_query(patient_query, params=(appointment[5],))
+            patient = db.fetch_one()
+            send_mail(patient[3],subject,message)
         return JSONResponse(content=appointment_data, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error while updating appointment : " + str(e))
