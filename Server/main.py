@@ -9,7 +9,7 @@ from app.database.database import db
 from app.routes.main_route import router
 
 # Check if .env file exists
-env_path = Path(__file__).parent.parent / '.env'
+env_path = Path(__file__).parent / '.env'
 if not env_path.exists():
     raise FileNotFoundError(
         "The .env file is missing. Please create a .env file in the root directory of the project. "
