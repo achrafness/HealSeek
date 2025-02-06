@@ -147,7 +147,7 @@ export default function SettingsContent() {
                         alt="Profile Picture"
                         width={200}
                         height={200}
-                        className="rounded-full"
+                        className="rounded-full aspect-square object-cover"
                     />
                     <h1 className="text-primary font-semibold text-lg">{formData?.name}</h1>
                     <p className="text-[#888888] text-sm font-semibold">{user?.email}</p>
