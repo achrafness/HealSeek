@@ -15,10 +15,11 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
     const isPublicRoute = publicRoutes.some(route => pathname.endsWith(route));
     const isAuthRoute = pathname.includes('/auth/');
+    const isHomePage = pathname === `/${language}` || pathname === '/';
 
     useEffect(() => {
-        // If user is already authenticated and trying to access auth pages
-        if (accessToken && isAuthRoute) {
+        // If user is already authenticated and trying to access auth pages or home page
+        if (accessToken && (isAuthRoute || isHomePage)) {
             // Redirect based on role
             if (role === 'admin') {
                 router.push(`/${language}/dashboard/admin`);
@@ -30,7 +31,7 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
                 router.push('/');
             }
         }
-    }, [accessToken, isAuthRoute, role, language, router]);
+    }, [accessToken, isAuthRoute, isHomePage, role, language, router]);
 
     // For public routes or pages that don't need auth check, render as is
     // For protected routes, wrap with PersistentLogin to check auth
