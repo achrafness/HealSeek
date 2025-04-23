@@ -27,19 +27,35 @@ export default function Page() {
     }, [accessToken, role, language, router])
 
     return (
-        <div className=' mx-auto h-[100vh] max-md:w-full flex bg-primary flex-grow'>
-            <div className="w-1/2 max-md:hidden flex-1 ">
-                <div className='mx-12 my-8 top-0 left-0 relative w-fit'>
-                    <Link href='/'>
-                    <Image src="/secondaryLogo.svg" height={80} width={243} alt='' />
+        <div className='min-h-screen w-full flex flex-col md:flex-row bg-primary'>
+            {/* Logo for mobile view */}
+            <div className='md:hidden p-6 flex justify-center'>
+                <Link href={`/${language}/`}>
+                    <Image src="/secondaryLogo.svg" height={60} width={180} alt='HealSeek Logo' className='object-contain' />
+                </Link>
+            </div>
+
+            {/* Left column with illustration - hidden on mobile */}
+            <div className="hidden md:flex md:w-1/2 flex-col">
+                <div className='p-6 md:p-8 lg:p-12 relative'>
+                    <Link href={`/${language}/`}>
+                        <Image src="/secondaryLogo.svg" height={80} width={243} alt='HealSeek Logo' className='object-contain' />
                     </Link>
                 </div>
-                <div className='flex justify-center items-center h-[70vh]'>
-                    <Image src="/Login.svg" height={400} width={500} alt='' className='' />
+                <div className='flex-1 flex justify-center items-center p-4'>
+                    <Image 
+                        src="/Login.svg" 
+                        height={400} 
+                        width={500} 
+                        alt='Login Illustration' 
+                        className='max-w-full h-auto object-contain' 
+                    />
                 </div>
             </div>
-            <div className=" w-[907px] max-xl:w-1/2 flex-1 md:rounded-l-[50px] bg-customWhite h-full max-md:w-full">
-                <div className="flex justify-center items-center h-full">
+
+            {/* Right column with login form */}
+            <div className="w-full md:w-1/2 flex flex-col md:rounded-l-[50px] bg-customWhite min-h-[80vh] md:min-h-screen">
+                <div className="flex-1 flex justify-center items-center p-4 md:p-6 lg:p-8">
                     <UserLogin />
                 </div>
             </div>
