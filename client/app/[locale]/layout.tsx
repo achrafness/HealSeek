@@ -39,10 +39,12 @@ export default async function RootLayout({
 
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Suspense fallback={<Loading/>}>
-        {children}
+          <RouteWrapper>
+        {children} 
+        </RouteWrapper>
         </Suspense>
         </NextIntlClientProvider>
-      </body>
+            </body>
     </html>
 
   );
