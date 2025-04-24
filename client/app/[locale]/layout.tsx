@@ -36,15 +36,14 @@ export default async function RootLayout({
       cz-shortcut-listen="true"
       >
       {/* <PersistentLogin Children={children} /> */}
-
+      <RouteWrapper>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Suspense fallback={<Loading/>}>
-          <RouteWrapper>
-        {children} 
-        </RouteWrapper>
+        {children}
         </Suspense>
         </NextIntlClientProvider>
-            </body>
+      </RouteWrapper>
+      </body>
     </html>
 
   );
