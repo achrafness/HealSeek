@@ -13,27 +13,40 @@ const PersistentLogin = ({
     Children: React.ReactNode
 }) => {
     const [loading, setLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
     const refreshToken = useRefreshToken();
     const { accessToken, setAuthState } = useAuthStore(state => state);
     const { language } = useLanguageStore(state => state);
     const router = useRouter();
 
     useEffect(() => {
-        // Flag to track component mount state
         let isMounted = true;
-
+        const controller = new AbortController();
+        
         const verifyToken = async () => {
             try {
-                await refreshToken();
-            } catch (error) {
-                console.error('Token refresh failed');
+                // Add a timeout to prevent infinite loading
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Token refresh timeout')), 8000)
+                );
                 
-                // Clear auth state
+                // Race between the refresh token call and the timeout
+                await Promise.race([
+                    refreshToken(),
+                    timeoutPromise
+                ]);
+                
+            } catch (error) {
+                console.log('Token refresh failed:', error);
+                setIsError(true);
+                // Clear auth state on error
                 setAuthState({
                     accessToken: '',
                     user: null,
                     role: ''
                 });
+                // Redirect to login on error
+                router.push(`/${language}/auth/login`);
             } finally {
                 // Only update state if component is still mounted
                 if (isMounted) {
@@ -42,27 +55,24 @@ const PersistentLogin = ({
             }
         }
 
-        // If no token, try to refresh. Otherwise, stop loading.
+        // Only attempt to verify if we don't have a token
         if (!accessToken) {
             verifyToken();
         } else {
             setLoading(false);
         }
 
-        // Force loading to stop after a maximum time (8 seconds)
-        const forceTimeout = setTimeout(() => {
-            if (isMounted && loading) {
-                setLoading(false);
-            }
-        }, 8000);
-
         // Cleanup function to prevent state updates after unmount
         return () => {
             isMounted = false;
-            clearTimeout(forceTimeout);
-        };
-    }, [accessToken, refreshToken, setAuthState]);
+            controller.abort();
+        }
+    }, [accessToken, refreshToken, router, language, setAuthState]);
 
+    // If there was an error and we're not loading anymore, show nothing and let the redirect happen
+    if (isError && !loading) return null;
+
+    // Show loading component while loading, otherwise show children
     return loading ? <LoadingComponent /> : <>{Children}</>;
 }
 
