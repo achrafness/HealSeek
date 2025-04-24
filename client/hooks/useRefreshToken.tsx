@@ -18,7 +18,7 @@ const useRefreshToken = () => {
                 },
                 withCredentials: true,
                 // Add a timeout for the request
-                timeout: 5000
+                timeout: 8000
             });
 
             // If no accessToken in response, throw error
@@ -27,39 +27,50 @@ const useRefreshToken = () => {
             }
 
             // Get user profile with new token
-            const res2 = await axios.get(`/users/profile`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${res.data.accessToken}`
-                },
-                withCredentials: true,
-                // Add a timeout for the request
-                timeout: 5000
-            });
-
-            const data = res.data;
-            
-            // Update auth state with new token and user data
-            setAuthState({
-                user: res2.data,
-                accessToken: data.accessToken,
-                role: res2.data.role
-            });
-            
-            return data.accessToken;
-
+            try {
+                const res2 = await axios.get(`/users/profile`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${res.data.accessToken}`
+                    },
+                    withCredentials: true,
+                    // Add a timeout for the request
+                    timeout: 8000
+                });
+                
+                const data = res.data;
+                
+                // Update auth state with new token and user data
+                setAuthState({
+                    user: res2.data,
+                    accessToken: data.accessToken,
+                    role: res2.data.role
+                });
+                
+                return data.accessToken;
+            } catch (profileError) {
+                console.error('Failed to fetch profile after token refresh:', profileError);
+                
+                // Even if profile fetch fails, still update the token
+                setAuthState(state => ({
+                    ...state,
+                    accessToken: res.data.accessToken
+                }));
+                
+                return res.data.accessToken;
+            }
         } catch (error: any) {
             console.error('Refresh token error:', error?.response?.data || error.message);
             
-            // Clear auth state on error
-            setAuthState({
-                accessToken: '',
-                user: null,
-                role: ''
-            });
-            
-            // Only redirect if there's a genuine auth error
+            // Only clear auth state for authentication errors
             if (error?.response?.status === 401 || error?.response?.status === 403) {
+                setAuthState({
+                    accessToken: '',
+                    user: null,
+                    role: ''
+                });
+                
+                // Only redirect to login for unauthorized errors
                 router.push(`/${language}/auth/login`);
             }
             

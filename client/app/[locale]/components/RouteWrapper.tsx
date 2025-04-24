@@ -1,9 +1,10 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'; // For Next.js 13+
+import { usePathname, useRouter } from 'next/navigation'; 
 import PersistentLogin from '@/HOC/PersistLogin';
 import { useAuthStore, useLanguageStore } from '@/store/store';
 import { useEffect } from 'react';
+import useRefreshToken from '@/hooks/useRefreshToken';
 
 // Define public routes that don't require authentication
 const publicRoutes = ["/", "/auth/login", "/auth/register", "/doctor"];
@@ -13,14 +14,13 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     const { accessToken, role } = useAuthStore(state => state);
     const { language } = useLanguageStore(state => state);
     const router = useRouter();
+    const refreshToken = useRefreshToken();
     const isPublicRoute = publicRoutes.some(route => pathname.endsWith(route));
-    const isAuthRoute = pathname.includes('/auth/');
-    const isHomePage = pathname === `/${language}` || pathname === '/';
 
+    // Handle authentication redirects
     useEffect(() => {
-        // If user is already authenticated and trying to access auth pages or home page
-        if (accessToken && (isAuthRoute || isHomePage)) {
-            // Redirect based on role
+        // If user is authenticated and trying to access auth pages, redirect to appropriate dashboard
+        if (accessToken) {
             if (role === 'admin') {
                 router.push(`/${language}/dashboard/admin`);
             } else if (role === 'doctor') {
@@ -31,11 +31,36 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
                 router.push('/');
             }
         }
-    }, [accessToken, isAuthRoute, isHomePage, role, language, router]);
+    }, [accessToken, role, language, router]);
 
-    // For public routes or pages that don't need auth check, render as is
-    // For protected routes, wrap with PersistentLogin to check auth
-    return isPublicRoute ? children : <PersistentLogin Children={children} />;
+    // Refresh token periodically for authenticated users on all routes
+    useEffect(() => {
+        // Only attempt to refresh if user is logged in
+        if (!accessToken) return;
+        
+        // Set up periodic token refresh (every 14 minutes)
+        // This ensures the token is refreshed before it expires (typically 15-20 minutes)
+        const refreshInterval = setInterval(async () => {
+            try {
+                await refreshToken();
+                console.log('Token refreshed successfully');
+            } catch (error) {
+                console.error('Failed to refresh token:', error);
+            }
+        }, 14 * 60 * 1000); // 14 minutes
+        
+        // Clear interval on unmount
+        return () => clearInterval(refreshInterval);
+    }, [accessToken, refreshToken]);
+
+    // For auth routes and protected routes, use PersistentLogin
+    // For public routes, if user is authenticated, still use PersistentLogin to maintain auth state
+    // Only render public routes directly for unauthenticated users
+    if (isPublicRoute && !accessToken) {
+        return <>{children}</>;
+    } else {
+        return <PersistentLogin Children={children} />;
+    }
 };
 
 export default RouteWrapper;

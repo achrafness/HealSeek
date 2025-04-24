@@ -10,6 +10,8 @@ import Link from "next/link";
 import Map from "./_components/MapComponent";
 import { useTranslations } from "next-intl";
 import axios from "@/api/axios";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useAuthStore } from "@/store/store";
 
 const DoctorCard = ({ doctor }: any) => {
     const t = useTranslations("doctorsPage");
@@ -118,6 +120,11 @@ const DoctorsPage = () => {
         user_latitude: 0,
     });
 
+    const axiosPrivate = useAxiosPrivate();
+    const { accessToken } = useAuthStore(state => state);
+
+    const apiClient = accessToken ? axiosPrivate : axios;
+
     const fetchDoctors = async () => {
         setLoading(true);
         setError(null);
@@ -130,14 +137,10 @@ const DoctorsPage = () => {
                 }
             });
 
-            const response = await axios.get(`/doctors/search?${params.toString()}`);
+            const response = await apiClient.get(`/doctors/search?${params.toString()}`);
             setDoctors(response.data.doctors || []);
         } catch (err: any) {
-            // Instead of showing the error message directly, we'll set doctors to empty array
-            // and handle the empty state gracefully
             setDoctors([]);
-            
-            // We still keep track of the error for logging purposes
             console.error("Error fetching doctors:", err);
         } finally {
             setLoading(false);
@@ -156,11 +159,9 @@ const DoctorsPage = () => {
                 }
             });
 
-            // Using axios consistently instead of fetch for better error handling
-            const response = await axios.get(`/doctors/search?${params.toString()}`);
+            const response = await apiClient.get(`/doctors/search?${params.toString()}`);
             setDoctors(response.data.doctors || []);
         } catch (err: any) {
-            // Same approach here - empty doctors array instead of error
             setDoctors([]);
             console.error("Error fetching doctors by location:", err);
         } finally {
