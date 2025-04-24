@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'; // For Next.js 13+
+import { usePathname, useRouter } from 'next/navigation'; 
 import PersistentLogin from '@/HOC/PersistLogin';
 import { useAuthStore, useLanguageStore } from '@/store/store';
 import { useEffect } from 'react';
@@ -18,8 +18,9 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
     const isHomePage = pathname === `/${language}` || pathname === '/';
 
     useEffect(() => {
-        // If user is already authenticated and trying to access auth pages or home page
-        if (accessToken && (isAuthRoute || isHomePage)) {
+        // If user is already authenticated and trying to access auth pages
+        // Note: Removed isHomePage from this condition to allow authenticated users to access the home page
+        if (accessToken && isAuthRoute) {
             // Redirect based on role
             if (role === 'admin') {
                 router.push(`/${language}/dashboard/admin`);
@@ -31,7 +32,7 @@ const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
                 router.push('/');
             }
         }
-    }, [accessToken, isAuthRoute, isHomePage, role, language, router]);
+    }, [accessToken, isAuthRoute, role, language, router]);
 
     // For public routes or pages that don't need auth check, render as is
     // For protected routes, wrap with PersistentLogin to check auth
