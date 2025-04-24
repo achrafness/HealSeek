@@ -1,85 +1,53 @@
+// import React from 'react'
 import axios from '../api/axios';
 import { useAuthStore } from '../store/store';
 import { useRouter } from 'next/navigation';
-import { useLanguageStore } from '../store/store';
+// import useAxiosPrivate from './useAxiosPrivate';
 
 const useRefreshToken = () => {
-    const { setAuthState, accessToken } = useAuthStore(state => state);
-    const { language } = useLanguageStore(state => state);
-    const router = useRouter();
-
+    const { setAuthState, accessToken } = useAuthStore(state => state)
+    const router = useRouter()
     const refreshToken = async () => {
         try {
-            // Request a new access token
             const res = await axios.get(`/auth/refresh`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
+                    
+                    'Authorization' : `Bearer ${accessToken}`
                 },
-                withCredentials: true,
-                // Add a timeout for the request
-                timeout: 8000
+                withCredentials: true
+            })
+
+            console.log("hada response : " ,res)
+
+            const res2 = await axios.get(`/users/profile`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${res.data.accessToken}`
+                },
+                withCredentials: true
+            })
+
+
+            console.log(res)
+            const data = await res.data
+            console.log('data : ', data);
+            // localStorage.setItem('accessToken', data.accessToken);
+            setAuthState({
+                user: res2.data,
+                accessToken: data.accessToken,
+                role: res2.data.role
             });
+            return data.accessToken;
 
-            // If no accessToken in response, throw error
-            if (!res.data?.accessToken) {
-                throw new Error('No access token in refresh response');
-            }
-
-            // Get user profile with new token
-            try {
-                const res2 = await axios.get(`/users/profile`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${res.data.accessToken}`
-                    },
-                    withCredentials: true,
-                    // Add a timeout for the request
-                    timeout: 8000
-                });
-                
-                const data = res.data;
-                
-                // Update auth state with new token and user data
-                setAuthState({
-                    user: res2.data,
-                    accessToken: data.accessToken,
-                    role: res2.data.role
-                });
-                
-                return data.accessToken;
-            } catch (profileError) {
-                console.error('Failed to fetch profile after token refresh:', profileError);
-                
-                // Even if profile fetch fails, still update the token
-                setAuthState(state => ({
-                    ...state,
-                    accessToken: res.data.accessToken
-                }));
-                
-                return res.data.accessToken;
-            }
-        } catch (error: any) {
-            console.error('Refresh token error:', error?.response?.data || error.message);
-            
-            // Only clear auth state for authentication errors
-            if (error?.response?.status === 401 || error?.response?.status === 403) {
-                setAuthState({
-                    accessToken: '',
-                    user: null,
-                    role: ''
-                });
-                
-                // Only redirect to login for unauthorized errors
-                router.push(`/${language}/auth/login`);
-            }
-            
-            // Rethrow to allow proper handling in PersistLogin
-            throw error;
+        } catch (error: unknown) {
+            console.log(error);
+            router.push('/')
         }
-    };
+        return refreshToken;
+    }
 
     return refreshToken;
-};
+}
 
-export default useRefreshToken;
+export default useRefreshToken  
