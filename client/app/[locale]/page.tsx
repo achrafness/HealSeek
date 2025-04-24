@@ -13,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     // If user is already logged in, redirect them based on their role
-    if (accessToken) {
+    if (accessToken &&accessToken!="") {
       if (role === 'admin') {
         router.push(`/${language}/dashboard/admin`);
       } else if (role === 'doctor') {
